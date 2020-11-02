@@ -108,6 +108,9 @@ class Home:
           print("roomId",self.roomId)
           self.previousWindowWidgets()
           self.browse()
+        elif "error" in message.keys():
+          self.error_message = message['error']
+          print(self.error_message) 
 
     def joinRoom(self):
       try:
