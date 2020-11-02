@@ -81,7 +81,7 @@ class App:
 					self.clear_window()
 					self.browse()
 				elif 'error' in message:
-          tkinter.messagebox.showerror("error",message['error'])
+					tkinter.messagebox.showerror("error",message['error'])
 					print("DISPLAY : ", message['error'])
 
 			else:
@@ -176,7 +176,7 @@ class App:
 				self.clear_window()
 				self.create_or_join()
 			elif not self.server_connected:
-				tkinter.messagebox.showerror("error",self.error_message)
+				tkinter.messagebox.showerror("Error",self.error_message)
 
 	def create_room(self):
 		self.create_roomCheck = cu.create_room(self.username)
