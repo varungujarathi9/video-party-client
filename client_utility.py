@@ -19,9 +19,9 @@ def connect_server():
     global server_socket, HOST, PORT
 
     try:
-        server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
         print("Connecting to server")
-        server_socket.connect((HOST, PORT))
+        server_socket = socket.create_connection((HOST, PORT))
         _thread.start_new_thread(receive_messages, ())
         print("Server connected")
         return True
@@ -56,8 +56,9 @@ def join_room(username, room_id):
 
 def disconnect_server():
     global server_socket
-
+    data = {'action_id':4, 'username':username, 'room_id':room_id}
     try:
+        server_socket.send(bytes(json.dumps(data), encoding='utf8'))
         message_queue = []
         server_socket.close()
         return False
@@ -81,7 +82,7 @@ def receive_messages():
                 break
             else:
                 message_queue.append(message)
-                # print(message_queue)
+                print(message_queue)
         return message_queue
 
 
