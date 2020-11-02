@@ -63,7 +63,7 @@ class App:
 			self.clear_window()
 			self.enter_room_id = tkinter.Entry(self.window)
 			self.enter_room_id.pack()
-			btn_join_room = tkinter.Button(self.window, text = "Enter Room Code", command =self.join_roomAccepted,width=10)
+			btn_join_room = tkinter.Button(self.window, text = "Enter Room Code", command =self.join_room,width=10)
 			btn_back = tkinter.Button(self.window, text = "Back", command =self.create_or_join,width=10)
 			btn_join_room.pack(anchor=tkinter.CENTER, expand=True)
 			btn_back.pack(anchor=tkinter.CENTER, expand=True)
@@ -81,9 +81,9 @@ class App:
 				message = json.loads(cu.message_queue.pop(0))
 				if 'join' in message:
 					self.clear_window()
-					self.home()
+					self.browse()
 				elif 'error' in message:
-					print("room not available")
+					print("DISPLAY : ", message['error'])
 
 			else:
 				print(join_roomCheck)
@@ -92,7 +92,6 @@ class App:
 		try:
 
 			def browseFiles():
-
 				filename = filedialog.askopenfilename(initialdir = "~/", title = "Select a File", filetypes = (("Text files", "*.txt*"), ("all files","*.*")))
 				label_file_explorer.configure(text="File Opened: "+filename)
 
