@@ -23,65 +23,77 @@ class Home:
 
         self.window = window
         self.window.title(window_title)
-
-        self.UsernameLabel = tkinter.Label(window,text='Username',font=('calibre',
+        self.initialize()
+        self.displayDetails = True
+    
+    def initialize(self):
+      try:
+        self.UsernameLabel = tkinter.Label(self.window,text='Username',font=('calibre',
                             10, 'bold'))
-        self.textExample = tkinter.Entry(window)
+        self.textExample = tkinter.Entry(self.window)
         self.UsernameLabel.pack()
         self.textExample.pack()
 
 
           # Create a canvas that can fit the above video source size
-        self.canvas = tkinter.Canvas(window, width = 10, height = 10)
+        self.canvas = tkinter.Canvas(self.window, width = 10, height = 10)
         self.canvas.pack()
 
           # Button that lets the user take a snapshot
 
-        self.btn_submit=tkinter.Button(window, text="Submit", width=30,command =self.connCheck)
+        self.btn_submit=tkinter.Button(self.window, text="Submit", width=30,command =self.connCheck)
 
         self.btn_submit.pack(anchor=tkinter.CENTER, expand=True)
 
         # self.btn_browse=tkinter.Button(window, text="UserPage", width=30,command = self.browse )
         # self.btn_browse.pack(anchor=tkinter.CENTER, expand=True)
-
+        widget_list = self.checkWidgets()
+        for item in widget_list:
+          item.pack_forget()
         self.window.mainloop()
+      except KeyboardInterrupt:
+        pass
 
     # check the status of the connection
     def connCheck(self):
-      self.connCheck = cu.connect_server()
-      self.userVal = self.textExample.get()
-      print("check user",self.userVal)
-      print("check conn",self.connCheck)
-      if(self.connCheck and self.userVal):
-        print("all right")
-        self.roomDecide()
-      else:
-        print(self.connCheck)
+      
+        self.connCheck = cu.connect_server()
+        self.userVal = self.textExample.get()
+        print("check user",self.userVal)
+        print("check conn",self.connCheck)
+        if(self.connCheck and self.userVal):
+          print("all right")
+          self.roomDecide()
+        else:
+          print(self.connCheck)
+     
 
 
     def roomDecide(self):
       # userVal = self.textExample.get()
-      self.window = tkinter.Tk()
-      self.window.title('Hello '+self.userVal )
-      self.window.geometry("500x500")
-      self.window.config(background = "white")
-      label_file_explorer = tkinter.Label(self.window,
+      try:
+        
+        self.window.title('Hello '+self.userVal )
+        self.window.geometry("500x500")
+        self.window.config(background = "white")
+        label_file_explorer = tkinter.Label(self.window,
                     text = "Select room",
                     width = 100, height = 4,
                     fg = "blue")
-      btn_create = tkinter.Button(self.window,
+        btn_create = tkinter.Button(self.window,
                 text = "Create Room",
                 command = self.createRoom,width=10)
-      btn_join = tkinter.Button(self.window,
+        btn_join = tkinter.Button(self.window,
                 text = "Join Room",
                 command =self.joinRoom,width=10)
-      button_exit = tkinter.Button(self.window,
+        button_exit = tkinter.Button(self.window,
               text = "Exit",
               command = exit,width=10)
-      btn_create.place(relx=0.5, rely=0.3, anchor=tkinter.CENTER)
-      btn_join.place(relx=0.5, rely=0.4, anchor=tkinter.CENTER)
-      button_exit.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
-
+        btn_create.place(relx=0.5, rely=0.3, anchor=tkinter.CENTER)
+        btn_join.place(relx=0.5, rely=0.4, anchor=tkinter.CENTER)
+        button_exit.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
+      except KeyboardInterrupt:
+        pass
 
 
     def createRoom(self):
@@ -92,23 +104,25 @@ class Home:
         print("inside createroom")
         print("msg que",cu.message_queue)
         message = json.loads(cu.message_queue.pop(0))
-        if "join" in message.keys():
-          self.roomId = message['join']
+        if "created" in message.keys():
+          self.roomId = message['created']
           print("roomId",self.roomId)
           self.browse()
 
     def joinRoom(self):
-      self.window = tkinter.Tk()
-      self.window.title('Hello '+self.userVal )
-      self.window.geometry("500x500")
-      self.window.config(background = "white")
-      self.enterRoomId = tkinter.Entry(self.window)
-      self.enterRoomId.pack()
-      btn_joinRoom = tkinter.Button(self.window,
+      try:
+        
+        self.window.title('Hello '+self.userVal )
+        self.window.geometry("500x500")
+        self.window.config(background = "white")
+        self.enterRoomId = tkinter.Entry(self.window)
+        self.enterRoomId.pack()
+        btn_joinRoom = tkinter.Button(self.window,
                 text = "Submit RoomID",
                 command =self.joinRoomAccepted,width=10)
-      btn_joinRoom.pack(anchor=tkinter.CENTER, expand=True)
-
+        btn_joinRoom.pack(anchor=tkinter.CENTER, expand=True)
+      except KeyboardInterrupt:
+        pass
 
     def joinRoomAccepted(self):
       validRoomId = self.enterRoomId.get()
@@ -117,10 +131,15 @@ class Home:
         print("sending info to join room")
         if(joinRoomCheck):
           print("message appended to join room server")
+          print(message_queue)
           while(len(cu.message_queue)==0):
             pass
           message = json.loads(cu.message_queue.pop(0))
-          print("check message",message)
+          if('join' in message):
+            self.home()
+          else:
+            print("room not available")
+          
         else:
           print(joinRoomCheck)
 
@@ -128,6 +147,7 @@ class Home:
 
 
     def browse(self):
+      try:
 
         def browseFiles():
 
@@ -175,6 +195,8 @@ class Home:
 
         # Let the window wait for any events
         self.window.mainloop()
+      except KeyboardInterrupt:
+        pass
 
 
 
@@ -182,6 +204,20 @@ class Home:
 
     def home(self):
         App(tkinter.Tk(), "Home Page")
+    
+    
+    def checkWidgets(self):
+      _list = self.window.winfo_children()
+      for item in _list :
+        # if item.winfo_children() :
+        #     _list.extend(item.winfo_children())
+        print("check the childre items")
+        print(_list)
+        print(item.winfo_children())
+
+
+      return _list
+      
 
 
 
@@ -192,20 +228,23 @@ class App:
         self.window = window
         self.window.title(window_title)
         self.video_source = video_source
-
-        self.textExample = tkinter.Text(window, height=10)
+        self.playerWindow()
+    
+    def playerWindow(self):
+      try:
+        self.textExample = tkinter.Text(self.window, height=10)
         self.textExample.pack()
 
           # open video source (by default this will try to open the computer webcam)
         self.vid = MyVideoCapture(self.video_source)
 
           # Create a canvas that can fit the above video source size
-        self.canvas = tkinter.Canvas(window, width = self.vid.width, height = self.vid.height)
+        self.canvas = tkinter.Canvas(self.window, width = self.vid.width, height = self.vid.height)
         self.canvas.pack()
 
           # Button that lets the user take a snapshot
-        self.btn_pause=tkinter.Button(window, text="Pause", width=50, command=self.pause)
-        self.btn_play = tkinter.Button(window, text="Play", width=50, command=self.play)
+        self.btn_pause=tkinter.Button(self.window, text="Pause", width=50, command=self.pause)
+        self.btn_play = tkinter.Button(self.window, text="Play", width=50, command=self.play)
         self.btn_pause.pack(anchor=tkinter.CENTER, expand=True)
         self.btn_play.pack(anchor=tkinter.CENTER, expand=True)
 
@@ -214,6 +253,8 @@ class App:
         self.update()
 
         self.window.mainloop()
+      except KeyboardInterrupt:
+        pass
 
     def pause(self):
         print("pause button pressed")
@@ -273,6 +314,10 @@ class MyVideoCapture:
         if self.vid.isOpened():
 
             self.vid.release()
+
+
+
+  
 
 #
 #
