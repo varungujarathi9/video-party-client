@@ -101,7 +101,6 @@ class Home:
       if(self.createRoomCheck):
         while len(cu.message_queue)==0:
           pass
-
         message = json.loads(cu.message_queue.pop(0))
         if "created" in message.keys():
           self.roomId = message['created']
@@ -111,6 +110,7 @@ class Home:
 
     def joinRoom(self):
       try:
+        self.previousWindowWidgets()
         self.window.title('Hello '+self.userVal )
         self.window.geometry("500x500")
         self.window.config(background = "white")
@@ -159,7 +159,7 @@ class Home:
 
             label_file_explorer.configure(text="File Opened: "+filename)
 
-        self.window = tkinter.Tk()
+        
 
         self.window.title('File Explorer')
 
@@ -190,14 +190,16 @@ class Home:
         code.grid(column=1,row = 3)
         button_explore.grid(column = 1, row = 4)
         roomIdLabel.grid(column=1,row=6)
-
+        self.widget_list = self.checkWidgets()
+        
         # Let the window wait for any events
         self.window.mainloop()
       except KeyboardInterrupt:
         pass
 
     def home(self):
-        App(tkinter.Tk(), "Home Page")
+      
+      App("Home Page")
 
 
     def checkWidgets(self):
@@ -208,14 +210,25 @@ class Home:
         print("check the childre items")
 
         print(item.winfo_class())
+        print("type of widget")
+        print(item.winfo_manager())
 
 
       return _list
 
     def previousWindowWidgets(self):
       for item in self.widget_list:
-        print("check items",item)
-        item.pack_forget()
+        if(item.winfo_manager()=='pack'):
+          print("inside pack")
+          item.pack_forget()
+        if(item.winfo_manager()=='grid'):
+          print("inside grid")
+          item.grid_forget()
+        if(item.winfo_manager()=='place'):
+          print("inside place")
+          item.place_forget()
+        
+        
 
 
 class App:
@@ -248,7 +261,7 @@ class App:
           # After it is called once, the update method will be automatically called every delay milliseconds
         self.delay = 15
         self.update()
-
+        self.widget_List = self.checkWidgets()
         self.window.mainloop()
       except KeyboardInterrupt:
         pass
