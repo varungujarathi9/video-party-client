@@ -11,7 +11,6 @@ server_socket = None
 client_configs = configparser.SafeConfigParser()
 client_configs.read('configs.ini')
 HOST = client_configs['GeneralSettings']['host']
-print(HOST)
 PORT = int(client_configs['GeneralSettings']['port'])
 message_queue = []
 users = []
