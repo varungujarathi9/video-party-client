@@ -17,6 +17,8 @@ from tkinter import filedialog
 import client_utility as cu
 
 
+
+
 class Home:
 
     def __init__(self, window, window_title):
@@ -61,7 +63,7 @@ class Home:
         print("check user",self.userVal)
         print("check conn",self.connCheck)
         if(self.connCheck and self.userVal):
-          self.previousWindowWidgets()
+          self.hideWidgets()
           print("all right")
           self.roomDecide()
         else:
@@ -72,6 +74,7 @@ class Home:
     def roomDecide(self):
       # userVal = self.textExample.get()
       try:
+        self.hideWidgets()
         self.window.title('Hello '+self.userVal )
         self.window.geometry("500x500")
         self.window.config(background = "white")
@@ -101,12 +104,11 @@ class Home:
       if(self.createRoomCheck):
         while len(cu.message_queue)==0:
           pass
-
         message = json.loads(cu.message_queue.pop(0))
         if "created" in message.keys():
           self.roomId = message['created']
           print("roomId",self.roomId)
-          self.previousWindowWidgets()
+          self.hideWidgets()
           self.browse()
         elif "error" in message.keys():
           self.error_message = message['error']
@@ -114,6 +116,7 @@ class Home:
 
     def joinRoom(self):
       try:
+        self.hideWidgets()
         self.window.title('Hello '+self.userVal )
         self.window.geometry("500x500")
         self.window.config(background = "white")
@@ -123,6 +126,10 @@ class Home:
                 text = "Submit RoomID",
                 command =self.joinRoomAccepted,width=10)
         btn_joinRoom.pack(anchor=tkinter.CENTER, expand=True)
+        button_goBack = tkinter.Button(self.window,
+        						text = "Back",
+        						command =self.roomDecide,width=10)
+        button_goBack.pack(anchor=tkinter.CENTER, expand=True)
         self.widget_list = self.checkWidgets()
       except KeyboardInterrupt:
         pass
@@ -139,7 +146,7 @@ class Home:
             pass
           message = json.loads(cu.message_queue.pop(0))
           if('join' in message):
-            self.previousWindowWidgets()
+            self.hideWidgets()
             self.home()
           else:
             print("room not available")
@@ -162,7 +169,7 @@ class Home:
 
             label_file_explorer.configure(text="File Opened: "+filename)
 
-        self.window = tkinter.Tk()
+        
 
         self.window.title('File Explorer')
 
@@ -186,21 +193,26 @@ class Home:
         # get username from receive message
 
         code = tkinter.Text(self.window, height=2)
-
+        button_goBack = tkinter.Button(self.window,
+        						text = "Back",
+        						command =self.roomDecide,width=10)
 
 
         label_file_explorer.grid(column = 1, row = 1)
         code.grid(column=1,row = 3)
         button_explore.grid(column = 1, row = 4)
         roomIdLabel.grid(column=1,row=6)
-
+        button_goBack.grid(column=1,row=7)
+        self.widget_list = self.checkWidgets()
+        
         # Let the window wait for any events
         self.window.mainloop()
       except KeyboardInterrupt:
         pass
 
     def home(self):
-        App(tkinter.Tk(), "Home Page")
+      
+      App("Home Page")
 
 
     def checkWidgets(self):
@@ -211,14 +223,25 @@ class Home:
         print("check the childre items")
 
         print(item.winfo_class())
+        print("type of widget")
+        print(item.winfo_manager())
 
 
       return _list
 
-    def previousWindowWidgets(self):
+    def hideWidgets(self):
       for item in self.widget_list:
-        print("check items",item)
-        item.pack_forget()
+        if(item.winfo_manager()=='pack'):
+          print("inside pack")
+          item.pack_forget()
+        if(item.winfo_manager()=='grid'):
+          print("inside grid")
+          item.grid_forget()
+        if(item.winfo_manager()=='place'):
+          print("inside place")
+          item.place_forget()
+        
+        
 
 
 class App:
@@ -251,7 +274,7 @@ class App:
           # After it is called once, the update method will be automatically called every delay milliseconds
         self.delay = 15
         self.update()
-
+        self.widget_List = self.checkWidgets()
         self.window.mainloop()
       except KeyboardInterrupt:
         pass
