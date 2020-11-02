@@ -11,7 +11,6 @@ server_socket = None
 client_configs = configparser.SafeConfigParser()
 client_configs.read('configs.ini')
 HOST = client_configs['GeneralSettings']['host']
-print(HOST)
 PORT = int(client_configs['GeneralSettings']['port'])
 message_queue = []
 users = []
@@ -40,7 +39,7 @@ def create_room(username):
         return True
     except Exception as e:
         print("EXCEPTION IN CREATE ROOM: " + str(e))
-        raceback.print_exc()
+        traceback.print_exc()
         return False
 
 def join_room(username, room_id):

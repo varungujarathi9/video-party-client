@@ -89,9 +89,9 @@ class Home:
       if(self.createRoomCheck):
         while len(cu.message_queue)==0:
           pass
-        print("inside createroom")
-        print("msg que",cu.message_queue)
+
         message = json.loads(cu.message_queue.pop(0))
+
         if "join" in message.keys():
           self.roomId = message['join']
           print("roomId",self.roomId)
@@ -109,7 +109,6 @@ class Home:
                 command =self.joinRoomAccepted,width=10)
       btn_joinRoom.pack(anchor=tkinter.CENTER, expand=True)
 
-
     def joinRoomAccepted(self):
       validRoomId = self.enterRoomId.get()
       if(validRoomId and self.userVal):
@@ -123,9 +122,6 @@ class Home:
           print("check message",message)
         else:
           print(joinRoomCheck)
-
-
-
 
     def browse(self):
 
@@ -176,14 +172,8 @@ class Home:
         # Let the window wait for any events
         self.window.mainloop()
 
-
-
-
-
     def home(self):
         App(tkinter.Tk(), "Home Page")
-
-
 
 class App:
 
@@ -240,7 +230,6 @@ class App:
 
         self.window.after(self.delay, self.update)
 
-
 class MyVideoCapture:
 
     def __init__(self, video_source="Alexa intro.mp4"):
@@ -286,16 +275,20 @@ class MyVideoCapture:
   # Create a window and pass it to the Application object
 Home(tkinter.Tk(), "Tkinter and OpenCV")
 
-
 # def read_message():
+
 #   while True:
-#     print("message que")
-#     print(cu.message_queue)
-#     if(len(cu.message_queue)>0):
-#       message = json.loads(cu.message_queue.pop(0))
-#       if "join" in message.keys():
-#         Home.browse()
-#         print("display message",json.dumps(message))
+#     try:
+#       # print("message que")
+#       # print(cu.message_queue)
+#       if(len(cu.message_queue)>0):
+#         message = json.loads(cu.message_queue.pop(0))
+#         if "created" in message.keys():
+#           home.browse()
+#           print("display message",json.dumps(message))
+#     except KeyboardInterrupt as e:
+#       break
 
 # _thread.start_new_thread(read_message,())
+
 
