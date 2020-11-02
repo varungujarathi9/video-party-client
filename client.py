@@ -13,13 +13,11 @@ import time
 import _thread
 import json
 
-from tkinter import filedialog
+from tkinter import filedialog,messagebox
 import client_utility as cu
 
 class App:
-
 	def __init__(self, window, window_title):
-
 		self.window = window
 		self.window.config(background = "white")
 		self.window.geometry("500x500")
@@ -83,6 +81,7 @@ class App:
 					self.clear_window()
 					self.browse()
 				elif 'error' in message:
+          tkinter.messagebox.showerror("error",message['error'])
 					print("DISPLAY : ", message['error'])
 
 			else:
@@ -177,7 +176,7 @@ class App:
 				self.clear_window()
 				self.create_or_join()
 			elif not self.server_connected:
-				print(self.error_message)
+				tkinter.messagebox.showerror("error",self.error_message)
 
 	def create_room(self):
 		self.create_roomCheck = cu.create_room(self.username)
@@ -193,7 +192,7 @@ class App:
 				self.clear_window()
 				self.browse()
 			elif "error" in message.keys():
-				self.error_message = message['error']
+				tkinter.messagebox("error",message['error'])
 				print(self.error_message)
 
 class VideoPlayer:
