@@ -6,6 +6,7 @@ import time
 import configparser
 import _thread
 import traceback
+import requests
 
 server_socket = None
 client_configs = configparser.SafeConfigParser()
@@ -18,16 +19,28 @@ users = []
 def connect_server():
     global server_socket, HOST, PORT
 
-    try:
+    if check_internet():
+        try:
+            server_socket = socket.create_connection((HOST, PORT))
 
-        print("Connecting to server")
-        server_socket = socket.create_connection((HOST, PORT))
-        _thread.start_new_thread(receive_messages, ())
-        print("Server connected")
+            # start receiving messages from server
+            _thread.start_new_thread(receive_messages, ())
+
+            return True, "DISPLAY : Server connected"
+        except Exception as e:
+            print("EXCEPTION IN CONNECT SERVER: " + str(e))
+            traceback.print_exc()
+            return False, str(e)
+    else:
+        return False, "DISPLAY : No internet connection"
+
+def check_internet():
+    url = "http://www.google.com"
+    timeout = 5
+    try:
+        request = requests.get(url, timeout=timeout)
         return True
-    except Exception as e:
-        print("EXCEPTION IN CONNECT SERVER: " + str(e))
-        traceback.print_exc()
+    except (requests.ConnectionError, requests.Timeout) as exception:
         return False
 
 def create_room(username):
