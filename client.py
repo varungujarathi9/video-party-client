@@ -25,7 +25,7 @@ class Home:
         self.window.title(window_title)
         self.initialize()
         self.displayDetails = True
-    
+
     def initialize(self):
       try:
         self.UsernameLabel = tkinter.Label(self.window,text='Username',font=('calibre',
@@ -48,14 +48,14 @@ class Home:
         # self.btn_browse=tkinter.Button(window, text="UserPage", width=30,command = self.browse )
         # self.btn_browse.pack(anchor=tkinter.CENTER, expand=True)
         self.widget_list = self.checkWidgets()
-        
+
         self.window.mainloop()
       except KeyboardInterrupt:
         pass
 
     # check the status of the connection
     def connCheck(self):
-      
+
         self.connCheck = cu.connect_server()
         self.userVal = self.textExample.get()
         print("check user",self.userVal)
@@ -66,12 +66,12 @@ class Home:
           self.roomDecide()
         else:
           print(self.connCheck)
-     
+
 
 
     def roomDecide(self):
       # userVal = self.textExample.get()
-      try:        
+      try:
         self.window.title('Hello '+self.userVal )
         self.window.geometry("500x500")
         self.window.config(background = "white")
@@ -90,7 +90,7 @@ class Home:
               command = exit,width=10)
         btn_create.place(relx=0.5, rely=0.3, anchor=tkinter.CENTER)
         btn_join.place(relx=0.5, rely=0.4, anchor=tkinter.CENTER)
-        button_exit.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)        
+        button_exit.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
         self.widget_list = self.checkWidgets()
       except KeyboardInterrupt:
         pass
@@ -110,7 +110,7 @@ class Home:
           self.browse()
 
     def joinRoom(self):
-      try:        
+      try:
         self.window.title('Hello '+self.userVal )
         self.window.geometry("500x500")
         self.window.config(background = "white")
@@ -140,7 +140,7 @@ class Home:
             self.home()
           else:
             print("room not available")
-          
+
         else:
           print(joinRoomCheck)
 
@@ -198,15 +198,15 @@ class Home:
 
     def home(self):
         App(tkinter.Tk(), "Home Page")
-    
-    
+
+
     def checkWidgets(self):
       _list = self.window.winfo_children()
       for item in _list :
         # if item.winfo_children() :
         #     _list.extend(item.winfo_children())
         print("check the childre items")
-        
+
         print(item.winfo_class())
 
 
@@ -216,7 +216,7 @@ class Home:
       for item in self.widget_list:
         print("check items",item)
         item.pack_forget()
-      
+
 
 class App:
 
@@ -226,7 +226,7 @@ class App:
         self.window.title(window_title)
         self.video_source = video_source
         self.playerWindow()
-    
+
     def playerWindow(self):
       try:
         self.textExample = tkinter.Text(self.window, height=10)
@@ -313,7 +313,7 @@ class MyVideoCapture:
 
 
 
-  
+
 
 #
 #
