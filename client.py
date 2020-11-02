@@ -47,9 +47,8 @@ class Home:
 
         # self.btn_browse=tkinter.Button(window, text="UserPage", width=30,command = self.browse )
         # self.btn_browse.pack(anchor=tkinter.CENTER, expand=True)
-        widget_list = self.checkWidgets()
-        for item in widget_list:
-          item.pack_forget()
+        self.widget_list = self.checkWidgets()
+        
         self.window.mainloop()
       except KeyboardInterrupt:
         pass
@@ -62,6 +61,7 @@ class Home:
         print("check user",self.userVal)
         print("check conn",self.connCheck)
         if(self.connCheck and self.userVal):
+          self.previousWindowWidgets()
           print("all right")
           self.roomDecide()
         else:
@@ -71,8 +71,7 @@ class Home:
 
     def roomDecide(self):
       # userVal = self.textExample.get()
-      try:
-        
+      try:        
         self.window.title('Hello '+self.userVal )
         self.window.geometry("500x500")
         self.window.config(background = "white")
@@ -91,7 +90,8 @@ class Home:
               command = exit,width=10)
         btn_create.place(relx=0.5, rely=0.3, anchor=tkinter.CENTER)
         btn_join.place(relx=0.5, rely=0.4, anchor=tkinter.CENTER)
-        button_exit.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
+        button_exit.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)        
+        self.widget_list = self.checkWidgets()
       except KeyboardInterrupt:
         pass
 
@@ -107,11 +107,11 @@ class Home:
         if "created" in message.keys():
           self.roomId = message['created']
           print("roomId",self.roomId)
+          self.previousWindowWidgets()
           self.browse()
 
     def joinRoom(self):
-      try:
-        
+      try:        
         self.window.title('Hello '+self.userVal )
         self.window.geometry("500x500")
         self.window.config(background = "white")
@@ -121,6 +121,7 @@ class Home:
                 text = "Submit RoomID",
                 command =self.joinRoomAccepted,width=10)
         btn_joinRoom.pack(anchor=tkinter.CENTER, expand=True)
+        self.widget_list = self.checkWidgets()
       except KeyboardInterrupt:
         pass
 
@@ -136,6 +137,7 @@ class Home:
             pass
           message = json.loads(cu.message_queue.pop(0))
           if('join' in message):
+            self.previousWindowWidgets()
             self.home()
           else:
             print("room not available")
@@ -212,11 +214,16 @@ class Home:
         # if item.winfo_children() :
         #     _list.extend(item.winfo_children())
         print("check the childre items")
-        print(_list)
-        print(item.winfo_children())
+        
+        print(item.winfo_class())
 
 
       return _list
+
+    def previousWindowWidgets(self):
+      for item in self.widget_list:
+        print("check items",item)
+        item.pack_forget()
       
 
 
