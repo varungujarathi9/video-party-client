@@ -27,8 +27,8 @@ class App:
 		self.initialize()
 
 	def toggle_geom(self,event):
-		self.window_geom=self.master.winfo_geometry()
-		self.master.geometry(self._geom)
+		self.window_geom=self.window.winfo_geometry()
+		self.window.geometry(self._geom)
 		self._geom='100x100+0+0'
 
 	# GUI Functions ---------------------------------------
@@ -124,11 +124,11 @@ class App:
 			# self.clear_window()
 			# open video source (by default this will try to open the computer webcam)
 			self.canvas_width = self.window.winfo_screenwidth()
-			self.canvas_height = self.window.winfo_screenheight()-30
+			self.canvas_height = self.window.winfo_screenheight()-100 
 			# self.video = VideoStreamer(self.filename, self.canvas_width, self.canvas_height)
 
-			self.video = VideoStreamer("/media/varungujarathi9/Varun Seagate HDD/Movies & Series/Asur/Asur 2020 S01E01 Hindi 720p WEBRip x264 AAC - LOKiHD - Telly.mkv", self.canvas_width, self.canvas_height)
-
+			self.video = VideoStreamer(self.filename, self.canvas_width, self.canvas_height)
+		
 			# Create a canvas that can fit the above video source size
 			self.canvas = tkinter.Canvas(self.window, width = self.canvas_width, height = self.canvas_height, bg='black')
 			self.canvas.pack()
@@ -136,8 +136,8 @@ class App:
 			# Button that lets the user take a snapshot
 			self.btn_pause=tkinter.Button(self.window, text="Pause", width=50, command=self.pause)
 			self.btn_play = tkinter.Button(self.window, text="Play", width=50, command=self.play)
-			# self.btn_pause.pack(anchor=tkinter.CENTER, expand=True)
-			# self.btn_play.pack(anchor=tkinter.CENTER, expand=True)
+			self.btn_pause.pack(anchor=tkinter.CENTER, expand=True)
+			self.btn_play.pack(anchor=tkinter.CENTER, expand=True)
 
 			# After it is called once, the update method will be automatically called every delay milliseconds
 			self.delay = 15
