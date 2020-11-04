@@ -68,8 +68,8 @@ class App:
 			self.clear_window()
 			self.enter_room_id = tkinter.Entry(self.window)
 			self.enter_room_id.pack()
-			btn_join_room = tkinter.Button(self.window, text = "Enter Room Code", command =self.join_room,width=10)
-			btn_back = tkinter.Button(self.window, text = "Back", command =self.create_or_join,width=10)
+			btn_join_room = tkinter.Button(self.window, text = "Enter Room Code", command =self.join_room, width=10)
+			btn_back = tkinter.Button(self.window, text = "Back", command =self.create_or_join, width=10)
 			btn_join_room.pack(anchor=tkinter.CENTER, expand=True)
 			btn_back.pack(anchor=tkinter.CENTER, expand=True)
 			self.widget_list = self.check_widgets()
@@ -164,7 +164,7 @@ class App:
 		if ret:
 			self.photo = PIL.ImageTk.PhotoImage(image = PIL.Image.fromarray(frame))
 			self.canvas.create_image(0, 0, image = self.photo, anchor = tkinter.NW)
-			
+
 		self.window.after(self.delay, self.update)
 
 	def check_widgets(self):
