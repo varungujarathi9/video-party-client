@@ -90,7 +90,7 @@ def send_share_file(room_id,filename,fileSize,read_bytes):
         server_socket.send(bytes(json.dumps(data),encoding='utf-8'))
         return True
     except Exception as e:
-        print("EXCEPTION IN SENDING FILE"+str(e)
+        print("EXCEPTION IN SENDING FILE:",e)
         return False
 
 def receive_messages():
