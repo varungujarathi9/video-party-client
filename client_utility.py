@@ -83,9 +83,9 @@ def get_users_in_room():
     return users
 
 
-def send_share_file(room_id,filename,fileSize,read_bytes):
+def send_share_file(room_id,file_name,file_size,read_bytes):
     global server_socket
-    data = {'action_id':5, 'room_id':room_id,'read_file':filename,'read_filesize':fileSize,'read_bytes':read_bytes}
+    data = {'action_id':5, 'room_id':room_id,'read_file':file_name,'read_file_size':file_size,'read_bytes':read_bytes}
     try:
         server_socket.send(bytes(json.dumps(data),encoding='utf-8'))
         return True
