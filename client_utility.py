@@ -85,9 +85,10 @@ def get_users_in_room():
 
 def send_share_file(room_id,file_name,file_size,read_bytes):
     global server_socket
-    data = {'action_id':5, 'room_id':room_id,'read_file':file_name,'read_file_size':file_size,'read_bytes':read_bytes}
+    data = {'action_id':5, 'room_id':room_id,'read_file':file_name,'read_file_size':file_size}
     try:
         server_socket.send(bytes(json.dumps(data),encoding='utf-8'))
+        server_socket.sendall(read_bytes)
         return True
     except Exception as e:
         print("EXCEPTION IN SENDING FILE:",e)

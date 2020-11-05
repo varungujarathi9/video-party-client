@@ -88,7 +88,7 @@ class App:
 		try:
 			self.clear_window()
 			def browse_file():
-				self.file_name = filedialog.askopenfile_name(initialdir = "~/", title = "Select a file", filetypes = (("Video file", "*.mp4* *.mkv* *.mpv* *.avi* *.webm*"), ("All files","*.*")))
+				self.file_name = filedialog.askopenfilename(initialdir = "~/", title = "Select a file", filetypes = (("Video file", "*.mp4* *.mkv* *.mpv* *.avi* *.webm*"), ("All files","*.*")))
 				if self.file_name not in (""," ",None) and type(self.file_name) is not tuple:
 					label_file_explorer.configure(text="File selected: " + self.file_name)
 					btn_next.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
