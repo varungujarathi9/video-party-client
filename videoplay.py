@@ -1,6 +1,6 @@
 import vlc
 import sys
-
+ 
 if sys.version_info[0] < 3:
     import Tkinter as Tk
     from Tkinter import ttk
