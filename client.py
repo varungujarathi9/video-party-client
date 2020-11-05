@@ -12,9 +12,14 @@ import _thread
 import json
 from tkinter import filedialog,messagebox
 from videoprops import get_video_properties
+import tqdm
+import os
 
 import client_utility as cu
 
+
+SEPARATOR = "<SEPARATOR>"
+BUFFER_SIZE = 4096
 class App:
 	def __init__(self, window, window_title):
 		self.window = window
@@ -69,8 +74,10 @@ class App:
 			self.enter_room_id = tkinter.Entry(self.window)
 			self.enter_room_id.pack()
 			btn_join_room = tkinter.Button(self.window, text = "Enter Room Code", command =self.join_room,width=10)
+			btn_download_file = tkinter.Button(self.window, text = "Download file", command = self.download_file, width=10)
 			btn_back = tkinter.Button(self.window, text = "Back", command =self.create_or_join,width=10)
 			btn_join_room.pack(anchor=tkinter.CENTER, expand=True)
+			btn_download_file.pack(anchor=tkinter.CENTER,expand=True)
 			btn_back.pack(anchor=tkinter.CENTER, expand=True)
 			self.widget_list = self.check_widgets()
 			self.window.mainloop()
@@ -84,17 +91,24 @@ class App:
 				self.filename = filedialog.askopenfilename(initialdir = "~/", title = "Select a file", filetypes = (("Video file", "*.mp4* *.mkv* *.mpv* *.avi* *.webm*"), ("All files","*.*")))
 				if self.filename not in (""," ",None) and type(self.filename) is not tuple:
 					label_file_explorer.configure(text="File selected: " + self.filename)
-					btn_next.place(relx=0.5, rely=0.4, anchor=tkinter.CENTER)
+					btn_next.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
+					btn_share_file.place(relx=0.5,rely=0.6,anchor=tkinter.CENTER)
 					self.window.mainloop()
 
 			label_file_explorer = tkinter.Label(self.window, text = "Select a file to play", width = 100, height = 4, fg = "blue")
 			btn_explore = tkinter.Button(self.window, text = "Browse", command = browse_file, width=10)
 			btn_next = tkinter.Button(self.window, text = "Next", command = self.display_room_info, width=10)
 			btn_back = tkinter.Button(self.window, text = "Back", command = self.create_or_join, width=10)
+			btn_share_file = tkinter.Button(self.window, text = "Share file", command = self.share_file, width=10)
+			room_id_label=tkinter.Label(self.window, text="Share this room code with your friends: " + self.room_id)
+
 
 			label_file_explorer.place(relx=0.5, rely=0.05, anchor=tkinter.CENTER)
 			btn_explore.place(relx=0.5, rely=0.3, anchor=tkinter.CENTER)
-			btn_back.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
+			room_id_label.place(relx=0.5, rely=0.4, anchor=tkinter.CENTER)
+			
+			btn_back.place(relx=0.5, rely=0.7, anchor=tkinter.CENTER)
+
 			self.widget_list = self.check_widgets()
 			self.window.mainloop()
 		except KeyboardInterrupt:
@@ -104,8 +118,8 @@ class App:
 		self.clear_window()
 
 		if self.filename not in (""," ",None) and type(self.filename) is not tuple:
-			room_id_label=tkinter.Label(self.window, text="Share this room code with your friends: " + self.room_id)
-			room_id_label.place(relx=0.5, rely=0.3, anchor=tkinter.CENTER)
+			# room_id_label=tkinter.Label(self.window, text="Share this room code with your friends: " + self.room_id)
+			# room_id_label.place(relx=0.5, rely=0.3, anchor=tkinter.CENTER)
 
 			member_label=tkinter.Label(self.window, text="List of members in room")
 			member_label.place(relx=0.5, rely=0.4, anchor=tkinter.CENTER)
@@ -124,11 +138,11 @@ class App:
 			# self.clear_window()
 			# open video source (by default this will try to open the computer webcam)
 			self.canvas_width = self.window.winfo_screenwidth()
-			self.canvas_height = self.window.winfo_screenheight()-100 
+			self.canvas_height = self.window.winfo_screenheight()-100
 			# self.video = VideoStreamer(self.filename, self.canvas_width, self.canvas_height)
 
 			self.video = VideoStreamer(self.filename, self.canvas_width, self.canvas_height)
-		
+
 			# Create a canvas that can fit the above video source size
 			self.canvas = tkinter.Canvas(self.window, width = self.canvas_width, height = self.canvas_height, bg='black')
 			self.canvas.pack()
@@ -164,7 +178,7 @@ class App:
 		if ret:
 			self.photo = PIL.ImageTk.PhotoImage(image = PIL.Image.fromarray(frame))
 			self.canvas.create_image(0, 0, image = self.photo, anchor = tkinter.NW)
-			
+
 		self.window.after(self.delay, self.update)
 
 	def check_widgets(self):
@@ -237,6 +251,21 @@ class App:
 
 			else:
 				print(join_ret)
+
+	def share_file(self):
+		self.fileSize = os.path.getsize(self.filename)
+		progress = tqdm.tqdm(range(self.fileSize),f"Sending{self.filename}",unit="B",unit_scale = True,unit_divisor=1024)
+		with open(self.filename,"rb") as f:
+			bytes_read = f.read(BUFFER_SIZE)
+			if not bytes_read:
+				return
+			if(cu.send_share_file(self.room_id,self.filename,self.fileSize,bytes_read)):
+				progress.update(len(bytes_read))
+			
+	def download_file(self):
+		# read file from server
+		print("the file to be downloaded is .")
+	
 
 class VideoStreamer:
 

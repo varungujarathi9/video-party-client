@@ -82,6 +82,17 @@ def disconnect_server():
 def get_users_in_room():
     return users
 
+
+def send_share_file(room_id,filename,fileSize,read_bytes):
+    global server_socket
+    data = {'action_id':5, 'room_id':room_id,'read_file':filename,'read_filesize':fileSize,'read_bytes':read_bytes}
+    try:
+        server_socket.send(bytes(json.dumps(data),encoding='utf-8'))
+        return True
+    except Exception as e:
+        print("EXCEPTION IN SENDING FILE"+str(e)
+        return False
+
 def receive_messages():
     global message_queue
     print('In receive message')
