@@ -1,11 +1,11 @@
-import logo from './logo.svg';
+import RouterPage from './components/helper/router'
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <h1>Hello World</h1>
-    </div>
+   
+    <RouterPage/>
+    
   );
 }
 
