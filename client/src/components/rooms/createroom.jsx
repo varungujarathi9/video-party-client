@@ -1,36 +1,31 @@
 import { navigate } from '@reach/router'
-import React from 'react'
+import React,{useState} from 'react'
 
-export default class CreateRoom extends React.Component{
-    state={
-        filename:'',
-        extension:["mp4","mkv","mpv","avi","webm"],
-        extensionCheck:false,
-        errorMsg:''
-    }
+export default function  CreateRoom(){
+   
 
+    const [filename,setFileName] = useState('')
+    const [extension] = useState(["mp4","mkv","mpv","avi","webm"])
+    const [extensionCheck,setExtensionCheck] = useState(false)
+    const [errorMsg,setErrorMsg] = useState('')
 
-    handleFile=(e)=>{
+    function handleFile(e){
         e.preventDefault()
         var file= e.target.value.replace(/^.*[\\\/]/, '')
-        this.setState({
-            filename:file,
-            
-        })
+        setFileName(file)
+       
 
         var extensionVal = file.split('.')
 
-        if(this.state.extension.includes(extensionVal[1])){
-            this.setState({
-                extensionCheck:true,
-                errorMsg:''
-            })
+        if(extension.includes(extensionVal[1])){
+            setExtensionCheck(true)
+            setErrorMsg('')
+            
         }
         else{
-            this.setState({
-                errorMsg:"please provide valid file",
-                extensionCheck:false
-            })
+            setExtensionCheck(false)
+            setErrorMsg("please provide valid file")
+           
         }  
         
 
@@ -38,37 +33,37 @@ export default class CreateRoom extends React.Component{
 
 
 
-    gotoVideoPage=()=>{
+    function gotoVideoPage(){
         navigate("/videopage")
     }
 
-    goBackToDecideRoom= ()=>{
+    function goBackToDecideRoom(){
         navigate("/decideroom")
     }
 
 
-    render(){
+    
         return(
             <div>
                 <label>Browse file</label>
-                <input type="file" onChange={this.handleFile}/>
+                <input type="file" onChange={handleFile}/>
                 <div style={{ fontSize: '16px', margin: '5px' }}>
-                {this.state.extensionCheck ? 
+                {extensionCheck ? 
                 <div>
                 <h6 style={{color:'green'}}
                 
-                >{this.state.filename}</h6>
+                >{filename}</h6>
                 
-                    <button onClick={this.gotoVideoPage}>Next</button>
+                    <button onClick={gotoVideoPage}>Next</button>
 
                 </div>
                 
-                :<h6 style={{color:'red'}}>{this.state.errorMsg}</h6>}
+                :<h6 style={{color:'red'}}>{errorMsg}</h6>}
                   </div>
 
-                <button onClick={this.goBackToDecideRoom}>Back</button>
+                <button onClick={goBackToDecideRoom}>Back</button>
         
             </div>
         )
-    }
+    
 }

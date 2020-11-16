@@ -1,32 +1,26 @@
-import React from 'react'
+import React,{useContext}from 'react'
 import {navigate} from '@reach/router'
-
-
-export default class LandingPage extends React.Component{
-    constructor(props){
-        super(props)
-        this.state={
-            username:'',
-            errorMsg:''
-        }
-    }
+import {userContext} from '../helper/usercontext'
 
 
 
-    onSubmitForm =(e)=>{
+export default function LandingPage (){
+    
+    
+    const user = useContext(userContext)
+    const onSubmitForm = (e)=>{
         
-        var usernameValid = this.state.username
+        var usernameValid = user.username
         console.log(Boolean(usernameValid===''))
         if(usernameValid !== ''){
             console.log("check here")
             navigate("decideroom",{replace:true})
-            e.preventDefault()
+            e.preventDefault()            
         }
         else{
            e.preventDefault()
-            this.setState({
-                errorMsg:"Please fill username"
-            })
+           user.setErrorMsg("please provide username")
+           
            
             
         }
@@ -34,25 +28,25 @@ export default class LandingPage extends React.Component{
     }
 
 
-    handleInput=(e)=>{
+    const handleInput=(e)=>{
         e.preventDefault()
-        this.setState({
-            username:e.target.value
-        })
+        user.setUsername(e.target.value.trim())
+      
+        
     }
 
-    render(){
+    
         return(
             <div>
                 <form >
                     <label>Username</label>
-                    <input type="text" onChange = {this.handleInput} ></input>
-                    <button  onClick={this.onSubmitForm}>submit</button>
+                    <input type="text" onChange = {handleInput} ></input>
+                    <button  onClick={onSubmitForm}>submit</button>
                 </form>
                 <h6 style={{ color: 'red', fontSize: '16px', margin: '5px' }}>
-                    {this.state.errorMsg}
+                    {user.errormsg}
                   </h6>
             </div>
         )
-    }
+    
 }
