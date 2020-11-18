@@ -4,27 +4,13 @@ import {userContext} from '../helper/usercontext'
 import io from 'socket.io-client'
 
 
-let endpoint = "http://127.0.0.1:5000"
-let socket=io.connect(`${endpoint}`)
 
-export default function LandingPage (){
-
-   
-
-
-
-
-    // const [messages, setMessages] = useState(["Hello And Welcome"]);
-    // const [message, setMessage] = useState("");
-  
-    //const [msg,setMsg] = useState([])
+export default function LandingPage (){  
     const user = useContext(userContext)
 
 
-    useEffect(()=>{
-        printUsername()
-        
-    })
+    let endpoint = "http://127.0.0.1:5000"
+    let socket=io.connect(`${endpoint}`)
 
     const onSubmitForm = (e)=>{
         
@@ -35,11 +21,8 @@ export default function LandingPage (){
             console.log("check here")
 
             
-            socket.emit("message", usernameValid);
-            // if(socket.on("username")){
-            //     navigate("decideroom",{replace:true})
-            // }
-            
+            socket.emit("incomingmessage", usernameValid);
+            navigate("decideroom",{replace:true})
             e.preventDefault()            
         }
         else{
@@ -58,32 +41,19 @@ export default function LandingPage (){
         
     }
 
-    const printUsername = ()=>{
-        console.log("jhello")
-        socket.on("message",(msg)=>{          
-            console.log("check username msg",msg)
-        })
-    }
-
-    // const displayUsername =() =>{
-    //  socket.on("message",msg=>{
-    //         user.setUsername(msg)
-    //         return user.username
+    // const printUsername = ()=>{
+    //     console.log("jhello")
+    //     socket.on("incomingmessage",(msg)=>{          
+    //         console.log("check username msg",msg)
     //     })
     // }
 
-    // const welcomeMsgDisplay =(socket)=>{
-    //     // let msg= socket
-       
-
-    // }
-
+  
     
         return(
             <div>
                 <form >
-                    {/* <p>{msg}</p> */}
-                   
+                               
                     <label>Username</label>
                     <input type="text" onChange = {handleInput} ></input>
                     <button  onClick={onSubmitForm}>submit</button>
