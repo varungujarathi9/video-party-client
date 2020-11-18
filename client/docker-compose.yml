@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+
+  client-uat:
+    # container_name: video-party-client
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: varungujarathi9/video-party-client:uat
+    ports:
+      - 3001:3000
+  
+  client-prod:
+    # container_name: video-party-client
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: varungujarathi9/video-party-client:latest
+    ports:
+      - 80:80    
