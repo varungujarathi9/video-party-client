@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+
+  client:
+    # container_name: video-party-client
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    image: varungujarathi9/video-party-client:latest
+    ports:
+      - 80:80
