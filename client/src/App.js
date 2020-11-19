@@ -8,7 +8,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload. {process.env.REACT_APP_SERVER_TYPE}
+          Edit <code>src/App.js</code> and save to reload. App Stage: {process.env.REACT_APP_SERVER_TYPE}
         </p>
         <a
           className="App-link"
