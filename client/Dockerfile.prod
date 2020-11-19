@@ -7,7 +7,7 @@ RUN echo "TYPE:" $SERVER_TYPE
 COPY package.json ./
 COPY package-lock.json ./
 # replace config file
-RUN cp configs.prod.json configs.json
+RUN cp ./src/configs.prod.json ./src/configs.json
 RUN npm ci --silent
 COPY . ./
 RUN npm run build
