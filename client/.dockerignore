@@ -1,6 +1,8 @@
 node_modules
 build
 .dockerignore
-Dockerfile
+Dockerfile.sit
+Dockerfile.uat
 Dockerfile.prod
 docker-compose.yml
+configs.json
