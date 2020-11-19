@@ -8,9 +8,9 @@ services:
     #   context: .
     #   dockerfile: Dockerfile
     environment: 
-      - SERVER_TYPE="SIT"
-      - SERVER_PORT="9002"
-      - CLIENT_PORT="8002"
+      - REACT_APP_SERVER_TYPE="SIT"
+      - REACT_APP_SERVER_PORT="9002"
+      - REACT_APP_CLIENT_PORT="8002"
     image: varungujarathi9/video-party-client:sit
     ports:
       - 8002:3000
@@ -21,9 +21,9 @@ services:
     #   context: .
     #   dockerfile: Dockerfile
     environment: 
-      - SERVER_TYPE="UAT"
-      - SERVER_PORT="9001"
-      - CLIENT_PORT="8001"
+      - REACT_APP_SERVER_TYPE="UAT"
+      - REACT_APP_SERVER_PORT="9001"
+      - REACT_APP_CLIENT_PORT="8001"
     image: varungujarathi9/video-party-client:uat
     ports:
       - 8001:80
@@ -34,9 +34,9 @@ services:
     #   context: .
     #   dockerfile: Dockerfile
     environment: 
-      - SERVER_TYPE="Prod"
-      - SERVER_PORT="1793"
-      - CLIENT_PORT="80"
+      - REACT_APP_SERVER_TYPE="Prod"
+      - REACT_APP_SERVER_PORT="1793"
+      - REACT_APP_CLIENT_PORT="80"
     image: varungujarathi9/video-party-client:latest
     ports:
       - 80:80    
