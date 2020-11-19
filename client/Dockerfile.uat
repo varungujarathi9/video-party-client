@@ -6,10 +6,11 @@ ENV REACT_APP_SERVER_TYPE $SERVER_TYPE
 RUN echo "TYPE:" $SERVER_TYPE
 COPY package.json ./
 COPY package-lock.json ./
-# replace config file
-RUN cp ./src/configs.uat.json ./src/configs.json
+
 RUN npm ci --silent
 COPY . ./
+# replace config file
+RUN cp ./src/configs.uat.json ./src/configs.json
 RUN npm run build
 
 # production environment
