@@ -16,7 +16,7 @@ RUN npm install --silent
 COPY . ./
 
 # replace config file
-RUN cp configs.sit.json configs.json
+RUN cp ./src/configs.sit.json ./src/configs.json
 
 # start app
 CMD ["npm", "start"]

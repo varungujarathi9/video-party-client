@@ -5,4 +5,4 @@ Dockerfile.sit
 Dockerfile.uat
 Dockerfile.prod
 docker-compose.yml
-configs.json
+src/configs.json
