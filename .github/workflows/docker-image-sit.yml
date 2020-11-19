@@ -34,7 +34,7 @@ jobs:
               icon_emoji: ':octocat:',
               attachments: [{
                 color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `Job status : ${{ job.status }}`,
+                text: `${process.env.AS_WORKFLOW}\nJob status : ${{ job.status }}`,
               }]
             }
         env:
