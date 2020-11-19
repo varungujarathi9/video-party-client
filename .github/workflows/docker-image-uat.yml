@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build the Docker image
-        run: docker build . --file Dockerfile.prod --tag varungujarathi9/video-party-client:uat
+        run: docker build . --file Dockerfile.uat --tag varungujarathi9/video-party-client:uat
       - name: Login to docker
         run: docker login -u=${{ secrets.DOCKER_USERNAME }} -p=${{ secrets.DOCKER_PASSWORD }}
       - name: Build the Docker image
