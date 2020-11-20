@@ -1,68 +1,74 @@
-import React,{useContext,useEffect, useState}from 'react'
-import {navigate} from '@reach/router'
-import {userContext} from '../helper/usercontext'
-import io from 'socket.io-client'
+import React from 'react'
+import { navigate, Link } from '@reach/router'
+// import {userContext} from '../helper/usercontext'
 
 
+import {socket} from '../helper/socketfile'
 
-export default function LandingPage (){  
-    const user = useContext(userContext)
+export default class LandingPage extends React.Component {
+    // const user = useContext(userContext) 
+    constructor(props) {
+        super(props)
+        this.state = {
+            username: '',
+            errormsg: '',
+           
+        }
+    }
 
-
-    let endpoint = "http://127.0.0.1:5000"
-    let socket=io.connect(`${endpoint}`)
-
-    const onSubmitForm = (e)=>{
-        
-        var usernameValid = user.username
-        
-        console.log(Boolean(usernameValid ===''))
-        if(usernameValid !== ''){
+    onSubmitForm = (e) => {
+        var usernameValid = this.state.username
+        console.log(Boolean(usernameValid === ''))
+        if (usernameValid !== '') {
             console.log("check here")
+            socket.emit('message', {data:usernameValid});
+            // this.setState({
+            //     showPage: true
+            // })
+            navigate("decideroom", { state: { getUsername: usernameValid }, replace: true })
+            e.preventDefault()
 
-            
-            socket.emit("incomingmessage", usernameValid);
-            navigate("decideroom",{replace:true})
-            e.preventDefault()            
+
         }
-        else{
-           e.preventDefault()
-           user.setErrorMsg("please provide username")   
-            
+        else {
+            e.preventDefault()
+            //    user.setErrorMsg("please provide username")   
+            this.setState({
+                errormsg: "Please provide username"
+            })
+
         }
 
     }
 
-
-    const handleInput=(e)=>{
+    handleInput = (e) => {
         e.preventDefault()
-        user.setUsername(e.target.value.trim())
-      
-        
+        // user.setUsername(e.target.value.trim())
+        this.setState({
+            username: e.target.value.trim()
+        })
+
+
     }
 
-    // const printUsername = ()=>{
-    //     console.log("jhello")
-    //     socket.on("incomingmessage",(msg)=>{          
-    //         console.log("check username msg",msg)
-    //     })
-    // }
-
-  
-    
-        return(
+    render() {
+        const { errormsg } = this.state
+        
+        return (
             <div>
+
                 <form >
-                               
                     <label>Username</label>
-                    <input type="text" onChange = {handleInput} ></input>
-                    <button  onClick={onSubmitForm}>submit</button>
+                    <input type="text" onChange={this.handleInput} ></input>
+                    <button onClick={this.onSubmitForm}>submit</button>
                 </form>
                 <h6 style={{ color: 'red', fontSize: '16px', margin: '5px' }}>
-                    {user.errormsg}
-                  </h6>
-       
+                    {errormsg}
+                </h6>
+
+
+
             </div>
         )
-    
+    }
 }

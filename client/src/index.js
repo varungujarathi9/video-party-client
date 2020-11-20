@@ -7,9 +7,9 @@ import {Userdetails} from '../src/components/helper/usercontext'
 
 ReactDOM.render(
   <React.StrictMode>
-    <Userdetails>
+    
     <App />
-    </Userdetails>
+    
   </React.StrictMode>,
   document.getElementById('root')
 );

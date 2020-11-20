@@ -1,6 +1,6 @@
 import React from 'react'
 import LandingPage from '../Homepage/LandingPage'
-import DecideRoom from '../RoomDecidepage/DecideRoom'
+import DecideRoom from '../RoomDecidepage/RoomDecide'
 import CreateRoom from '../rooms/createroom'
 import JoinRoom from '../rooms/joinroom'
 import {Router} from '@reach/router'
