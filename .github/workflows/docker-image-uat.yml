@@ -22,7 +22,7 @@ jobs:
         run: docker build . --file Dockerfile.uat --tag varungujarathi9/video-party-client:uat
       - name: Login to docker
         run: docker login -u=${{ secrets.DOCKER_USERNAME }} -p=${{ secrets.DOCKER_PASSWORD }}
-      - name: Build the Docker image
+      - name: Push the Docker image
         run: docker push varungujarathi9/video-party-client:uat
       - uses: 8398a7/action-slack@v3
         with:
@@ -34,11 +34,10 @@ jobs:
               icon_emoji: ':octocat:',
               attachments: [{
                 color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `${process.env.AS_WORKFLOW}\nJob status : ${{ job.status }}`,
+                text: `${{github.repository}}\n${process.env.AS_WORKFLOW}\nJob status : ${{ job.status }}`,
               }]
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }} # required
-        if: always() # Pick up events even if the job fails or is canceled.  
+        if: always() # Pick up events even if the job fails or is canceled.
 
-    
