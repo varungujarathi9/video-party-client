@@ -34,11 +34,10 @@ jobs:
               icon_emoji: ':octocat:',
               attachments: [{
                 color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `${process.env.AS_WORKFLOW}\nJob status : ${{ job.status }}`,
+                text: `${{github.repository}}${process.env.AS_WORKFLOW}\nJob status : ${{ job.status }}`,
               }]
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }} # required
-        if: always() # Pick up events even if the job fails or is canceled.  
+        if: always() # Pick up events even if the job fails or is canceled.
 
-    
