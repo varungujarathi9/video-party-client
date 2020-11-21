@@ -17,7 +17,8 @@ export default class CreateRoom extends React.Component{
 
     navigateToVideoPage =() =>{
         console.log("hello")
-        socket.emit('room_id',{sendRoomId:this.state.roomId_val})
+        const joinRoomdetails = {'sendRoomId':this.state.roomId_val,'username':localStorage.getItem('username')}
+        socket.emit('room_id',{join_room:joinRoomdetails})
     }
     
     render(){
