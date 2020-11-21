@@ -8,20 +8,12 @@ export default class CreateRoom extends React.Component {
         extension: ["mp4", "mkv", "mpv", "avi", "webm", "x-msvideo", "x-matroska"],
         extensionCheck: false,
         errorMsg: '',
-        uNameJoinee: []
+       
 
     }
 
 
-    componentDidMount() {
-        socket.on('newJoinee', (joineeName) => {
-            console.log(joineeName.data)
-            this.setState({
-                uNameJoinee: [...this.state.uNameJoinee, joineeName.data]
-            })
-
-        })
-    }
+   
 
 
     handleFile = (e) => {
@@ -61,14 +53,15 @@ export default class CreateRoom extends React.Component {
 
 
     render() {
-        const { uNameJoinee } = this.state
+      
+        const membersList = localStorage.getItem('roomMembers')
         return (
             <div>
                 <label>Browse file</label>
                 <input type="file" id="videofile" onChange={this.handleFile} />
                 <p>{localStorage.getItem('roomId')}</p>
-                {uNameJoinee.length > 0 &&
-                    uNameJoinee.map(item => {
+                {membersList.length > 0 &&
+                    membersList.map(item => {
                         return (
                             <h3>{item}</h3>
                         )

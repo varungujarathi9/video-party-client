@@ -3,7 +3,8 @@ import { socket } from '../helper/socketfile'
 
 export default class CreateRoom extends React.Component{
     state ={
-        roomId_val:''
+        roomId_val:'',
+        uNameJoinee:[]
     }
 
     handleChange =(e) =>{
@@ -19,6 +20,18 @@ export default class CreateRoom extends React.Component{
         console.log("hello")
         const joinRoomdetails = {'sendRoomId':this.state.roomId_val,'userName':localStorage.getItem('username')}
         socket.emit('room_id',{joinRoom:joinRoomdetails})
+        this.listNewJoinee()
+
+    }
+
+    listNewJoinee=()=>{
+        socket.on('newJoinee', (joineeName) => {
+            console.log(joineeName.membersName)
+            this.setState({
+                uNameJoinee: [...this.state.uNameJoinee, joineeName.membersName]
+            })
+            localStorage.setItem("roomMembers",this.state.uNameJoinee)
+        })
     }
     
     render(){
