@@ -1,10 +1,27 @@
-import RouterPage from './components/helper/router'
+import logo from './logo.svg';
 import './App.css';
+import data from './configs.json'
 
 function App() {
-  return (   
-    <RouterPage/>
-    
+
+  console.log(data.ENVIRONMENT_TYPE)
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Explain. Edit <code>src/App.js</code> and save to reload. Env Type: {data.ENVIRONMENT_TYPE}
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
   );
 }
 
