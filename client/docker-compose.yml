@@ -9,7 +9,7 @@ services:
     #   dockerfile: Dockerfile
     image: varungujarathi9/video-party-client:sit
     ports:
-      - 8002:3000
+      - 3002:3000
 
   client-uat:
     # container_name: video-party-client
@@ -18,7 +18,7 @@ services:
     #   dockerfile: Dockerfile
     image: varungujarathi9/video-party-client:uat
     ports:
-      - 8001:80
+      - 3001:80
 
   client-prod:
     # container_name: video-party-client
