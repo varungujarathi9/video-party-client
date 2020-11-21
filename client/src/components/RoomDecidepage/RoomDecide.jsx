@@ -7,12 +7,7 @@ import {socket} from '../helper/socketfile'
 
 export default class DecideRoom extends React.Component{    
     
-    constructor(props){
-        super(props)
-           
-    }
-    
-    
+  
 
     componentDidMount(){
        localStorage.removeItem('roomId')
@@ -22,7 +17,7 @@ export default class DecideRoom extends React.Component{
     navigateCreateRoom = ()=>{
             socket.emit('my_roomId')
             this.displayRoomId()
-            navigate('/createroom')                    
+                               
     }
     
 
