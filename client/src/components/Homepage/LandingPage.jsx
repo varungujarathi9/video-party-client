@@ -1,5 +1,5 @@
 import React from 'react'
-import { navigate, Link } from '@reach/router'
+import { navigate} from '@reach/router'
 // import {userContext} from '../helper/usercontext'
 
 
@@ -21,11 +21,13 @@ export default class LandingPage extends React.Component {
         console.log(Boolean(usernameValid === ''))
         if (usernameValid !== '') {
             console.log("check here")
+            localStorage.setItem('username',usernameValid)
             socket.emit('message', {data:usernameValid});
+            
             // this.setState({
             //     showPage: true
             // })
-            navigate("decideroom", { state: { getUsername: usernameValid }, replace: true })
+            navigate("decideroom", {replace: true} )
             e.preventDefault()
 
 

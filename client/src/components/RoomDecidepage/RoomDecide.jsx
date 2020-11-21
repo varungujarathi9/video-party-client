@@ -6,45 +6,48 @@ import {socket} from '../helper/socketfile'
 
 
 export default class DecideRoom extends React.Component{    
-    // const user = useContext(userContext)
-    // const[uname,setuname] = useState('')    
+    
     constructor(props){
         super(props)
-        this.state={
-            username:''
-        }
+        // this.state={
+        //     roomId:''
+        // }
         
         
     }
     
-    // useEffect(()=>{
-        
-    //     Socket.on('outgoingdata',(msg)=>{
-    //         setuname(msg)
-    //         console.log(msg)
-    //     })
-       
-    // })
-
+    
     componentDidMount(){
-            socket.on('outgoingdata',this.receiveUsername)
+        console.log("hello ")
+            socket.on('outgoingdata',(uname)=>{
+                if(localStorage.getItem('roomId') == null){
+                    localStorage.setItem('roomId',uname.room_id)
+                }
+                
+            })
+        
     }
+   
+   
 
-    receiveUsername =(uname)=>{
-
-        this.setState({username:uname.data})
-    }
+        navigateOut =() =>{
+            localStorage.removeItem('username')
+            localStorage.removeItem('roomId')
+            navigate('/',{replace:true})
+        }
 
    
         render(){
+            // const {username,roomId} = this.state
+            
         return(
             <div>
                 
-                <h1>Hello {this.state.username}</h1>
+        <h1>Hello {localStorage.getItem('username')}</h1>
                
                 <button  onClick={()=>navigate('/createroom')}>Create Room</button>
                 <button  onClick={()=>navigate('/joinroom')}>Join Room</button>
-                <button  onClick={()=>navigate('/',{replace:true})}>Logout</button>
+                <button  onClick={this.navigateOut}>Logout</button>
             </div>
         )
             }
