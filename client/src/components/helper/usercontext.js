@@ -6,12 +6,12 @@
 
 // export const Userdetails = ({ children }) => {
 //     const [username, setUsername] = useState('')
-//     const [errormsg, setErrorMsg] = useState('')
+//     const [roomId,setRoomId] = useState('')
 
 //     return (<userContext.Provider
 //         value={{
-//             username, errormsg, setUsername,
-//             setErrorMsg
+//             username, roomId, setUsername,
+//             setRoomId
 //         }}>
 //         {children}
 //     </userContext.Provider>

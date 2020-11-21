@@ -9,43 +9,49 @@ export default class DecideRoom extends React.Component{
     
     constructor(props){
         super(props)
-        // this.state={
-        //     roomId:''
-        // }
-        
-        
+           
     }
     
     
+
     componentDidMount(){
-        console.log("hello ")
-            socket.on('outgoingdata',(uname)=>{
-                if(localStorage.getItem('roomId') == null){
-                    localStorage.setItem('roomId',uname.room_id)
-                }
-                
-            })
-        
+       localStorage.removeItem('roomId')
     }
    
+
+    navigateCreateRoom = ()=>{
+            socket.emit('my_roomId')
+            this.displayRoomId()
+            navigate('/createroom')                    
+    }
+    
+
+    displayRoomId =() =>{
+        socket.on('emitRoomId',(roomId)=>{   
+         
+               localStorage.setItem('roomId',roomId.roomid)
+               navigate('/createroom')    
+            
+        })
+    }
+    
    
 
         navigateOut =() =>{
-            localStorage.removeItem('username')
-            localStorage.removeItem('roomId')
+            localStorage.removeItem('username')            
             navigate('/',{replace:true})
         }
 
    
         render(){
-            // const {username,roomId} = this.state
+           
             
         return(
             <div>
                 
-        <h1>Hello {localStorage.getItem('username')}</h1>
+                <h1>Hello {localStorage.getItem('username')}</h1>
                
-                <button  onClick={()=>navigate('/createroom')}>Create Room</button>
+                <button  onClick={this.navigateCreateRoom}>Create Room</button>
                 <button  onClick={()=>navigate('/joinroom')}>Join Room</button>
                 <button  onClick={this.navigateOut}>Logout</button>
             </div>

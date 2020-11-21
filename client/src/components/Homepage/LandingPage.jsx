@@ -20,14 +20,10 @@ export default class LandingPage extends React.Component {
         var usernameValid = this.state.username
         console.log(Boolean(usernameValid === ''))
         if (usernameValid !== '') {
-            console.log("check here")
-            localStorage.setItem('username',usernameValid)
+            console.log("check here")           
             socket.emit('message', {data:usernameValid});
-            
-            // this.setState({
-            //     showPage: true
-            // })
-            navigate("decideroom", {replace: true} )
+            this.displayUsername()
+            // navigate("decideroom", {replace: true} )
             e.preventDefault()
 
 
@@ -41,6 +37,16 @@ export default class LandingPage extends React.Component {
 
         }
 
+    }
+
+    displayUsername = ()=>{
+        socket.on('outgoingdata',(username)=>{
+            console.log(username)            
+            localStorage.setItem('username',username.data)
+            navigate("decideroom", {replace: true} )
+        })
+       
+        
     }
 
     handleInput = (e) => {

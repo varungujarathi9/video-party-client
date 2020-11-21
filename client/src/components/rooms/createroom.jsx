@@ -8,17 +8,18 @@ export default class CreateRoom extends React.Component{
         extension:["mp4","mkv","mpv","avi","webm"],
         extensionCheck:false,
         errorMsg:'',
-        roomId:''
+        
     }
-    // componentDidMount(){
-    //     console.log("hello ")
-    //         socket.on('outgoingdata',(uname)=>{
-    //             this.setState({
-    //                 roomId:uname.room_id
-                    
-    //             })
-    //         })
-    //     // this.storeinls  
+    
+
+    // componentDidMount (){
+    //     socket.on('emitRoomId',(roomId)=>{
+            
+    //         if(localStorage.getItem('roomId') == null){
+    //            localStorage.setItem('roomId',roomId.roomid)
+    //         }
+            
+    //     })
     // }
 
 
@@ -47,12 +48,8 @@ export default class CreateRoom extends React.Component{
         
 
     }   
+
     
-
-   
-   
-
-
     render(){
         return(
             <div>
@@ -66,7 +63,7 @@ export default class CreateRoom extends React.Component{
                 
                 >{this.state.filename}</h6>
                 
-                    <button onClick={()=>{ navigate("/videopage")}}>Next</button>
+                    <button onClick={()=>{navigate('/videopage')}}>Next</button>
 
                 </div>
                 
