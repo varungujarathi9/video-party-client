@@ -25,6 +25,7 @@ export default class CreateRoom extends React.Component{
     }
 
     listNewJoinee=()=>{
+        console.log("********************************************************")
         socket.on('newJoinee', (joineeName) => {
             console.log(joineeName.membersName)
             this.setState({

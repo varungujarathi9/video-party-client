@@ -8,12 +8,15 @@ export default class CreateRoom extends React.Component {
         extension: ["mp4", "mkv", "mpv", "avi", "webm", "x-msvideo", "x-matroska"],
         extensionCheck: false,
         errorMsg: '',
-       
+        membersList: []
 
     }
 
 
-   
+    componentDidMount(){
+        const joinRoomdetails = {'sendRoomId':localStorage.getItem('roomId'),'userName':localStorage.getItem('username')}
+        socket.emit('room_id',{joinRoom:joinRoomdetails})
+    }
 
 
     handleFile = (e) => {
@@ -51,10 +54,29 @@ export default class CreateRoom extends React.Component {
 
     }
 
+    listNewJoinee=()=>{
+        socket.on('newJoinee', (joineeName) => {
+            console.log("********************************************************")
+            console.log(joineeName.membersName)
+            this.setState({
+                membersList: [...this.state.membersList, joineeName.membersName]
+            })
+            localStorage.setItem("roomMembers",this.state.membersList)
+        })
+    }
+    
 
     render() {
-      
-        const membersList = localStorage.getItem('roomMembers')
+        // let membersList = []
+        // if (localStorage.getItem('roomMembers') !== null){
+        //     membersList = localStorage.getItem('roomMembers')
+        // }
+        // else{
+        //     membersList = []
+        // }
+        const {membersList} = this.state
+        
+        this.listNewJoinee()
         return (
             <div>
                 <label>Browse file</label>
@@ -86,5 +108,6 @@ export default class CreateRoom extends React.Component {
 
             </div>
         )
+        
     }
 }
