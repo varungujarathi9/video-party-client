@@ -1,5 +1,5 @@
 import React from 'react'
-import { socket } from '../helper/socketfile'
+import { serverSocket } from '../helper/connection'
 
 export default class CreateRoom extends React.Component{
     state ={
@@ -19,14 +19,14 @@ export default class CreateRoom extends React.Component{
     navigateToVideoPage =() =>{
         console.log("hello")
         const joinRoomdetails = {'sendRoomId':this.state.roomId_val,'userName':localStorage.getItem('username')}
-        socket.emit('room_id',{joinRoom:joinRoomdetails})
+        serverSocket.emit('room_id',{joinRoom:joinRoomdetails})
         this.listNewJoinee()
 
     }
 
     listNewJoinee=()=>{
         console.log("********************************************************")
-        socket.on('newJoinee', (joineeName) => {
+        serverSocket.on('newJoinee', (joineeName) => {
             console.log(joineeName.membersName)
             this.setState({
                 uNameJoinee: [...this.state.uNameJoinee, joineeName.membersName]

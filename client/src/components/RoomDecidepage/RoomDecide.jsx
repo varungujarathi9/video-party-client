@@ -1,7 +1,7 @@
 import { navigate } from '@reach/router'
 import React from 'react'
 // import {userContext} from '../helper/usercontext'
-import {socket} from '../helper/socketfile'
+import {serverSocket} from '../helper/connection'
 
 
 
@@ -15,14 +15,14 @@ export default class DecideRoom extends React.Component{
    
 
     navigateCreateRoom = ()=>{
-            socket.emit('my_roomId')
+            serverSocket.emit('my_roomId')
             this.displayRoomId()
                                
     }
     
 
     displayRoomId =() =>{
-        socket.on('emitRoomId',(roomId)=>{   
+        serverSocket.on('emitRoomId',(roomId)=>{   
          
                localStorage.setItem('roomId',roomId.roomid)
                navigate('/createroom')    

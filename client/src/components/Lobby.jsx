@@ -1,25 +1,52 @@
+/**
+ * TODO: Dont show next for joinees
+ * TODO: socket listen to new-joinee, if joinee listen to video-started 
+ */
+
 import { navigate } from '@reach/router'
 import React from 'react'
-import { serverSocket } from '../helper/connection'
+import { serverSocket } from './helper/connection'
 
-export default class CreateRoom extends React.Component {
+export default class Lobby extends React.Component {
     state = {
-        filename: '',
-        extension: ["mp4", "mkv", "mpv", "avi", "webm", "x-msvideo", "x-matroska"],
-        extensionCheck: false,
-        errorMsg: '',
-        membersList: []
-
+        userType: '',
+        username: '',
+        roomDetails: '',
+        fileName: '',
+        extension: ["mp4", "mkv", "x-msvideo", "x-matroska"],
+        extensionValid: false,
+        fileError: '',
     }
-
 
     componentDidMount(){
-        const joinRoomdetails = {'sendRoomId':localStorage.getItem('roomId'),'userName':localStorage.getItem('username')}
-        serverSocket.emit('room_id',{joinRoom:joinRoomdetails})
-        console.log('emit')
-        this.listNewJoinee()
-    }
+        if (sessionStorage.getItem('user-type') === 'creator' || sessionStorage.getItem('user-type') === 'joinee' ){
+            this.setState({userType: sessionStorage.getItem('user-type')})
+        }
+        else{
+            navigate('/')
+        }
 
+        if (sessionStorage.getItem('room-details') !== null || sessionStorage.getItem('room-details') !== '' ){
+            this.setState({roomDetails: sessionStorage.getItem('room-details')})
+        }
+        else{
+            navigate('/')
+        }
+
+        if (sessionStorage.getItem('username') !== null || sessionStorage.getItem('username') !== '' ){
+            this.setState({username: sessionStorage.getItem('username')})
+        }
+        else{
+            navigate('/')
+        }
+
+        if (sessionStorage.getItem('room-id') !== null || sessionStorage.getItem('room-id') !== '' ){
+            this.setState({roomID: sessionStorage.getItem('room-id')})
+        }
+        else{
+            navigate('/')
+        }
+    }
 
     handleFile = (e) => {
         e.preventDefault()
@@ -74,36 +101,30 @@ export default class CreateRoom extends React.Component {
         // else{
         //     membersList = []
         // }
-        const {membersList} = this.state
+        let roomDetails = JSON.parse(sessionStorage.getItem('room-details').replace(/"/g, '\"'))
         return (
             <div>
-                <label>Browse file</label>
+                
+                <label>Browse file</label><br/>
                 <input type="file" id="videofile" onChange={this.handleFile} />
-                <p>{localStorage.getItem('roomId')}</p>
-                {membersList.length > 0 &&
-                    membersList.map(item => {
-                        return (
-                            <h3 key={item}>{item}</h3>
-                        )
-                    })}
-
-
                 <div style={{ fontSize: '16px', margin: '5px' }}>
                     {this.state.extensionCheck ?
                         <div>
-                            <h6 style={{ color: 'green' }}
-
-                            >{this.state.filename}</h6>
-
-                            <button onClick={() => { navigate('/videopage') }}>Next</button>
-
+                            <h5 style={{ color: 'green' }}>{this.state.filename}</h5>
+                            <button onClick={this.startVideo}>Start Partying</button>
                         </div>
 
                         : <h6 style={{ color: 'red' }}>{this.state.errorMsg}</h6>}
                 </div>
-
                 <button onClick={() => { navigate(-1) }}>Back</button>
-
+                <h4>Room I.D.</h4>
+                {this.state.roomID}
+                <h4>Room Members</h4>
+                {roomDetails.members.map(username=>{
+                    return (
+                        <p key={username}>{username}</p>
+                    )
+                })}
             </div>
         )
         

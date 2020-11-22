@@ -3,7 +3,7 @@ import { navigate} from '@reach/router'
 // import {userContext} from '../helper/usercontext'
 
 
-import {socket} from '../helper/socketfile'
+import {socket} from '../helper/connection'
 
 export default class LandingPage extends React.Component {
     // const user = useContext(userContext) 
