@@ -27,7 +27,7 @@ export default class Lobby extends React.Component {
         }
 
         if (sessionStorage.getItem('room-details') !== null || sessionStorage.getItem('room-details') !== '' ){
-            this.setState({roomDetails: sessionStorage.getItem('room-details')})
+            this.setState({roomDetails: JSON.parse(sessionStorage.getItem('room-details').replace(/"/g, '\"'))})
         }
         else{
             navigate('/')
@@ -46,6 +46,24 @@ export default class Lobby extends React.Component {
         else{
             navigate('/')
         }
+
+        serverSocket.on('new-joinee', (data)=>{
+            console.log(data)
+            sessionStorage.setItem('room-details', JSON.stringify(data))
+            this.setState({
+                roomDetails: JSON.parse(JSON.stringify(data))
+            })
+        })
+
+        serverSocket.on('video-started', (data)=>{
+            if (this.state.userType === 'joinee' && ( this.state.fileName === '' || this.state.fileName === null)){
+                // TODO change alert to UI
+                alert('Select a file')
+            }
+            else{
+                navigate('/video-player')
+            }
+        })
     }
 
     handleFile = (e) => {
@@ -57,8 +75,7 @@ export default class Lobby extends React.Component {
         var file = e.target.value.replace(/^.*[\\]/, '')
 
         this.setState({
-            filename: file,
-
+            fileName: file,
         })
 
         var extensionVal = typeOfFile.split('/')
@@ -72,7 +89,7 @@ export default class Lobby extends React.Component {
         }
         else {
             this.setState({
-                errorMsg: "please provide valid file",
+                errorMsg: "Please provide valid file",
                 extensionCheck: false
             })
         }
@@ -83,16 +100,11 @@ export default class Lobby extends React.Component {
 
     }
 
-    listNewJoinee=()=>{
-        serverSocket.on('newJoinee', (joineeName) => {
-            this.setState({
-                membersList: [...this.state.membersList, joineeName.membersName]
-            })
-            localStorage.setItem("roomMembers",this.state.membersList)
-        })
+    startVideo = () =>{
+        serverSocket.emit('start-video')
     }
     
-
+    
     render() {
         // let membersList = []
         // if (localStorage.getItem('roomMembers') !== null){
@@ -101,7 +113,8 @@ export default class Lobby extends React.Component {
         // else{
         //     membersList = []
         // }
-        let roomDetails = JSON.parse(sessionStorage.getItem('room-details').replace(/"/g, '\"'))
+        // let roomDetailsString = sessionStorage.getItem('room-details').replace(/"/g, '\"')
+        var {roomDetails} = this.state
         return (
             <div>
                 
@@ -110,8 +123,8 @@ export default class Lobby extends React.Component {
                 <div style={{ fontSize: '16px', margin: '5px' }}>
                     {this.state.extensionCheck ?
                         <div>
-                            <h5 style={{ color: 'green' }}>{this.state.filename}</h5>
-                            <button onClick={this.startVideo}>Start Partying</button>
+                            <h5 style={{ color: 'green' }}>{this.state.fileName}</h5>
+                            {sessionStorage.getItem('user-type') === 'creator' && <button onClick={this.startVideo}>Start Partying</button>}
                         </div>
 
                         : <h6 style={{ color: 'red' }}>{this.state.errorMsg}</h6>}
@@ -120,7 +133,7 @@ export default class Lobby extends React.Component {
                 <h4>Room I.D.</h4>
                 {this.state.roomID}
                 <h4>Room Members</h4>
-                {roomDetails.members.map(username=>{
+                {roomDetails !== '' && roomDetails.members.length > 0 && roomDetails.members.map(username=>{
                     return (
                         <p key={username}>{username}</p>
                     )

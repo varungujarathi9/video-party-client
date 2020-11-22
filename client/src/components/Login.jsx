@@ -57,9 +57,10 @@ export default class Login extends React.Component {
     }
 
     handleJoinRoom = () => {  
-        serverSocket.on('room-joined',(roomID)=>{   
+        serverSocket.on('room-joined',(data)=>{   
             sessionStorage.setItem('username', this.state.username)
             sessionStorage.setItem('room-id', this.state.roomID)
+            sessionStorage.setItem('room-details', JSON.stringify(data['room-details']))
             navigate('/lobby')    
         })
     }
