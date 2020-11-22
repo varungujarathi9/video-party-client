@@ -16,6 +16,8 @@ export default class CreateRoom extends React.Component {
     componentDidMount(){
         const joinRoomdetails = {'sendRoomId':localStorage.getItem('roomId'),'userName':localStorage.getItem('username')}
         socket.emit('room_id',{joinRoom:joinRoomdetails})
+        console.log('emit')
+        this.listNewJoinee()
     }
 
 
@@ -56,8 +58,6 @@ export default class CreateRoom extends React.Component {
 
     listNewJoinee=()=>{
         socket.on('newJoinee', (joineeName) => {
-            console.log("********************************************************")
-            console.log(joineeName.membersName)
             this.setState({
                 membersList: [...this.state.membersList, joineeName.membersName]
             })
@@ -75,8 +75,6 @@ export default class CreateRoom extends React.Component {
         //     membersList = []
         // }
         const {membersList} = this.state
-        
-        this.listNewJoinee()
         return (
             <div>
                 <label>Browse file</label>
@@ -85,7 +83,7 @@ export default class CreateRoom extends React.Component {
                 {membersList.length > 0 &&
                     membersList.map(item => {
                         return (
-                            <h3>{item}</h3>
+                            <h3 key={item}>{item}</h3>
                         )
                     })}
 
