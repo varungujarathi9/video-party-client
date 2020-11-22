@@ -27,7 +27,7 @@ services:
     ports:
       - 3001:3000
     networks:
-      - netw  
+      - sit  
 
   client-uat:
     # container_name: video-party-client
@@ -39,7 +39,7 @@ services:
     ports:
       - 3002:80
     networks:
-      - netw
+      - uat
 
   client-prod:
     # container_name: video-party-client
@@ -51,7 +51,7 @@ services:
     ports:
       - 80:80
     networks:
-      - netw  
+      - prod  
 
   server-sit:
     # container_name: video-party-server
@@ -63,7 +63,7 @@ services:
     ports:
       - 5001:5000
     networks:
-      - netw  
+      - sit  
 
   server-uat:
     # container_name: video-party-server
@@ -75,7 +75,7 @@ services:
     ports:
       - 5002:5000
     networks:
-      - netw
+      - uat
 
   server-prod:
     # container_name: video-party-client
@@ -87,8 +87,12 @@ services:
     ports:
       - 1793:5000
     networks:
-      - netw
+      - prod
 
 networks:
-  netw:
-    driver: bridge 
+  sit:
+    driver: bridge
+  uat:
+    driver: bridge
+  prod:
+    driver: bridge
