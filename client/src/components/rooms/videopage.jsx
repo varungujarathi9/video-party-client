@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactPlayer from 'react-player'
+import { socket } from '../helper/socketfile'
 
 export default class VideoPage extends React.Component{
     state={
@@ -17,7 +18,7 @@ export default class VideoPage extends React.Component{
         onProgressTime:0.0
     }
     
-    
+
     vidOnPause=()=>{
         this.setState({
             playing:false
@@ -25,10 +26,16 @@ export default class VideoPage extends React.Component{
         if(this.state.playing === false){
             this.setState({
                 onPauseTime:this.player.getCurrentTime()
-            })
+            },this.sendPauseDetails)
         }
         console.log(this.player.getCurrentTime())
         console.log("video paused")
+    }
+
+
+    sendPauseDetails =()=>{
+        const pauseDetails = {'playing':this.state.playing,'pauseTime':this.state.onPauseTime,'progressTime':this.state.onProgressTime}
+        socket.emit('pause_details',{pauseDetails:pauseDetails})
     }
 
     vidOnProgress=()=>{
@@ -37,6 +44,7 @@ export default class VideoPage extends React.Component{
         })
         console.log(this.player.getCurrentTime())
         console.log("vid on progreess")
+        this.sendPauseDetails()
     }
 
 
