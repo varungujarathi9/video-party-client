@@ -1,55 +1,62 @@
+// TODO: got back to lobby when creator goes back
+// TODO: leave room
+// TODO: check file duration of all members
+// TODO: create a ready button for joinee
 import React from 'react'
 import ReactPlayer from 'react-player'
-import {serverSocket} from './helper/connection'
+import { serverSocket } from './helper/connection'
 
 export default class VideoPlayer extends React.Component{
     state={
         playing: false,
-        controls: false,
-        light: false,
-        volume: 0.8,
-        muted: false,
-        played: 0,
-        loaded: 0,
-        duration: 0,
-        playbackRate: 1.0,
-        loop: false,
-        onPauseTime:0.0,
-        onProgressTime:0.0
+        secondsPlayed: 0,
+        lastUpdatedBy: sessionStorage.getItem('username'),
+        videoPlayer: null
     }
     
-    
+    componentDidMount(){
+        serverSocket.on('updated-video', (data) =>{
+            if(data['pauseDetails']['username'] !== sessionStorage.getItem('username')){
+                console.log('DATA:'+JSON.stringify(data['pauseDetails']))
+                this.setState({
+                    playing: data['pauseDetails']['playing'],
+                    played: data['pauseDetails']['progressTime']
+                })
+                this.setState({
+                    lastUpdatedBy: data['pauseDetails']['username']
+                })
+                this.state.videoPlayer.seekTo(data['pauseDetails']['progressTime'], 'seconds')
+            }
+        })
+    }
+
     vidOnPause=()=>{
-        this.setState({
-            playing:false
-        })
-        if(this.state.playing === false){
-            this.setState({
-                onPauseTime:this.player.getCurrentTime()
-            })
+        if (this.state.lastUpdatedBy === sessionStorage.getItem('username')){
+            let pauseDetails = {'playing':false,'progressTime':this.state.videoPlayer.getCurrentTime(), 'username':sessionStorage.getItem('username')}
+            serverSocket.emit('video-update',{pauseDetails:pauseDetails})
+            console.log('paused')
         }
-        console.log(this.player.getCurrentTime())
-        console.log("video paused")
-    }
-
-    vidOnProgress=()=>{
+        
         this.setState({
-            onProgressTime:this.player.getCurrentTime()
+            lastUpdatedBy: sessionStorage.getItem('username')
         })
-        console.log(this.player.getCurrentTime())
-        console.log("vid on progreess")
+  
     }
 
+    vidOnPlay = () => {
+        if (this.state.lastUpdatedBy === sessionStorage.getItem('username')){
+            let pauseDetails = {'playing':true,'progressTime':this.state.videoPlayer.getCurrentTime(), 'username':sessionStorage.getItem('username')}
+            serverSocket.emit('video-update',{pauseDetails:pauseDetails})
+            console.log('played')
+        }
 
-    vidOnPlay =()=>{
         this.setState({
-            playing:true
+            lastUpdatedBy: sessionStorage.getItem('username')
         })
-
     }
 
-    ref =(player) =>{
-        this.player = player
+    ref = (player) =>{
+        this.setState({videoPlayer:player})
     }
     render(){
         const videoFileUrl = localStorage.getItem('video_file')
@@ -65,7 +72,6 @@ export default class VideoPlayer extends React.Component{
             height='100%'
             controls = {true}
             onPause ={this.vidOnPause}
-            onProgress={this.vidOnProgress}
             onPlay={this.vidOnPlay}
             />
         </div>
