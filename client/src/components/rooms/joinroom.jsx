@@ -1,3 +1,4 @@
+import { navigate } from '@reach/router'
 import React from 'react'
 import { serverSocket } from '../helper/connection'
 
@@ -32,6 +33,7 @@ export default class CreateRoom extends React.Component{
                 uNameJoinee: [...this.state.uNameJoinee, joineeName.membersName]
             })
             localStorage.setItem("roomMembers",this.state.uNameJoinee)
+            navigate('/createroom')
         })
     }
     

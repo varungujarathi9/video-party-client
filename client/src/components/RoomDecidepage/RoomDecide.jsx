@@ -22,8 +22,9 @@ export default class DecideRoom extends React.Component{
     
 
     displayRoomId =() =>{
-        serverSocket.on('emitRoomId',(roomId)=>{   
-         
+        console.log("before listening")
+        socket.on('emitRoomId',(roomId)=>{     
+            console.log("after listening")      
                localStorage.setItem('roomId',roomId.roomid)
                navigate('/createroom')    
             
@@ -33,7 +34,7 @@ export default class DecideRoom extends React.Component{
    
 
         navigateOut =() =>{
-            localStorage.removeItem('username')            
+            localStorage.clear()         
             navigate('/',{replace:true})
         }
 
