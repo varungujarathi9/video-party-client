@@ -2,6 +2,7 @@
 // TODO: leave room
 // TODO: check file duration of all members
 // TODO: create a ready button for joinee
+import { navigate } from '@reach/router'
 import React from 'react'
 import ReactPlayer from 'react-player'
 import { serverSocket } from './helper/connection'
@@ -20,19 +21,27 @@ export default class VideoPlayer extends React.Component{
                 console.log('DATA:'+JSON.stringify(data['pauseDetails']))
                 this.setState({
                     playing: data['pauseDetails']['playing'],
-                    played: data['pauseDetails']['progressTime']
-                })
-                this.setState({
+                    played: data['pauseDetails']['progressTime'],
                     lastUpdatedBy: data['pauseDetails']['username']
                 })
                 this.state.videoPlayer.seekTo(data['pauseDetails']['progressTime'], 'seconds')
+                if(data['pauseDetails']['exited'] === true){
+                    navigate('/lobby')
+                }
             }
         })
     }
 
+    componentWillUnmount(){
+        if (this.state.lastUpdatedBy === sessionStorage.getItem('username')){
+            let pauseDetails = {'playing':false,'progressTime':this.state.videoPlayer.getCurrentTime(), 'username':sessionStorage.getItem('username'), 'exited':true}
+            serverSocket.emit('video-update',{pauseDetails:pauseDetails})
+        }
+    }
+
     vidOnPause=()=>{
         if (this.state.lastUpdatedBy === sessionStorage.getItem('username')){
-            let pauseDetails = {'playing':false,'progressTime':this.state.videoPlayer.getCurrentTime(), 'username':sessionStorage.getItem('username')}
+            let pauseDetails = {'playing':false,'progressTime':this.state.videoPlayer.getCurrentTime(), 'username':sessionStorage.getItem('username'), 'exited':false}
             serverSocket.emit('video-update',{pauseDetails:pauseDetails})
             console.log('paused')
         }
@@ -45,7 +54,7 @@ export default class VideoPlayer extends React.Component{
 
     vidOnPlay = () => {
         if (this.state.lastUpdatedBy === sessionStorage.getItem('username')){
-            let pauseDetails = {'playing':true,'progressTime':this.state.videoPlayer.getCurrentTime(), 'username':sessionStorage.getItem('username')}
+            let pauseDetails = {'playing':true,'progressTime':this.state.videoPlayer.getCurrentTime(), 'username':sessionStorage.getItem('username'), 'exited':false}
             serverSocket.emit('video-update',{pauseDetails:pauseDetails})
             console.log('played')
         }
@@ -62,14 +71,14 @@ export default class VideoPlayer extends React.Component{
         const videoFileUrl = localStorage.getItem('video_file')
         const {playing} =this.state
         return(
-            <div className='player-wrapper'>
+            <div className='player-wrapper' style={{backgroundColor:'black'}}>
             <ReactPlayer
             ref ={this.ref}
             playing={playing}
             className='react-player fixed-bottom'
             url= {videoFileUrl}
             width='100%'
-            height='100%'
+            height='100vh'
             controls = {true}
             onPause ={this.vidOnPause}
             onPlay={this.vidOnPlay}
