@@ -81,11 +81,11 @@ export default class Lobby extends React.Component {
         })
 
         serverSocket.on('all_left',data=>{
+            console.log(data)
             sessionStorage.setItem('room-details', JSON.stringify(data))
             // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
             this.setState({
                 roomDetails: JSON.parse(JSON.stringify(data)),
-                
             })     
             navigate('/')    
         })
@@ -130,7 +130,7 @@ export default class Lobby extends React.Component {
     }
 
     startVideo = () =>{
-        serverSocket.emit('start-video')
+        serverSocket.emit('start-video', {room_id:sessionStorage.getItem('room-id')})
     }
 
 
