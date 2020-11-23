@@ -27,17 +27,15 @@ services:
     ports:
       - 3001:3000
     
-  # clientuat:
-  #   # container_name: video-party-client
-  #   # build:
-  #   #   context: .
-  #   #   dockerfile: Dockerfile
-  #   container_name: clientuat
-  #   image: index.docker.io/varungujarathi9/video-party-client:uat
-  #   ports:
-  #     - 3002:80
-  #   networks:
-  #     - uat
+  clientuat:
+    # container_name: video-party-client
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    container_name: clientuat
+    image: index.docker.io/varungujarathi9/video-party-client:uat
+    ports:
+      - 3002:80
 
   # clientprod:
   #   # container_name: video-party-client
@@ -61,17 +59,15 @@ services:
     ports:
       - 5001:5000
 
-  # serveruat:
-  #   # container_name: video-party-server
-  #   # build:
-  #   #   context: .
-  #   #   dockerfile: Dockerfile
-  #   container_name: serveruat
-  #   image: index.docker.io/varungujarathi9/video-party-server:uat
-  #   # ports:
-  #   #   - 5002:5000
-  #   networks:
-  #     - uat
+  serveruat:
+    # container_name: video-party-server
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    container_name: serveruat
+    image: index.docker.io/varungujarathi9/video-party-server:uat
+    ports:
+      - 5002:5000
 
   # serverprod:
   #   # container_name: video-party-client
@@ -80,7 +76,7 @@ services:
   #   #   dockerfile: Dockerfile
   #   container_name: serverprod
   #   image: index.docker.io/varungujarathi9/video-party-server:latest
-  #   # ports:
-  #   #   - 1793:5000
+  #   ports:
+  #     - 1793:5000
   #   networks:
   #     - prod
