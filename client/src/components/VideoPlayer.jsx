@@ -1,4 +1,4 @@
-// TODO: got back to lobby when creator goes back
+// TODO: got back to lobby when creator goes back--DONE
 // TODO: leave room
 // TODO: check file duration of all members
 // TODO: create a ready button for joinee
@@ -36,6 +36,7 @@ export default class VideoPlayer extends React.Component{
         if (this.state.lastUpdatedBy === sessionStorage.getItem('username')){
             let pauseDetails = {'playing':false,'progressTime':this.state.videoPlayer.getCurrentTime(), 'username':sessionStorage.getItem('username'), 'exited':true}
             serverSocket.emit('video-update',{pauseDetails:pauseDetails})
+            localStorage.removeItem('video_file')
         }
     }
 

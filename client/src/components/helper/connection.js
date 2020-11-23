@@ -1,6 +1,12 @@
 import io from 'socket.io-client'
 import configs from '../../configs.json'
 
-const serverSocket  = io.connect(`${configs.SERVER}`,{transports: ['websocket'],upgrade:false})
+
+const endpoint = "http://0.0.0.0:5000"
+// uncomment this while running in gcp
+// const serverSocket  = io.connect(`${configs.SERVER}`,{transports: ['websocket'],upgrade:false})
+
+// uncomment this while using in local server
+const serverSocket  = io.connect(`${endpoint}`,{transports: ['websocket'],upgrade:false})
 
 export {serverSocket}
