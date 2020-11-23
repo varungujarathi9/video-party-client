@@ -1,5 +1,5 @@
 {
     "ENVIRONMENT_TYPE" : "SIT",
-    "SERVER" : "ws://server-sit:5000",
-    "CLIENT" : "client-sit:3001"
+    "SERVER" : "ws://serversit:5000",
+    "CLIENT" : "clientsit:3001"
 }

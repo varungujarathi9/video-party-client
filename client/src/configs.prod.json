@@ -1,5 +1,5 @@
 {
     "ENVIRONMENT_TYPE" : "Prod",
-    "SERVER_PORT" : "server-prod:1793",
-    "CLIENT_PORT" : "http://client-prod"
+    "SERVER_PORT" : "serverprod:1793",
+    "CLIENT_PORT" : "http://clientprod"
 }

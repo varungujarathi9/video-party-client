@@ -17,76 +17,76 @@ services:
       - WATCHTOWER_REVIVE_STOPPED=true
       - WATCHTOWER_POLL_INTERVAL=60
 
-  client-sit:
+  serversit:
     # container_name: video-party-client
     # build:
     #   context: .
     #   dockerfile: Dockerfile
     depends_on:
-      - server-sit
+      - serversit
     links:
-      - server-sit
-    container_name: client-sit
+      - serversit
+    container_name: serversit
     image: index.docker.io/varungujarathi9/video-party-client:sit
     ports:
       - 3001:3000
     networks:
       - sit
 
-  client-uat:
+  serveruat:
     # container_name: video-party-client
     # build:
     #   context: .
     #   dockerfile: Dockerfile
-    container_name: client-uat
+    container_name: serveruat
     image: index.docker.io/varungujarathi9/video-party-client:uat
     ports:
       - 3002:80
     networks:
       - uat
 
-  client-prod:
+  serverprod:
     # container_name: video-party-client
     # build:
     #   context: .
     #   dockerfile: Dockerfile
-    container_name: client-prod
+    container_name: serverprod
     image: index.docker.io/varungujarathi9/video-party-client:latest
     ports:
       - 80:80
     networks:
       - prod  
 
-  server-sit:
+  serversit:
     # container_name: video-party-server
     # build:
     #   context: .
     #   dockerfile: Dockerfile
-    container_name: server-sit
+    container_name: serversit
     image: index.docker.io/varungujarathi9/video-party-server:sit
     # ports:
     #   - 5001:5000
     networks:
       - sit  
 
-  server-uat:
+  serveruat:
     # container_name: video-party-server
     # build:
     #   context: .
     #   dockerfile: Dockerfile
-    container_name: server-uat
+    container_name: serveruat
     image: index.docker.io/varungujarathi9/video-party-server:uat
     # ports:
     #   - 5002:5000
     networks:
       - uat
 
-  server-prod:
+  serverprod:
     # container_name: video-party-client
     # build:
     #   context: .
     #   dockerfile: Dockerfile
-    container_name: server-prod
+    container_name: serverprod
     image: index.docker.io/varungujarathi9/video-party-server:latest
     # ports:
     #   - 1793:5000
