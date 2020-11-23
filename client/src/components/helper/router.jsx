@@ -1,19 +1,18 @@
 import React from 'react'
-import LandingPage from '../Homepage/LandingPage'
-import DecideRoom from '../RoomDecidepage/RoomDecide'
-import CreateRoom from '../rooms/createroom'
-import JoinRoom from '../rooms/joinroom'
 import {Router} from '@reach/router'
-
+import Home from '../Home'
+import Login from '../Login'
+import Lobby from '../Lobby'
+import VideoPlayer from '../VideoPlayer'
 
 export default class RouterPage extends React.Component{
     render(){
         return(
             <Router>
-                <LandingPage exact path="/" />
-                <DecideRoom  path="decideroom"/>     
-                <CreateRoom path="/createroom"/>
-                <JoinRoom path="/joinroom"/>           
+                <Home exact path="/" />
+                <Login exact path="/login" />
+                <Lobby exact path="/lobby" />
+                <VideoPlayer exact path="/video-player" />      
             </Router>
         )
     }
