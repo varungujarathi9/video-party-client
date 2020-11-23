@@ -60,8 +60,8 @@ services:
     #   dockerfile: Dockerfile
     container_name: server-sit
     image: index.docker.io/varungujarathi9/video-party-server:sit
-    ports:
-      - 5001:5000
+    # ports:
+    #   - 5001:5000
     networks:
       - sit  
 
@@ -72,8 +72,8 @@ services:
     #   dockerfile: Dockerfile
     container_name: server-uat
     image: index.docker.io/varungujarathi9/video-party-server:uat
-    ports:
-      - 5002:5000
+    # ports:
+    #   - 5002:5000
     networks:
       - uat
 
@@ -84,8 +84,8 @@ services:
     #   dockerfile: Dockerfile
     container_name: server-prod
     image: index.docker.io/varungujarathi9/video-party-server:latest
-    ports:
-      - 1793:5000
+    # ports:
+    #   - 1793:5000
     networks:
       - prod
 
