@@ -17,45 +17,39 @@ services:
       - WATCHTOWER_REVIVE_STOPPED=true
       - WATCHTOWER_POLL_INTERVAL=60
 
-  serversit:
+  clientsit:
     # container_name: video-party-client
     # build:
     #   context: .
     #   dockerfile: Dockerfile
-    depends_on:
-      - serversit
-    links:
-      - serversit
-    container_name: serversit
+    container_name: clientsit
     image: index.docker.io/varungujarathi9/video-party-client:sit
     ports:
       - 3001:3000
-    networks:
-      - sit
+    
+  # clientuat:
+  #   # container_name: video-party-client
+  #   # build:
+  #   #   context: .
+  #   #   dockerfile: Dockerfile
+  #   container_name: clientuat
+  #   image: index.docker.io/varungujarathi9/video-party-client:uat
+  #   ports:
+  #     - 3002:80
+  #   networks:
+  #     - uat
 
-  serveruat:
-    # container_name: video-party-client
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile
-    container_name: serveruat
-    image: index.docker.io/varungujarathi9/video-party-client:uat
-    ports:
-      - 3002:80
-    networks:
-      - uat
-
-  serverprod:
-    # container_name: video-party-client
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile
-    container_name: serverprod
-    image: index.docker.io/varungujarathi9/video-party-client:latest
-    ports:
-      - 80:80
-    networks:
-      - prod  
+  # clientprod:
+  #   # container_name: video-party-client
+  #   # build:
+  #   #   context: .
+  #   #   dockerfile: Dockerfile
+  #   container_name: clientprod
+  #   image: index.docker.io/varungujarathi9/video-party-client:latest
+  #   ports:
+  #     - 80:80
+  #   networks:
+  #     - prod  
 
   serversit:
     # container_name: video-party-server
@@ -64,39 +58,29 @@ services:
     #   dockerfile: Dockerfile
     container_name: serversit
     image: index.docker.io/varungujarathi9/video-party-server:sit
-    # ports:
-    #   - 5001:5000
-    networks:
-      - sit  
+    ports:
+      - 5001:5000
 
-  serveruat:
-    # container_name: video-party-server
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile
-    container_name: serveruat
-    image: index.docker.io/varungujarathi9/video-party-server:uat
-    # ports:
-    #   - 5002:5000
-    networks:
-      - uat
+  # serveruat:
+  #   # container_name: video-party-server
+  #   # build:
+  #   #   context: .
+  #   #   dockerfile: Dockerfile
+  #   container_name: serveruat
+  #   image: index.docker.io/varungujarathi9/video-party-server:uat
+  #   # ports:
+  #   #   - 5002:5000
+  #   networks:
+  #     - uat
 
-  serverprod:
-    # container_name: video-party-client
-    # build:
-    #   context: .
-    #   dockerfile: Dockerfile
-    container_name: serverprod
-    image: index.docker.io/varungujarathi9/video-party-server:latest
-    # ports:
-    #   - 1793:5000
-    networks:
-      - prod
-
-networks:
-  sit:
-    driver: bridge
-  uat:
-    driver: bridge
-  prod:
-    driver: bridge
+  # serverprod:
+  #   # container_name: video-party-client
+  #   # build:
+  #   #   context: .
+  #   #   dockerfile: Dockerfile
+  #   container_name: serverprod
+  #   image: index.docker.io/varungujarathi9/video-party-server:latest
+  #   # ports:
+  #   #   - 1793:5000
+  #   networks:
+  #     - prod
