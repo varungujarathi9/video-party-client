@@ -1,2 +1,2 @@
-git checkout uat
-git merge sit --no-commit
+sudo git checkout uat
+sudo git merge sit --no-commit
