@@ -11,9 +11,9 @@ export default class Login extends React.Component {
             roomID: '',
             usernameError: ''
         }
-        sessionStorage.removeItem('room-details')
-        sessionStorage.removeItem('room-id')
-        sessionStorage.removeItem('username')
+        // sessionStorage.removeItem('room-details')
+        // sessionStorage.removeItem('room-id')
+        // sessionStorage.removeItem('username')
     }
 
     componentDidMount(){
@@ -23,6 +23,8 @@ export default class Login extends React.Component {
             this.setState({userType: sessionStorage.getItem('user-type')})
         }
         else{
+            sessionStorage.clear()
+            localStorage.clear()
             navigate('/')
         }
     }

@@ -21,6 +21,7 @@ export default class Lobby extends React.Component {
     }
 
     componentDidMount(){
+        
         if (sessionStorage.getItem('user-type') === 'creator' || sessionStorage.getItem('user-type') === 'joinee' ){
             this.setState({userType: sessionStorage.getItem('user-type')})
         }
@@ -29,7 +30,8 @@ export default class Lobby extends React.Component {
         }
 
         if (sessionStorage.getItem('room-details') !== null || sessionStorage.getItem('room-details') !== '' ){
-            this.setState({roomDetails: JSON.parse(sessionStorage.getItem('room-details').replace(/"/g, '\"'))})
+            console.log(JSON.parse(sessionStorage.getItem('room-details').replace(/"/g,'\"')))
+            this.setState({roomDetails: JSON.parse(sessionStorage.getItem('room-details').replace(/"/g,'\"'))})
         }
         else{
             navigate('/')
@@ -52,8 +54,10 @@ export default class Lobby extends React.Component {
         serverSocket.on('update-joinee', (data)=>{
             console.log(data)
             sessionStorage.setItem('room-details', JSON.stringify(data))
+            // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
             this.setState({
-                roomDetails: JSON.parse(JSON.stringify(data))
+                roomDetails: JSON.parse(JSON.stringify(data)),
+                
             })
         })
 
@@ -61,13 +65,37 @@ export default class Lobby extends React.Component {
             sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
             navigate('/video-player')
         })
+
+        serverSocket.on('left_room',data=>{
+            sessionStorage.setItem('room-details', JSON.stringify(data))
+            // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
+            this.setState({
+                roomDetails: JSON.parse(JSON.stringify(data)),
+                
+            })     
+            navigate('/')    
+        })
+
+        serverSocket.on('all_left',data=>{
+            console.log(data)
+            sessionStorage.setItem('room-details', JSON.stringify(data))
+            // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
+            this.setState({
+                roomDetails: JSON.parse(JSON.stringify(data)),
+            })     
+            navigate('/')    
+        })
     }
+
+
+ 
 
     handleFile = (e) => {
         this.setState({
             videoStartError:''
         })
         e.preventDefault()
+
         var filelist = document.getElementById('videofile').files[0]
         console.log(filelist)
         var typeOfFile = filelist.type
@@ -100,6 +128,17 @@ export default class Lobby extends React.Component {
     startVideo = () =>{
         if(this.state.userType === 'creator'){
             serverSocket.emit('start-video')
+        serverSocket.emit('start-video', {room_id:sessionStorage.getItem('room-id')})
+      }
+    }
+
+
+    leaveRoom =() =>{
+        if(sessionStorage.getItem('user-type') === 'joinee'){
+            serverSocket.emit('remove-member',{username:this.state.username, roomID:this.state.roomID})
+        }
+        else{
+            serverSocket.emit('remove-all-member',{username:this.state.username, roomID:this.state.roomID})
         }
     }
 
@@ -165,6 +204,7 @@ export default class Lobby extends React.Component {
                         <p key={username}>{username}</p>
                     )
                 })}
+                <button onClick={this.leaveRoom}>Leave Room</button>
             </div>
         )
     }
