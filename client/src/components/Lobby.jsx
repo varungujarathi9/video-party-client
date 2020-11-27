@@ -21,7 +21,7 @@ export default class Lobby extends React.Component {
     }
 
     componentDidMount(){
-        
+
         if (sessionStorage.getItem('user-type') === 'creator' || sessionStorage.getItem('user-type') === 'joinee' ){
             this.setState({userType: sessionStorage.getItem('user-type')})
         }
@@ -51,14 +51,17 @@ export default class Lobby extends React.Component {
             navigate('/')
         }
 
-        serverSocket.on('update-joinee', (data)=>{
+        serverSocket.on('update-members', (data)=>{
             console.log(data)
             sessionStorage.setItem('room-details', JSON.stringify(data))
             // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
             this.setState({
                 roomDetails: JSON.parse(JSON.stringify(data)),
-                
             })
+            if(this.state.ready && JSON.parse(JSON.stringify(data))['started']){
+                sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
+                navigate('/video-player')
+            }
         })
 
         serverSocket.on('video-started', (data)=>{
@@ -71,9 +74,9 @@ export default class Lobby extends React.Component {
             // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
             this.setState({
                 roomDetails: JSON.parse(JSON.stringify(data)),
-                
-            })     
-            navigate('/')    
+
+            })
+            navigate('/')
         })
 
         serverSocket.on('all_left',data=>{
@@ -82,13 +85,13 @@ export default class Lobby extends React.Component {
             // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
             this.setState({
                 roomDetails: JSON.parse(JSON.stringify(data)),
-            })     
-            navigate('/')    
+            })
+            navigate('/')
         })
     }
 
 
- 
+
 
     handleFile = (e) => {
         this.setState({
@@ -97,32 +100,43 @@ export default class Lobby extends React.Component {
         e.preventDefault()
 
         var filelist = document.getElementById('videofile').files[0]
-        console.log(filelist)
-        var typeOfFile = filelist.type
-        console.log(typeOfFile)
-        var file = e.target.value.replace(/^.*[\\]/, '')
+        if (filelist !== undefined){
+            console.log(filelist)
+            var typeOfFile = filelist.type
+            console.log(typeOfFile)
+            var file = e.target.value.replace(/^.*[\\]/, '')
 
-        this.setState({
-            fileName: file,
-        })
-
-        var extensionVal = typeOfFile.split('/')
-        console.log(extensionVal)
-
-        if (this.state.extension.includes(extensionVal[1])) {
             this.setState({
-                extensionCheck: true,
-                errorMsg: ''
+                fileName: file,
             })
+
+            var extensionVal = typeOfFile.split('/')
+            console.log(extensionVal)
+
+            if (this.state.extension.includes(extensionVal[1])) {
+                this.setState({
+                    extensionCheck: true,
+                    errorMsg: '',
+                    videoStreamFlag: true
+                })
+            }
+            else {
+                this.setState({
+                    errorMsg: "Please provide valid file",
+                    extensionCheck: false,
+                    videoStreamFlag: false
+                })
+            }
+            var fileUrl = URL.createObjectURL(filelist).split()
+            sessionStorage.setItem('video_file', fileUrl)
         }
         else {
             this.setState({
-                errorMsg: "Please provide valid file",
-                extensionCheck: false
+                errorMsg: "",
+                extensionCheck: false,
+                videoStreamFlag: false
             })
         }
-        var fileUrl = URL.createObjectURL(filelist).split()
-        sessionStorage.setItem('video_file', fileUrl)
     }
 
     startVideo = () =>{
@@ -144,21 +158,6 @@ export default class Lobby extends React.Component {
 
     readyForVideo = () => {
         if(this.state.userType === 'joinee'){
-            if (this.state.ready === false){
-                document.getElementById('readyButton').innerHTML = 'Cancel'
-                document.getElementById('videofile').disabled = true
-                this.setState({
-                    ready: true
-                })
-            }
-            else{
-                document.getElementById('readyButton').innerHTML = 'Ready for partying'
-                document.getElementById('videofile').disabled = false
-                this.setState({
-                    ready: false
-                })
-            }
-
             if ( this.state.fileName === '' || this.state.fileName === null){
                 // TODO change alert to UI
                 this.setState({
@@ -172,12 +171,28 @@ export default class Lobby extends React.Component {
                 })
             }
 
-            serverSocket.emit('update-member-status',{room_id:this.state.roomID, username:this.state.username, ready:this.state.ready})
+            if (this.state.ready === false){
+                document.getElementById('readyButton').innerHTML = 'Cancel'
+                document.getElementById('videofile').disabled = true
+                this.setState({
+                    ready: true
+                })
+                serverSocket.emit('update-member-status',{roomID:this.state.roomID, username:this.state.username, ready:true})
+            }
+            else{
+                document.getElementById('readyButton').innerHTML = 'Ready for partying'
+                document.getElementById('videofile').disabled = false
+                this.setState({
+                    ready: false
+                })
+                serverSocket.emit('update-member-status',{roomID:this.state.roomID, username:this.state.username, ready:false})
+            }
        }
     }
 
     render() {
         var {roomDetails} = this.state
+        var {videoStreamFlag} = this.state
         return (
             <div>
 
@@ -194,14 +209,13 @@ export default class Lobby extends React.Component {
                 </div>
                 {sessionStorage.getItem('user-type') === 'joinee' && this.state.ready && <p style={{ color: 'blue' }}>Waiting for the host to start</p>}
                 {sessionStorage.getItem('user-type') === 'joinee' && <button id='readyButton' onClick={this.readyForVideo}>Ready for partying</button>}
-                {sessionStorage.getItem('user-type') === 'joinee' && (this.state.videoStreamFlag?<h6 style={{ color: 'red' }}>You have not selected any file, video will be stream to you directly</h6>:<h6 style={{ color: 'green' }}>Your selected file would be played</h6>)}
-                <button onClick={() => { navigate('/') }}>Back</button>
+                {sessionStorage.getItem('user-type') === 'joinee' && (videoStreamFlag?<h6 style={{ color: 'red' }}>You have not selected any file, video will be stream to you directly</h6>:<h6 style={{ color: 'green' }}>Your selected file would be played</h6>)}
                 <h4>Room I.D.</h4>
                 {this.state.roomID}
                 <h4>Room Members</h4>
-                {roomDetails !== '' && roomDetails.members.length > 0 && roomDetails.members.map(username=>{
+                {roomDetails !== '' && Object.keys(roomDetails.members).length > 0 && Object.keys(roomDetails.members).map((username)=>{
                     return (
-                        <p key={username}>{username}</p>
+                        <p key={username}>{username}:{roomDetails.members[username]?"ready":"not ready"}</p>
                     )
                 })}
                 <button onClick={this.leaveRoom}>Leave Room</button>
