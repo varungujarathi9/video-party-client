@@ -1,7 +1,7 @@
 // TODO: got back to lobby when creator goes back
-// TODO: leave room
-// TODO: check file duration of all members
-// TODO: create a ready button for joinee
+// TODO: leave room button
+
+
 import { navigate } from '@reach/router'
 import React from 'react'
 import ReactPlayer from 'react-player'
@@ -12,10 +12,17 @@ export default class VideoPlayer extends React.Component{
         playing: false,
         secondsPlayed: 0,
         lastUpdatedBy: sessionStorage.getItem('username'),
-        videoPlayer: null
+        videoPlayer: null,
+        videoStreamFlag: true
     }
-    
+
     componentDidMount(){
+        if(sessionStorage.getItem('video-stream-flag') === '' || sessionStorage.getItem('video-stream-flag') === null || sessionStorage.getItem('video-stream-flag') === undefined){
+            navigate('/lobby')
+        }
+        this.setState({
+            videoStreamFlag: sessionStorage.getItem('video-stream-flag')
+        })
         serverSocket.on('updated-video', (data) =>{
             if(data['pauseDetails']['username'] !== sessionStorage.getItem('username')){
                 console.log('DATA:'+JSON.stringify(data['pauseDetails']))
@@ -45,11 +52,11 @@ export default class VideoPlayer extends React.Component{
             serverSocket.emit('video-update',{pauseDetails:pauseDetails})
             console.log('paused')
         }
-        
+
         this.setState({
             lastUpdatedBy: sessionStorage.getItem('username')
         })
-  
+
     }
 
     vidOnPlay = () => {
@@ -68,9 +75,12 @@ export default class VideoPlayer extends React.Component{
         this.setState({videoPlayer:player})
     }
     render(){
-        const videoFileUrl = localStorage.getItem('video_file')
-        const {playing} =this.state
+        const videoFileUrl = sessionStorage.getItem('video_file')
+        const {playing} = this.state
+        const {videoStreamFlag} = this.state
         return(
+            <div>
+            {videoStreamFlag?<p>Stream video</p>:<p>Play local file</p>}
             <div className='player-wrapper' style={{backgroundColor:'black'}}>
             <ReactPlayer
             ref ={this.ref}
@@ -83,6 +93,7 @@ export default class VideoPlayer extends React.Component{
             onPause ={this.vidOnPause}
             onPlay={this.vidOnPlay}
             />
+            </div>
         </div>
         )
     }

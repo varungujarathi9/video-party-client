@@ -1,6 +1,6 @@
 /**
  * TODO: Dont show next for joinees
- * TODO: socket listen to new-joinee, if joinee listen to video-started 
+ * TODO: socket listen to new-joinee, if joinee listen to video-started
  */
 
 import { navigate } from '@reach/router'
@@ -16,6 +16,8 @@ export default class Lobby extends React.Component {
         extension: ["mp4", "mkv", "x-msvideo", "x-matroska"],
         extensionValid: false,
         fileError: '',
+        videoStreamFlag: true,
+        ready: false,
     }
 
     componentDidMount(){
@@ -47,7 +49,7 @@ export default class Lobby extends React.Component {
             navigate('/')
         }
 
-        serverSocket.on('new-joinee', (data)=>{
+        serverSocket.on('update-joinee', (data)=>{
             console.log(data)
             sessionStorage.setItem('room-details', JSON.stringify(data))
             this.setState({
@@ -56,17 +58,15 @@ export default class Lobby extends React.Component {
         })
 
         serverSocket.on('video-started', (data)=>{
-            if (this.state.userType === 'joinee' && ( this.state.fileName === '' || this.state.fileName === null)){
-                // TODO change alert to UI
-                alert('Select a file')
-            }
-            else{
-                navigate('/video-player')
-            }
+            sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
+            navigate('/video-player')
         })
     }
 
     handleFile = (e) => {
+        this.setState({
+            videoStartError:''
+        })
         e.preventDefault()
         var filelist = document.getElementById('videofile').files[0]
         console.log(filelist)
@@ -93,43 +93,70 @@ export default class Lobby extends React.Component {
                 extensionCheck: false
             })
         }
-
         var fileUrl = URL.createObjectURL(filelist).split()
-        localStorage.setItem('video_file', fileUrl)
-
-
+        sessionStorage.setItem('video_file', fileUrl)
     }
 
     startVideo = () =>{
-        serverSocket.emit('start-video')
+        if(this.state.userType === 'creator'){
+            serverSocket.emit('start-video')
+        }
     }
-    
-    
+
+    readyForVideo = () => {
+        if(this.state.userType === 'joinee'){
+            if (this.state.ready === false){
+                document.getElementById('readyButton').innerHTML = 'Cancel'
+                document.getElementById('videofile').disabled = true
+                this.setState({
+                    ready: true
+                })
+            }
+            else{
+                document.getElementById('readyButton').innerHTML = 'Ready for partying'
+                document.getElementById('videofile').disabled = false
+                this.setState({
+                    ready: false
+                })
+            }
+
+            if ( this.state.fileName === '' || this.state.fileName === null){
+                // TODO change alert to UI
+                this.setState({
+                    videoStreamFlag: true
+                })
+                sessionStorage.setItem('video_file', null)
+            }
+            else{
+                this.setState({
+                    videoStreamFlag: false
+                })
+            }
+
+            serverSocket.emit('update-member-status',{room_id:this.state.roomID, username:this.state.username, ready:this.state.ready})
+       }
+    }
+
     render() {
-        // let membersList = []
-        // if (localStorage.getItem('roomMembers') !== null){
-        //     membersList = localStorage.getItem('roomMembers')
-        // }
-        // else{
-        //     membersList = []
-        // }
-        // let roomDetailsString = sessionStorage.getItem('room-details').replace(/"/g, '\"')
         var {roomDetails} = this.state
         return (
             <div>
-                
+
                 <label>Browse file</label><br/>
                 <input type="file" id="videofile" onChange={this.handleFile} />
                 <div style={{ fontSize: '16px', margin: '5px' }}>
                     {this.state.extensionCheck ?
                         <div>
                             <h5 style={{ color: 'green' }}>{this.state.fileName}</h5>
-                            {sessionStorage.getItem('user-type') === 'creator' && <button onClick={this.startVideo}>Start Partying</button>}
+                            {sessionStorage.getItem('user-type') === 'creator' && <button onClick={this.startVideo}>Start partying</button>}
                         </div>
 
                         : <h6 style={{ color: 'red' }}>{this.state.errorMsg}</h6>}
                 </div>
-                <button onClick={() => { navigate(-1) }}>Back</button>
+                {sessionStorage.getItem('user-type') === 'joinee' && this.state.ready && <p style={{ color: 'blue' }}>Waiting for the host to start</p>}
+                {sessionStorage.getItem('user-type') === 'joinee' && <button id='readyButton' onClick={this.readyForVideo}>Ready for partying</button>}
+                {sessionStorage.getItem('user-type') === 'joinee' && (this.state.videoStreamFlag?<h6 style={{ color: 'red' }}>You have not selected any file, video will be stream to you directly</h6>:<h6 style={{ color: 'green' }}>Your selected file would be played</h6>)}
+                <button onClick={() => { navigate('/') }}>Back</button>
                 <h4>Room I.D.</h4>
                 {this.state.roomID}
                 <h4>Room Members</h4>
@@ -140,6 +167,5 @@ export default class Lobby extends React.Component {
                 })}
             </div>
         )
-        
     }
 }
