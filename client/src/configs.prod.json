@@ -1,5 +1,5 @@
 {
     "ENVIRONMENT_TYPE" : "Prod",
-    "SERVER" : "http://35.223.15.12:1793",
+    "SERVER" : "wss://35.223.15.12:1793",
     "CLIENT" : "http://35.223.15.12"
 }
