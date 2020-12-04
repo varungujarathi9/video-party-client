@@ -18,6 +18,8 @@ export default class Lobby extends React.Component {
         fileError: '',
         videoStreamFlag: true,
         ready: false,
+        messages: [],
+        message: '',
     }
 
     componentDidMount(){
@@ -51,7 +53,7 @@ export default class Lobby extends React.Component {
             navigate('/')
         }
 
-        serverSocket.on('update-members', (data)=>{
+        serverSocket.on('update-room-details', (data)=>{
             console.log(data)
             sessionStorage.setItem('room-details', JSON.stringify(data))
             // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
@@ -88,6 +90,15 @@ export default class Lobby extends React.Component {
             })
             navigate('/')
         })
+
+        serverSocket.on('receive_message',data=>{
+            console.log(data)
+            sessionStorage.setItem('messages', data)
+            this.setState({
+                messages: data,
+            })
+        })
+        serverSocket.emit('get-all-messages',{roomID:sessionStorage.getItem('room-id')})
     }
 
 
@@ -190,9 +201,26 @@ export default class Lobby extends React.Component {
        }
     }
 
+    handleMessageChange = (event) => {
+        event.preventDefault()
+        this.setState({
+            message: event.target.value
+        })
+    }
+
+    sendMsg = (event) =>{
+        event.preventDefault()
+        if(this.state.message !== ''){
+            serverSocket.emit('send-message',{senderName:this.state.username, roomID:this.state.roomID, message:this.state.message})
+        }
+        document.getElementById("chat").value = ""
+    }
+
     render() {
         var {roomDetails} = this.state
         var {videoStreamFlag} = this.state
+        var {messages} = this.state
+
         return (
             <div>
 
@@ -218,6 +246,15 @@ export default class Lobby extends React.Component {
                         <p key={username}>{username}:{roomDetails.members[username]?"ready":"not ready"}</p>
                     )
                 })}
+                <h4>Text Channel</h4>
+                {messages.length > 0 && messages.map((message)=>{
+                    return(
+                    <p key={message["messageNumber"]}>{message["senderName"]}:{message["message"]}</p>
+                    )
+                })}
+                <input type="text" name='chat' id='chat' onChange={this.handleMessageChange}></input>
+                <button onClick={this.sendMsg}>Send</button>
+                <br/>
                 <button onClick={this.leaveRoom}>Leave Room</button>
             </div>
         )

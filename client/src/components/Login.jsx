@@ -17,8 +17,8 @@ export default class Login extends React.Component {
     }
 
     componentDidMount(){
-        
-        // check if user-type is set or not 
+
+        // check if user-type is set or not
         if (sessionStorage.getItem('user-type') === 'creator' || sessionStorage.getItem('user-type') === 'joinee' ){
             this.setState({userType: sessionStorage.getItem('user-type')})
         }
@@ -31,10 +31,10 @@ export default class Login extends React.Component {
 
     onClickLogin = (event) =>{
         event.preventDefault()
-        
+
         // TODO: Add regex to check username is valid
-        if (this.state.username !== '') {      
-            if(this.state.userType === 'creator'){         
+        if (this.state.username !== '') {
+            if(this.state.userType === 'creator'){
                 serverSocket.emit('create-room', {username:this.state.username});
                 this.handleCreateRoom()
             }
@@ -50,20 +50,20 @@ export default class Login extends React.Component {
 
     handleCreateRoom = () => {
         serverSocket.on('room-created',(data)=>{
-            
+
             sessionStorage.setItem('username', this.state.username)
             sessionStorage.setItem('room-id', data['room-id'])
             sessionStorage.setItem('room-details', JSON.stringify(data['room-details']))
-            navigate('/lobby')    
+            navigate('/lobby')
         })
     }
 
-    handleJoinRoom = () => {  
-        serverSocket.on('room-joined',(data)=>{   
+    handleJoinRoom = () => {
+        serverSocket.on('room-joined',(data)=>{
             sessionStorage.setItem('username', this.state.username)
             sessionStorage.setItem('room-id', this.state.roomID)
             sessionStorage.setItem('room-details', JSON.stringify(data['room-details']))
-            navigate('/lobby')    
+            navigate('/lobby')
         })
     }
 
@@ -83,7 +83,7 @@ export default class Login extends React.Component {
 
     render() {
         const { usernameError } = this.state
-        
+
         return (
             <div>
                 <h1>Login to continue</h1>
@@ -91,10 +91,10 @@ export default class Login extends React.Component {
                     <div>
                         <label htmlFor='username'>Username</label>
                         <input type="text" id='username' name='username' maxLength='20' onChange={this.handleUsernameChange}></input>
-                    </div>    
+                    </div>
                     {this.state.userType === 'joinee' ? (
                         <div>
-                            <label htmlFor='roomID'>Room ID</label> 
+                            <label htmlFor='roomID'>Room ID</label>
                             <input type='text' id='roomID' name='roomID' minLength='6' maxLength='6' onChange={this.handleRoomIDChange}></input>
                         </div>
                     ) : null
