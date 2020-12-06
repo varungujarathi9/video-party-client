@@ -7,7 +7,7 @@ import configs from '../../configs.json'
 const serverSocket  = io.connect(`${configs.SERVER}`,{transports: ['websocket'],upgrade:false})
 
 // uncomment this while using in local server
-// const endpoint = "http://0.0.0.0:5000"
+// const endpoint = "http://localhost:5000"
 // const serverSocket  = io.connect(`${endpoint}`,{transports: ['websocket'],upgrade:false})
 
 export {serverSocket}
