@@ -1,6 +1,7 @@
 import React from 'react'
 import {navigate} from '@reach/router'
 import {serverSocket} from './helper/connection'
+import {createPeerConnection,sendOffer,sendAnswer,handleSignalingData} from './webrtcfile.js'
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -29,13 +30,17 @@ export default class Login extends React.Component {
         }
     }
 
-    onClickLogin = (event) =>{
+
+   
+    onClickLogin = async (event) =>{
         event.preventDefault()
         
         // TODO: Add regex to check username is valid
-        if (this.state.username !== '') {      
-            if(this.state.userType === 'creator'){         
-                serverSocket.emit('create-room', {username:this.state.username});
+        if (this.state.username !== '') {    
+            createPeerConnection()  
+            if(this.state.userType === 'creator'){ 
+                var receiveOffer = await sendOffer()              
+                serverSocket.emit('create-room', {username:this.state.username,webRtcDesc:receiveOffer});          
                 this.handleCreateRoom()
             }
             else if(this.state.userType === 'joinee'){
@@ -49,11 +54,11 @@ export default class Login extends React.Component {
     }
 
     handleCreateRoom = () => {
-        serverSocket.on('room-created',(data)=>{
-            
+        serverSocket.on('room-created',(data)=>{            
             sessionStorage.setItem('username', this.state.username)
             sessionStorage.setItem('room-id', data['room-id'])
             sessionStorage.setItem('room-details', JSON.stringify(data['room-details']))
+            //write peerconnection
             navigate('/lobby')    
         })
     }
@@ -63,6 +68,9 @@ export default class Login extends React.Component {
             sessionStorage.setItem('username', this.state.username)
             sessionStorage.setItem('room-id', this.state.roomID)
             sessionStorage.setItem('room-details', JSON.stringify(data['room-details']))
+            //write peerconnection
+            handleSignalingData({'sdp':data['room-details']['sesDetails'],'type':data['room-details']['typeOfSdp']})
+
             navigate('/lobby')    
         })
     }
