@@ -111,12 +111,21 @@ navigator.mediaDevices.getUserMedia({video:true,audio:true})
     .then((stream) => {
       console.log('Stream found',stream);
       localStream = stream;
+      pc.onaddstream = onAddStream;
+      pc.addStream(localStream);
        
     })
     .catch(error => {
       console.error('Stream not found: ', error);
     });
 }
+
+function onAddStream(event){
+    // allthe players are ready
+    console.log('Add stream');
+    let remoteStreamElement = document.querySelector('#remoteStream');
+    remoteStreamElement.url = event.stream;
+  };
 
 function handleSignalingData(data) {
     switch (data.type) {
