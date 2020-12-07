@@ -30,7 +30,7 @@ var answerDescription
 
 function createPeerConnection() {
     try {
-        pc = new RTCPeerConnection(PC_CONFIG);
+        pc = new RTCPeerConnection();
         pc.onicecandidate = (event) => {
             if (event.candidate) {
                 console.log('ICE candidate');
@@ -76,6 +76,7 @@ async function sendAnswer() {
         },
             (error) => { console.error('Send answer failed: ', error); }
         )
+    console.log("answer",answerDescription)
     return answerDescription
 };
 
@@ -109,11 +110,14 @@ function handleSignalingData(data) {
             createPeerConnection();
             pc.setRemoteDescription(new RTCSessionDescription(data));
             sendAnswer();
+            console.log("offer:",data)
             break;
         case 'answer':
             pc.setRemoteDescription(new RTCSessionDescription(data));
+            console.log("answer:",data)
             break;
         case 'candidate':
+            console.log("ice:",data)
             pc.addIceCandidate(new RTCIceCandidate(data.candidate));
             break;
         default:

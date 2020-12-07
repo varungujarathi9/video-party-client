@@ -44,6 +44,8 @@ export default class Login extends React.Component {
                 this.handleCreateRoom()
             }
             else if(this.state.userType === 'joinee'){
+                // var sendJoineeAnswer = await sendAnswer()
+                // console.log("send answer",sendJoineeAnswer)
                 serverSocket.emit('join-room', {username:this.state.username, roomID:this.state.roomID});
                 this.handleJoinRoom()
             }
@@ -59,6 +61,7 @@ export default class Login extends React.Component {
             sessionStorage.setItem('room-id', data['room-id'])
             sessionStorage.setItem('room-details', JSON.stringify(data['room-details']))
             //write peerconnection
+           
             navigate('/lobby')    
         })
     }
