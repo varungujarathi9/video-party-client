@@ -30,7 +30,7 @@ var answerDescription
 
 function createPeerConnection() {
     try {
-        pc = new RTCPeerConnection();
+        pc = new RTCPeerConnection(PC_CONFIG);
         pc.onicecandidate = (event) => {
             if (event.candidate) {
                 console.log('ICE candidate');
