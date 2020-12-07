@@ -60,16 +60,20 @@ export default class Lobby extends React.Component {
                 roomDetails: JSON.parse(JSON.stringify(data)),
             })
             if(this.state.ready && JSON.parse(JSON.stringify(data))['started']){
-                sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
-                getLocalStream()
-                navigate('/video-player')
+                if(this.state.ready === true){
+                    sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
+                    getLocalStream()
+                    navigate('/video-player')
+                }
             }
         })
 
         serverSocket.on('video-started', ()=>{
-            sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
-            getLocalStream()
-            navigate('/video-player')
+            if(this.state.ready === true){
+                sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
+                getLocalStream()
+                navigate('/video-player')
+            }
         })
 
         serverSocket.on('left_room',data=>{
