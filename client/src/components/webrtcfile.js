@@ -1,3 +1,4 @@
+import { navigate } from '@reach/router';
 import { serverSocket } from './helper/connection'
 
 const TURN_SERVER_URL = '35.223.15.12:3479';
@@ -22,6 +23,7 @@ const PC_CONFIG = {
 let pc;
 var offerDescription;
 var answerDescription
+let localStream;
 
 // serverSocket.on('sdp-data-action', data => {
 //     console.log("getting from server", data)
@@ -104,6 +106,18 @@ async function sendAnswer() {
 // }
 // };
 
+function getLocalStream(){
+navigator.mediaDevices.getUserMedia({video:true,audio:true})
+    .then((stream) => {
+      console.log('Stream found',stream);
+      localStream = stream;
+       
+    })
+    .catch(error => {
+      console.error('Stream not found: ', error);
+    });
+}
+
 function handleSignalingData(data) {
     switch (data.type) {
         case 'offer':
@@ -126,4 +140,4 @@ function handleSignalingData(data) {
 };
 
 
-export { createPeerConnection, sendOffer, sendAnswer,handleSignalingData } 
+export { createPeerConnection, sendOffer, sendAnswer,handleSignalingData,getLocalStream} 

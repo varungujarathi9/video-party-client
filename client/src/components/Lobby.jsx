@@ -6,6 +6,7 @@
 import { navigate } from '@reach/router'
 import React from 'react'
 import { serverSocket } from './helper/connection'
+import {getLocalStream} from './webrtcfile.js'
 
 export default class Lobby extends React.Component {
     state = {
@@ -60,12 +61,14 @@ export default class Lobby extends React.Component {
             })
             if(this.state.ready && JSON.parse(JSON.stringify(data))['started']){
                 sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
+                getLocalStream()
                 navigate('/video-player')
             }
         })
 
-        serverSocket.on('video-started', (data)=>{
+        serverSocket.on('video-started', ()=>{
             sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
+            getLocalStream()
             navigate('/video-player')
         })
 
