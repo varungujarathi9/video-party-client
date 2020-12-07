@@ -1,4 +1,5 @@
 import { navigate } from '@reach/router';
+import { Socket } from 'socket.io-client';
 import { serverSocket } from './helper/connection'
 
 const TURN_SERVER_URL = '35.223.15.12:3479';
@@ -30,6 +31,22 @@ let localStream;
 //     handleSignalingData(data);
 // })
 
+
+async function getLocalStream(){
+    var streamDetails = navigator.mediaDevices.getUserMedia({video:true,audio:true})
+        .then((stream) => {
+          console.log('Stream found',stream);
+          localStream=stream
+          return stream
+            
+           
+        })
+        .catch(error => {
+          console.error('Stream not found: ', error);
+        });
+    return streamDetails
+    }
+
 function createPeerConnection() {
     try {
         pc = new RTCPeerConnection(PC_CONFIG);
@@ -38,7 +55,10 @@ function createPeerConnection() {
                 console.log('ICE candidate');
             };
         }
+        pc.onaddstream = onAddStream;
+        pc.addStream(localStream);
         console.log('PeerConnection created');
+       
     } catch (error) {
         console.error('PeerConnection failed: ', error);
     }
@@ -106,19 +126,12 @@ async function sendAnswer() {
 // }
 // };
 
-function getLocalStream(){
-navigator.mediaDevices.getUserMedia({video:true,audio:true})
-    .then((stream) => {
-      console.log('Stream found',stream);
-      localStream = stream;
-      pc.onaddstream = onAddStream;
-      pc.addStream(localStream);
-       
-    })
-    .catch(error => {
-      console.error('Stream not found: ', error);
-    });
-}
+
+
+
+
+
+
 
 function onAddStream(event){
     // allthe players are ready

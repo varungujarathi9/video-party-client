@@ -37,10 +37,10 @@ export default class Login extends React.Component {
         
         // TODO: Add regex to check username is valid
         if (this.state.username !== '') {    
-            createPeerConnection()  
+            // createPeerConnection()  
             if(this.state.userType === 'creator'){ 
-                var receiveOffer = await sendOffer()              
-                serverSocket.emit('create-room', {username:this.state.username,webRtcDesc:receiveOffer});          
+                // var receiveOffer = await sendOffer()              
+                serverSocket.emit('create-room', {username:this.state.username});          
                 this.handleCreateRoom()
             }
             else if(this.state.userType === 'joinee'){
@@ -72,7 +72,7 @@ export default class Login extends React.Component {
             sessionStorage.setItem('room-id', this.state.roomID)
             sessionStorage.setItem('room-details', JSON.stringify(data['room-details']))
             //write peerconnection
-            handleSignalingData({'sdp':data['room-details']['sesDetails'],'type':data['room-details']['typeOfSdp']})
+         
 
             navigate('/lobby')    
         })
