@@ -6,7 +6,7 @@
 import { navigate } from '@reach/router'
 import React from 'react'
 import { serverSocket } from './helper/connection'
-import {getLocalStream,createPeerConnection,sendAnswer,sendOffer} from './webrtcfile.js'
+import {getLocalStream,createPeerConnection,sendAnswer,sendOffer, handleSignalingData} from './webrtcfile.js'
 
 export default class Lobby extends React.Component {
     state = {
@@ -60,16 +60,16 @@ export default class Lobby extends React.Component {
                 roomDetails: JSON.parse(JSON.stringify(data)),
             })
             if(this.state.ready && JSON.parse(JSON.stringify(data))['started']){
-                createPeerConnection() 
+                // createPeerConnection() 
                 sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
                 navigate('/video-player')
             }
         })
 
         serverSocket.on('video-started', (data)=>{
-            createPeerConnection() 
+            // createPeerConnection() 
             sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
-            handleSignalingData({'sdp':data['room-details']['sesDetails'],'type':data['room-details']['typeOfSdp']})
+            // handleSignalingData({'sdp':data['sesDetails'],'type':data['typeOfSdp']})
             navigate('/video-player')
             
         })
@@ -146,11 +146,8 @@ export default class Lobby extends React.Component {
 
     startVideo = async () =>{
         if(this.state.userType === 'creator'){
-            await getLocalStream()     
-            createPeerConnection() 
-            var send_Offer = await sendOffer()
-        serverSocket.emit('start-video', {room_id:sessionStorage.getItem('room-id'),webRtcDesc:send_Offer})
-      }
+            serverSocket.emit('start-video', {room_id:sessionStorage.getItem('room-id'),webRtcDesc:send_Offer})
+        }
     }
 
 

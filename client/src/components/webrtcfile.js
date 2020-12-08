@@ -14,7 +14,7 @@ const PC_CONFIG = {
             credential: TURN_SERVER_CREDENTIAL
         },
         {
-            urls: 'turn:' + TURN_SERVER_URL + '?transport=udp',
+            urls: 'stun:' + TURN_SERVER_URL + '?transport=udp',
             username: TURN_SERVER_USERNAME,
             credential: TURN_SERVER_CREDENTIAL
         }
@@ -24,7 +24,7 @@ const PC_CONFIG = {
 let pc;
 var offerDescription;
 var answerDescription
-let localStream;
+var localStream;
 
 // serverSocket.on('sdp-data-action', data => {
 //     console.log("getting from server", data)
@@ -47,7 +47,7 @@ async function getLocalStream(){
     return streamDetails
     }
 
-function createPeerConnection() {
+async function createPeerConnection() {
     try {
         pc = new RTCPeerConnection(PC_CONFIG);
         pc.onicecandidate = (event) => {
@@ -55,8 +55,8 @@ function createPeerConnection() {
                 console.log('ICE candidate');
             };
         }
-        pc.onaddstream = onAddStream;
-        pc.addStream(localStream);
+        pc.ontrack = await onAddStream;
+        pc.addTrack(localStream);
         console.log('PeerConnection created');
        
     } catch (error) {
@@ -126,18 +126,16 @@ async function sendAnswer() {
 // }
 // };
 
-
-
-
-
-
-
-
 function onAddStream(event){
     // allthe players are ready
     console.log('Add stream');
-    let remoteStreamElement = document.querySelector('#remoteStream');
-    remoteStreamElement.url = event.stream;
+    if(sessionStorage.getItem('user-type') === 'joinee'){
+        console.log(event.streams[0])
+        console.log(document.getElementsByClassName('player-wrapper')[0].firstChild.firstChild)
+        let remoteStreamElement = document.getElementsByClassName('player-wrapper')[0].firstChild.firstChild;
+        console.log(remoteStreamElement)
+        remoteStreamElement.src = event.streams[0];
+    }
   };
 
 function handleSignalingData(data) {

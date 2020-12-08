@@ -37,6 +37,11 @@ export default class VideoPlayer extends React.Component{
                 }
             }
         })
+
+        if (sessionStorage.getItem("user-type") === "creator")
+        await getLocalStream()     
+        createPeerConnection() 
+        var sendOffer = await sendOffer()
     }
 
     componentWillUnmount(){
@@ -84,12 +89,14 @@ export default class VideoPlayer extends React.Component{
         const {playing} = this.state
         const {videoStreamFlag} = this.state
         const userType=sessionStorage.getItem('user-type')
+        
         return(
+            
             <div>
             {videoStreamFlag?<p>Stream video</p>:<p>Play local file</p>}
             <div className='player-wrapper' style={{backgroundColor:'black'}}>
             <ReactPlayer
-            id={userType ==='creator'?'':'remoteStream'}
+            id={userType ==='creator'?'localStream':'remoteStream'}
             ref ={this.ref}
             playing={playing}
             className='react-player fixed-bottom'
