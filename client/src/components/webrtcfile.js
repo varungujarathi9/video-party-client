@@ -24,39 +24,60 @@ const PC_CONFIG = {
 let pc;
 var offerDescription;
 var answerDescription
-var localStream;
-
+let stream;
+var video;
 // serverSocket.on('sdp-data-action', data => {
 //     console.log("getting from server", data)
 //     handleSignalingData(data);
 // })
 
+function setVideoPlayer(video1){
+    console.log("BBBBBBBBBBB")
+    video = video1
+    console.log(video)
+}
 
-async function getLocalStream(){
-    var streamDetails = navigator.mediaDevices.getUserMedia({video:true,audio:true})
-        .then((stream) => {
-          console.log('Stream found',stream);
-          localStream=stream
-          return stream
-            
-           
-        })
-        .catch(error => {
-          console.error('Stream not found: ', error);
-        });
-    return streamDetails
+function getLocalStream(video1){
+    // video = document.getElementById('video-player').firstChild;
+    video = video1
+    console.log(video)
+    if (sessionStorage.getItem("user-type") === "creator"){
+        if (stream) {
+            return stream
+        }
+        if (video.captureStream) {
+        stream = video.captureStream();
+        console.log('Captured stream from video with captureStream',
+            stream);
+        } else if (video.mozCaptureStream) {
+        stream = video.mozCaptureStream();
+        console.log('Captured stream from video with mozCaptureStream()',
+            stream);
+        } else {
+        console.log('captureStream() not supported');
+        }
+        return stream
     }
+}
 
-async function createPeerConnection() {
+function createPeerConnection(userType) {
+    
     try {
         pc = new RTCPeerConnection(PC_CONFIG);
         pc.onicecandidate = (event) => {
             if (event.candidate) {
                 console.log('ICE candidate');
+                pc.addIceCandidate(event.candidate)
             };
         }
-        pc.ontrack = await onAddStream;
-        pc.addTrack(localStream);
+        if (userType === "creator"){
+            // pc.addTrack(stream)
+            stream.getTracks().forEach(track => pc.addTrack(track, stream));
+        }
+        else {
+            pc.ontrack = onAddTrack
+        }
+        
         console.log('PeerConnection created');
        
     } catch (error) {
@@ -66,7 +87,6 @@ async function createPeerConnection() {
 
 async function sendOffer() {
     console.log('Send offer');
-    console.log("what is createOffer", pc.createOffer())
     offerDescription = await pc.createOffer()
         .then((sessionDescription) => {
             pc.setLocalDescription(sessionDescription)
@@ -75,6 +95,7 @@ async function sendOffer() {
             (error) => { console.error('Send offer failed: ', error); }
         )
 
+    // console.log("what is createOffer", offerDescription)
     return offerDescription
 
     //  offerDescription =pc.createAnswer()
@@ -98,7 +119,8 @@ async function sendAnswer() {
         },
             (error) => { console.error('Send answer failed: ', error); }
         )
-    console.log("answer",answerDescription)
+    // console.log("answer sending",answerDescription)
+    serverSocket.emit('send-answer', {room_id:sessionStorage.getItem('room-id'),webRtcDesc:answerDescription})
     return answerDescription
 };
 
@@ -126,15 +148,19 @@ async function sendAnswer() {
 // }
 // };
 
-function onAddStream(event){
+function onAddTrack(event){
     // allthe players are ready
     console.log('Add stream');
     if(sessionStorage.getItem('user-type') === 'joinee'){
-        console.log(event.streams[0])
-        console.log(document.getElementsByClassName('player-wrapper')[0].firstChild.firstChild)
-        let remoteStreamElement = document.getElementsByClassName('player-wrapper')[0].firstChild.firstChild;
-        console.log(remoteStreamElement)
-        remoteStreamElement.src = event.streams[0];
+        // console.log(event.streams[0])
+        // console.log(document.getElementsByClassName('player-wrapper')[0].firstChild.firstChild)
+        // let remoteStreamElement = document.getElementsByClassName('player-wrapper')[0].firstChild.firstChild;
+        // console.log(remoteStreamElement)
+        if (video.srcObject !== event.streams[0]) {
+            console.log(event.streams)
+
+            video.srcObject = event.streams[0];
+        }
     }
   };
 
@@ -144,11 +170,11 @@ function handleSignalingData(data) {
             createPeerConnection();
             pc.setRemoteDescription(new RTCSessionDescription(data));
             sendAnswer();
-            console.log("offer:",data)
+            // console.log("offer received:",data)
             break;
         case 'answer':
             pc.setRemoteDescription(new RTCSessionDescription(data));
-            console.log("answer:",data)
+            // console.log("answer received:",data)
             break;
         case 'candidate':
             console.log("ice:",data)
@@ -160,4 +186,4 @@ function handleSignalingData(data) {
 };
 
 
-export { createPeerConnection, sendOffer, sendAnswer,handleSignalingData,getLocalStream} 
+export { createPeerConnection, sendOffer, sendAnswer,handleSignalingData,getLocalStream, setVideoPlayer} 

@@ -6,17 +6,23 @@ import { navigate } from '@reach/router'
 import React from 'react'
 import ReactPlayer from 'react-player'
 import { serverSocket } from './helper/connection'
+import {getLocalStream,createPeerConnection,sendAnswer,sendOffer, handleSignalingData, setVideoPlayer} from './webrtcfile.js'
 
 export default class VideoPlayer extends React.Component{
-    state={
-        playing: false,
-        secondsPlayed: 0,
-        lastUpdatedBy: sessionStorage.getItem('username'),
-        videoPlayer: null,
-        videoStreamFlag: true
+    constructor(props){
+        super(props)
+        this.state={
+            playing: false,
+            secondsPlayed: 0,
+            lastUpdatedBy: sessionStorage.getItem('username'),
+            videoPlayer: null,
+            videoStreamFlag: true
+        }
+        this.videoPlayerRef = React.createRef()
     }
 
     componentDidMount(){
+        console.log("COMPONENT DID MOUNT")
         if(sessionStorage.getItem('video-stream-flag') === '' || sessionStorage.getItem('video-stream-flag') === null || sessionStorage.getItem('video-stream-flag') === undefined){
             navigate('/lobby')
         }
@@ -38,10 +44,36 @@ export default class VideoPlayer extends React.Component{
             }
         })
 
-        if (sessionStorage.getItem("user-type") === "creator")
-        await getLocalStream()     
-        createPeerConnection() 
-        var sendOffer = await sendOffer()
+        serverSocket.on('receive-offer', (data) => {
+            handleSignalingData({'sdp':data['sesDetails'],'type':data['typeOfSdp']})
+        })
+
+        serverSocket.on('receive-answer', (data) => {
+            // TODO: addIceCandidate
+            // FIXME
+            if(sessionStorage.getItem("user-type") === "creator"){
+                handleSignalingData({'sdp':data['sesDetails'],'type':data['typeOfSdp']})
+            }
+        })
+
+        setTimeout(() => {this.establishWebRTC()}, 5000)
+    }
+
+    establishWebRTC = async () =>{
+        let userType = sessionStorage.getItem("user-type")
+        console.log(userType)
+        
+        console.log(document.getElementById("video-player").firstChild)
+        getLocalStream(document.getElementById("video-player").firstChild);
+        
+ 
+        createPeerConnection(userType)
+        if (sessionStorage.getItem("user-type") === "creator"){
+            let send_Offer = await sendOffer();
+            setTimeout(function(){ serverSocket.emit('send-offer',{room_id:sessionStorage.getItem('room-id'),webRtcDesc:send_Offer}); }, 3000);
+        }
+        
+        
     }
 
     componentWillUnmount(){
@@ -81,10 +113,22 @@ export default class VideoPlayer extends React.Component{
         })
     }
 
-    ref = (player) =>{
+    handleRef = (player) =>{
+
         this.setState({videoPlayer:player})
+      
+        // if (sessionStorage.getItem("user-type") === "creator"){
+        //     console.log(this.videoPlayerRef.current)
+        //     getLocalStream(this.videoPlayerRef.current);
+        // }
+        
+    }
+
+    ready = () => {
+        // this.establishWebRTC()
     }
     render(){
+        console.log("RENDER START")
         const videoFileUrl = sessionStorage.getItem('video_file')
         const {playing} = this.state
         const {videoStreamFlag} = this.state
@@ -93,11 +137,11 @@ export default class VideoPlayer extends React.Component{
         return(
             
             <div>
-            {videoStreamFlag?<p>Stream video</p>:<p>Play local file</p>}
+            {sessionStorage.getItem('user-type')==="joinee" && videoStreamFlag?<p>Stream video</p>:<p>Play local file</p>}
             <div className='player-wrapper' style={{backgroundColor:'black'}}>
             <ReactPlayer
-            id={userType ==='creator'?'localStream':'remoteStream'}
-            ref ={this.ref}
+            id="video-player"
+            ref ={this.handleRef}
             playing={playing}
             className='react-player fixed-bottom'
             url= {videoFileUrl}
@@ -106,6 +150,7 @@ export default class VideoPlayer extends React.Component{
             controls = {true}
             onPause ={this.vidOnPause}
             onPlay={this.vidOnPlay}
+            onReady={this.ready}
             />
             </div>
         </div>

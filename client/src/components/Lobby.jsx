@@ -6,7 +6,6 @@
 import { navigate } from '@reach/router'
 import React from 'react'
 import { serverSocket } from './helper/connection'
-import {getLocalStream,createPeerConnection,sendAnswer,sendOffer, handleSignalingData} from './webrtcfile.js'
 
 export default class Lobby extends React.Component {
     state = {
@@ -146,7 +145,7 @@ export default class Lobby extends React.Component {
 
     startVideo = async () =>{
         if(this.state.userType === 'creator'){
-            serverSocket.emit('start-video', {room_id:sessionStorage.getItem('room-id'),webRtcDesc:send_Offer})
+            serverSocket.emit('start-video', {room_id:sessionStorage.getItem('room-id')})
         }
     }
 

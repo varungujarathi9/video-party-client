@@ -1,7 +1,7 @@
 import React from 'react'
 import {navigate} from '@reach/router'
 import {serverSocket} from './helper/connection'
-import {createPeerConnection,sendOffer,sendAnswer,handleSignalingData} from './webrtcfile.js'
+// import {createPeerConnection,sendOffer,sendAnswer,handleSignalingData} from './webrtcfile.js'
 
 export default class Login extends React.Component {
     constructor(props) {
