@@ -6,7 +6,7 @@ import { navigate } from '@reach/router'
 import React from 'react'
 import ReactPlayer from 'react-player'
 import { serverSocket } from './helper/connection'
-import {getLocalStream,createPeerConnection,sendAnswer,sendOffer, handleSignalingData, setVideoPlayer} from './webrtcfile.js'
+import {createPeerConnection, startPlaying} from './SimplePeer.js'
 
 export default class VideoPlayer extends React.Component{
     constructor(props){
@@ -22,7 +22,7 @@ export default class VideoPlayer extends React.Component{
     }
 
     componentDidMount(){
-        console.log("COMPONENT DID MOUNT")
+        
         if(sessionStorage.getItem('video-stream-flag') === '' || sessionStorage.getItem('video-stream-flag') === null || sessionStorage.getItem('video-stream-flag') === undefined){
             navigate('/lobby')
         }
@@ -43,37 +43,7 @@ export default class VideoPlayer extends React.Component{
                 }
             }
         })
-
-        serverSocket.on('receive-offer', (data) => {
-            handleSignalingData({'sdp':data['sesDetails'],'type':data['typeOfSdp']})
-        })
-
-        serverSocket.on('receive-answer', (data) => {
-            // TODO: addIceCandidate
-            // FIXME
-            if(sessionStorage.getItem("user-type") === "creator"){
-                handleSignalingData({'sdp':data['sesDetails'],'type':data['typeOfSdp']})
-            }
-        })
-
-        setTimeout(() => {this.establishWebRTC()}, 5000)
-    }
-
-    establishWebRTC = async () =>{
-        let userType = sessionStorage.getItem("user-type")
-        console.log(userType)
-        
-        console.log(document.getElementById("video-player").firstChild)
-        getLocalStream(document.getElementById("video-player").firstChild);
-        
- 
-        createPeerConnection(userType)
-        if (sessionStorage.getItem("user-type") === "creator"){
-            let send_Offer = await sendOffer();
-            setTimeout(function(){ serverSocket.emit('send-offer',{room_id:sessionStorage.getItem('room-id'),webRtcDesc:send_Offer}); }, 3000);
-        }
-        
-        
+        createPeerConnection()
     }
 
     componentWillUnmount(){
@@ -116,7 +86,7 @@ export default class VideoPlayer extends React.Component{
     handleRef = (player) =>{
 
         this.setState({videoPlayer:player})
-      
+        
         // if (sessionStorage.getItem("user-type") === "creator"){
         //     console.log(this.videoPlayerRef.current)
         //     getLocalStream(this.videoPlayerRef.current);
@@ -125,10 +95,13 @@ export default class VideoPlayer extends React.Component{
     }
 
     ready = () => {
-        // this.establishWebRTC()
+        
+        if(sessionStorage.getItem('user-type') === "creator"){  
+            console.log("CREATING STREAM")  
+            setTimeout(() => {startPlaying();}, 3000)
+        }
     }
     render(){
-        console.log("RENDER START")
         const videoFileUrl = sessionStorage.getItem('video_file')
         const {playing} = this.state
         const {videoStreamFlag} = this.state

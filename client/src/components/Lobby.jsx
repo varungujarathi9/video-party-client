@@ -30,7 +30,7 @@ export default class Lobby extends React.Component {
         }
 
         if (sessionStorage.getItem('room-details') !== null || sessionStorage.getItem('room-details') !== '' ){
-            console.log(JSON.parse(sessionStorage.getItem('room-details').replace(/"/g,'\"')))
+            // console.log(JSON.parse(sessionStorage.getItem('room-details').replace(/"/g,'\"')))
             this.setState({roomDetails: JSON.parse(sessionStorage.getItem('room-details').replace(/"/g,'\"'))})
         }
         else{
@@ -52,7 +52,7 @@ export default class Lobby extends React.Component {
         }
 
         serverSocket.on('update-members', (data)=>{
-            console.log(data)
+            // console.log(data)
             sessionStorage.setItem('room-details', JSON.stringify(data))
             // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
             this.setState({
