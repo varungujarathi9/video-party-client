@@ -1,6 +1,7 @@
 import React from 'react'
 import {navigate} from '@reach/router'
 import {serverSocket} from './helper/connection'
+// import {createPeerConnection,sendOffer,sendAnswer,handleSignalingData} from './webrtcfile.js'
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -29,7 +30,9 @@ export default class Login extends React.Component {
         }
     }
 
-    onClickLogin = (event) =>{
+
+   
+    onClickLogin = async (event) =>{
         event.preventDefault()
 
         // TODO: Add regex to check username is valid
@@ -39,6 +42,8 @@ export default class Login extends React.Component {
                 this.handleCreateRoom()
             }
             else if(this.state.userType === 'joinee'){
+                // var sendJoineeAnswer = await sendAnswer()
+                // console.log("send answer",sendJoineeAnswer)
                 serverSocket.emit('join-room', {username:this.state.username, roomID:this.state.roomID});
                 this.handleJoinRoom()
             }
