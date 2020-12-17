@@ -191,7 +191,7 @@ export default class Lobby extends React.Component {
                 this.setState({
                     ready: true
                 })
-                serverSocket.emit('update-member-status',{roomID:this.state.roomID, username:this.state.username, ready:true})
+                serverSocket.emit('update-room-details-status',{roomID:this.state.roomID, username:this.state.username, ready:true})
             }
             else{
                 document.getElementById('readyButton').innerHTML = 'Ready for partying'
@@ -199,7 +199,7 @@ export default class Lobby extends React.Component {
                 this.setState({
                     ready: false
                 })
-                serverSocket.emit('update-member-status',{roomID:this.state.roomID, username:this.state.username, ready:false})
+                serverSocket.emit('update-room-details-status',{roomID:this.state.roomID, username:this.state.username, ready:false})
             }
        }
     }
