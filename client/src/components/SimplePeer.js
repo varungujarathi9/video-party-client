@@ -29,7 +29,7 @@ function startPlaying(){
     if(videoPlayer === null || videoPlayer === undefined){
         console.error("videoPlayer not set: ", videoPlayer)
     }
-    else{
+    else if(stream === null || stream === undefined){
         stream = videoPlayer.captureStream()
         addMedia()
     }
