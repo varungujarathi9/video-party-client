@@ -86,7 +86,7 @@ export default class Lobby extends React.Component {
         })
 
         serverSocket.on('all_left',data=>{
-            console.log(data)
+            // console.log(data)
             sessionStorage.setItem('room-details', JSON.stringify(data))
             // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
             this.setState({
