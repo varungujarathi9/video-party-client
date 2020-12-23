@@ -12,7 +12,7 @@ export default class VideoPlayer extends React.Component{
     constructor(props){
         super(props)
         this.state={
-            playing: false,
+            playing: true,
             secondsPlayed: 0,
             lastUpdatedBy: sessionStorage.getItem('username'),
             videoPlayer: null,
