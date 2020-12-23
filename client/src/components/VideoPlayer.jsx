@@ -112,6 +112,7 @@ export default class VideoPlayer extends React.Component{
             <div>
                 {/* {sessionStorage.getItem('user-type')==="joinee" && videoStreamFlag?<p>Stream video</p>:<p>Play local file</p>} */}
                 <div className='player-wrapper' style={{backgroundColor:'black'}}>
+                
                 <ReactPlayer
                 id="video-player"
                 ref ={this.handleRef}
