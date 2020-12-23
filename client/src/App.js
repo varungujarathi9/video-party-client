@@ -9,7 +9,7 @@ function App() {
     <div className="App">
       <Router />
       {ConfigData.ENVIRONMENT_TYPE !== 'Prod' &&<p style={{ position: "absolute", right: "15px", bottom: "20px" }}>{ConfigData.ENVIRONMENT_TYPE}</p>}
-      <p style={{ position: "absolute", right: "15px", bottom: "0" }}>{version.VERSION}</p>
+      {ConfigData.ENVIRONMENT_TYPE !== 'Prod' &&<p style={{ position: "absolute", right: "15px", bottom: "0" }}>{version.VERSION}</p>}
     </div>
   );
 }
