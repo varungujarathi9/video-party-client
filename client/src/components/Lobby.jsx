@@ -152,9 +152,8 @@ export default class Lobby extends React.Component {
 
     startVideo = () =>{
         if(this.state.userType === 'creator'){
-            serverSocket.emit('start-video')
-        serverSocket.emit('start-video', {room_id:sessionStorage.getItem('room-id')})
-      }
+            serverSocket.emit('start-video', {room_id:sessionStorage.getItem('room-id')})
+        }
     }
 
 
