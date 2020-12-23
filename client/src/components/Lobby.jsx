@@ -32,7 +32,7 @@ export default class Lobby extends React.Component {
         }
 
         if (sessionStorage.getItem('room-details') !== null || sessionStorage.getItem('room-details') !== '' ){
-            console.log(JSON.parse(sessionStorage.getItem('room-details').replace(/"/g,'\"')))
+            // console.log(JSON.parse(sessionStorage.getItem('room-details').replace(/"/g,'\"')))
             this.setState({roomDetails: JSON.parse(sessionStorage.getItem('room-details').replace(/"/g,'\"'))})
         }
         else{
@@ -54,21 +54,25 @@ export default class Lobby extends React.Component {
         }
 
         serverSocket.on('update-room-details', (data)=>{
-            console.log(data)
+            // console.log(data)
             sessionStorage.setItem('room-details', JSON.stringify(data))
             // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
             this.setState({
                 roomDetails: JSON.parse(JSON.stringify(data)),
             })
             if(this.state.ready && JSON.parse(JSON.stringify(data))['started']){
+                // createPeerConnection() 
                 sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
                 navigate('/video-player')
             }
         })
 
         serverSocket.on('video-started', (data)=>{
+            // createPeerConnection() 
             sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
+            // handleSignalingData({'sdp':data['sesDetails'],'type':data['typeOfSdp']})
             navigate('/video-player')
+            
         })
 
         serverSocket.on('left_room',data=>{
@@ -82,7 +86,7 @@ export default class Lobby extends React.Component {
         })
 
         serverSocket.on('all_left',data=>{
-            console.log(data)
+            // console.log(data)
             sessionStorage.setItem('room-details', JSON.stringify(data))
             // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
             this.setState({
@@ -150,7 +154,7 @@ export default class Lobby extends React.Component {
         }
     }
 
-    startVideo = () =>{
+    startVideo = async () =>{
         if(this.state.userType === 'creator'){
             serverSocket.emit('start-video', {room_id:sessionStorage.getItem('room-id')})
         }
@@ -187,7 +191,7 @@ export default class Lobby extends React.Component {
                 this.setState({
                     ready: true
                 })
-                serverSocket.emit('update-member-status',{roomID:this.state.roomID, username:this.state.username, ready:true})
+                serverSocket.emit('update-room-details-status',{roomID:this.state.roomID, username:this.state.username, ready:true})
             }
             else{
                 document.getElementById('readyButton').innerHTML = 'Ready for partying'
@@ -195,7 +199,7 @@ export default class Lobby extends React.Component {
                 this.setState({
                     ready: false
                 })
-                serverSocket.emit('update-member-status',{roomID:this.state.roomID, username:this.state.username, ready:false})
+                serverSocket.emit('update-room-details-status',{roomID:this.state.roomID, username:this.state.username, ready:false})
             }
        }
     }

@@ -6,17 +6,23 @@ import { navigate } from '@reach/router'
 import React from 'react'
 import ReactPlayer from 'react-player'
 import { serverSocket } from './helper/connection'
+import {createPeerConnection, startPlaying} from './SimplePeer.js'
 
 export default class VideoPlayer extends React.Component{
-    state={
-        playing: false,
-        secondsPlayed: 0,
-        lastUpdatedBy: sessionStorage.getItem('username'),
-        videoPlayer: null,
-        videoStreamFlag: true
+    constructor(props){
+        super(props)
+        this.state={
+            playing: false,
+            secondsPlayed: 0,
+            lastUpdatedBy: sessionStorage.getItem('username'),
+            videoPlayer: null,
+            videoStreamFlag: true
+        }
+        this.videoPlayerRef = React.createRef()
     }
 
     componentDidMount(){
+        
         if(sessionStorage.getItem('video-stream-flag') === '' || sessionStorage.getItem('video-stream-flag') === null || sessionStorage.getItem('video-stream-flag') === undefined){
             navigate('/lobby')
         }
@@ -37,6 +43,7 @@ export default class VideoPlayer extends React.Component{
                 }
             }
         })
+        createPeerConnection()
     }
 
     componentWillUnmount(){
@@ -76,19 +83,38 @@ export default class VideoPlayer extends React.Component{
         })
     }
 
-    ref = (player) =>{
+    handleRef = (player) =>{
+
         this.setState({videoPlayer:player})
+        
+        // if (sessionStorage.getItem("user-type") === "creator"){
+        //     console.log(this.videoPlayerRef.current)
+        //     getLocalStream(this.videoPlayerRef.current);
+        // }
+        
+    }
+
+    ready = () => {
+        
+        if(sessionStorage.getItem('user-type') === "creator"){  
+            console.log("CREATING STREAM")  
+            setTimeout(() => {startPlaying();}, 3000)
+        }
     }
     render(){
         const videoFileUrl = sessionStorage.getItem('video_file')
         const {playing} = this.state
         const {videoStreamFlag} = this.state
+        const userType=sessionStorage.getItem('user-type')
+        
         return(
+            
             <div>
-            {videoStreamFlag?<p>Stream video</p>:<p>Play local file</p>}
+            {sessionStorage.getItem('user-type')==="joinee" && videoStreamFlag?<p>Stream video</p>:<p>Play local file</p>}
             <div className='player-wrapper' style={{backgroundColor:'black'}}>
             <ReactPlayer
-            ref ={this.ref}
+            id="video-player"
+            ref ={this.handleRef}
             playing={playing}
             className='react-player fixed-bottom'
             url= {videoFileUrl}
@@ -97,6 +123,7 @@ export default class VideoPlayer extends React.Component{
             controls = {true}
             onPause ={this.vidOnPause}
             onPlay={this.vidOnPlay}
+            onReady={this.ready}
             />
             </div>
         </div>
