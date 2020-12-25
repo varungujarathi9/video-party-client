@@ -19,18 +19,19 @@ const SERVER_CONFIG = {
     ]
 };
 
+console.log('Simple peer JS loaded')
 var stream;
 var videoPlayer;
-var peerConnections;
+var peerConnections = {};
 
 function connectToAllPeers(roomDetails){
-    peerConnections = {}
+
     Object.keys(roomDetails.members).map((username) => {
         if(username !== sessionStorage.getItem("username")){
-            let temp = {}
-            temp[username] = new Peer({initiator: true, config:SERVER_CONFIG})
-            peerConnections = Object.assign(peerConnections, temp);
-            // peerConnections[username] = new Peer({initiator: true, config:SERVER_CONFIG})
+            // let temp = {}
+            // temp[username] = new Peer({initiator: true, config:SERVER_CONFIG})
+            // peerConnections = Object.assign(peerConnections, temp);
+            peerConnections[username] = new Peer({initiator: true, config:SERVER_CONFIG})
             peerConnections[username].on('signal', desc => {
                 serverSocket.emit("send-offer", {desc:desc, roomID:sessionStorage.getItem("room-id"), from: sessionStorage.getItem("username"), to: username, fromType: sessionStorage.getItem("user-type")})
             })
@@ -43,9 +44,9 @@ function connectToAllPeers(roomDetails){
 
 serverSocket.on('receive-offer', (data) => {
     // create new connection
-    if(peerConnections === undefined){
-        peerConnections = {}
-    }
+    // if(peerConnections === undefined){
+    //     peerConnections = {}
+    // }
     if(data['to'] === sessionStorage.getItem('username')){
         let from = data['from']
         peerConnections[from] = new Peer({config:SERVER_CONFIG})

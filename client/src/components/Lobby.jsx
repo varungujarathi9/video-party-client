@@ -22,6 +22,7 @@ export default class Lobby extends React.Component {
         messages: [],
         message: '',
         numberOfMembers: 0,
+        peerConnectionDetails: null,
     }
 
     componentDidMount(){
@@ -65,7 +66,9 @@ export default class Lobby extends React.Component {
             if(this.state.ready && JSON.parse(JSON.stringify(data))['started']){
                 sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
                 var temp = await getPeerConnections()
-                console.log(temp)
+                this.setState({
+                    peerConnectionDetails: temp
+                }, () => navigate('/video-player', {state:{a: {b:"c"}, pC: this.state.extension}}))
                 // navigate('/video-player',  {state: { peerConnections: temp } })
             }
         })
@@ -79,8 +82,10 @@ export default class Lobby extends React.Component {
 
             sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
             var temp = await getPeerConnections()
-            console.log(temp)
-            navigate('/video-player', { state: { string:"hello", peerConnections: temp } })
+            this.setState({
+                peerConnectionDetails: temp
+            }, () => navigate('/video-player', {state:{a: {b:"c"}, pC: this.state.extension}}))
+            // navigate('/video-player', { state: { string:"hello", peerConnections: temp } })
 
         })
 

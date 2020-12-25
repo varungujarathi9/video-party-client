@@ -24,11 +24,11 @@ export default class VideoPlayer extends React.Component{
     }
 
     componentDidMount(){
-        console.log(this.props.location.state.peerConnections)
-        this.setState({
-            peerConnections: this.props.location.state.peerConnections
-        })
-        setPeerConnections(this.props.location.state.peerConnections)
+        console.log(this.props.location.state)
+        // this.setState({
+        //     peerConnections: this.props.location.state
+        // })
+        // setPeerConnections(this.props.location.state.peerConnections)
         if(sessionStorage.getItem('video-stream-flag') === '' || sessionStorage.getItem('video-stream-flag') === null || sessionStorage.getItem('video-stream-flag') === undefined){
             navigate('/lobby')
         }
@@ -104,7 +104,7 @@ export default class VideoPlayer extends React.Component{
 
         if(sessionStorage.getItem('user-type') === "creator"){
             console.log(1)
-            setTimeout(() => {startStreaming();}, 3000)
+            // setTimeout(() => {startStreaming();}, 3000)
         }
     }
     render(){
