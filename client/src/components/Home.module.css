@@ -1,0 +1,73 @@
+.title{
+    position: absolute;
+    left: 10%;      
+    font-family: Audiowide;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 80px;
+    line-height: 102px;
+    letter-spacing: 0.05em;
+    
+    color: #86C232;
+}
+.about{
+    position: absolute;
+    width: 71%;
+    left: 10%;
+    top: 18%;
+    font-family: Avenir LT Std;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 26px;
+    line-height: 38px;
+    letter-spacing: 0.05em;
+    color: #FFFFFF;
+    text-align: justify;
+
+}
+
+.createBtn{
+    position: absolute;
+    width: 25%;
+    height: 20%;
+    left: 10%;
+    top: 40%;
+    background: rgba(242, 170, 76, 0.01);
+    border: 1px solid #61892F;
+    box-sizing: border-box;
+    border-radius: 21px;
+    font-family: Bai Jamjuree;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 50px;
+    text-align: center;
+    letter-spacing: 0.05em;
+    color: #61892F;
+}
+
+button:hover{
+    background: #61892F;
+    color:white;
+    cursor: pointer;
+}
+
+.joinBtn{
+    position: absolute;
+    width: 25%;
+    height: 20%;
+    left: 55%;
+    top: 40%;
+    background: rgba(242, 170, 76, 0.01);
+    border: 1px solid #61892F;
+    box-sizing: border-box;
+    border-radius: 21px;
+    font-family: Bai Jamjuree;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 50px;
+    text-align: center;
+    letter-spacing: 0.05em;
+    color: #61892F;
+}

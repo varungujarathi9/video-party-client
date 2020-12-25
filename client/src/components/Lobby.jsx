@@ -6,6 +6,7 @@
 import { navigate } from '@reach/router'
 import React from 'react'
 import { serverSocket } from './helper/connection'
+import style from './Lobby.module.css'
 
 export default class Lobby extends React.Component {
     state = {
@@ -193,35 +194,63 @@ export default class Lobby extends React.Component {
        }
     }
 
+    capitalizeUsername = () =>{
+        var username  = sessionStorage.getItem('username')
+        var finalUsername = username.charAt(0).toUpperCase()+username.slice(1)
+        return(
+            <p className={style.creatorName}>
+                {finalUsername}'s Room
+                
+            </p>
+        )
+    }
+
     render() {
         var {roomDetails} = this.state
         var {videoStreamFlag} = this.state
         return (
             <div>
-
-                <label>Browse file</label><br/>
-                <input type="file" id="videofile" onChange={this.handleFile} />
-                <div style={{ fontSize: '16px', margin: '5px' }}>
-                    {this.state.extensionCheck ?
-                        <div>
-                            <h5 style={{ color: 'green' }}>{this.state.fileName}</h5>
-                            {sessionStorage.getItem('user-type') === 'creator' && <button onClick={this.startVideo}>Start partying</button>}
-                        </div>
-
-                        : <h6 style={{ color: 'red' }}>{this.state.errorMsg}</h6>}
-                </div>
-                {sessionStorage.getItem('user-type') === 'joinee' && this.state.ready && <p style={{ color: 'blue' }}>Waiting for the host to start</p>}
-                {sessionStorage.getItem('user-type') === 'joinee' && <button id='readyButton' onClick={this.readyForVideo}>Ready for partying</button>}
-                {sessionStorage.getItem('user-type') === 'joinee' && (videoStreamFlag?<h6 style={{ color: 'red' }}>You have not selected any file, video will be stream to you directly</h6>:<h6 style={{ color: 'green' }}>Your selected file would be played</h6>)}
-                <h4>Room I.D.</h4>
-                {this.state.roomID}
-                <h4>Room Members</h4>
+                <div className={style.left}>
+                {sessionStorage.getItem('user-type') === 'creator' && this.capitalizeUsername()}
+                {sessionStorage.getItem('user-type') === 'creator' &&<p className={style.roomId}>Room I.D.: {this.state.roomID}</p>}
+                <p className={style.memTitle}>Members in Lobby
+                <p className={style.memName}>
                 {roomDetails !== '' && Object.keys(roomDetails.members).length > 0 && Object.keys(roomDetails.members).map((username)=>{
                     return (
-                        <p key={username}>{username}:{roomDetails.members[username]?"ready":"not ready"}</p>
+                        <span key={username}>{username}:{roomDetails.members[username]?"ready":"not ready"}</span>
                     )
                 })}
-                <button onClick={this.leaveRoom}>Leave Room</button>
+                </p>
+                
+               </p>
+               <button className={style.leaveRoomBtn}onClick={this.leaveRoom}>Leave Room</button>
+
+                </div>
+               
+
+                <div className={style.right}>
+                   
+                    <p><input className={style.inputFile} type="file" id="videofile" onChange={this.handleFile} />
+                    </p>
+                      
+               
+                    {this.state.extensionCheck ?
+                        <div className={style.fileCheck}>
+                            <p className={style.fileName}>{this.state.fileName}</p>
+                            {sessionStorage.getItem('user-type') === 'creator' && <button className={style.startPlaying}onClick={this.startVideo}>Start partying</button>}
+                        </div>
+
+                        : <h4 style={{ color: 'red' }}>{this.state.errorMsg}</h4>}
+                 <div className={style.fileCheck}>
+                {sessionStorage.getItem('user-type') === 'joinee' && this.state.ready && <p style={{ color: 'blue' }}>Waiting for the host to start</p>}
+                {sessionStorage.getItem('user-type') === 'joinee' && <button id='readyButton' className={style.startPlaying} onClick={this.readyForVideo}>Ready for partying</button>}
+                {sessionStorage.getItem('user-type') === 'joinee' && (videoStreamFlag?<h6 style={{ color: 'red' }}>You have not selected any file, video will be stream to you directly</h6>:<h6 style={{ color: 'green' }}>Your selected file would be played</h6>)}
+                </div>
+                </div>
+                
+               
+                
+               
             </div>
         )
     }

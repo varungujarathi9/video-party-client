@@ -1,6 +1,7 @@
 import React from 'react'
 import {navigate} from '@reach/router'
 import {serverSocket} from './helper/connection'
+import style from './Login.module.css'
 // import {createPeerConnection,sendOffer,sendAnswer,handleSignalingData} from './webrtcfile.js'
 
 export default class Login extends React.Component {
@@ -96,23 +97,25 @@ export default class Login extends React.Component {
         const { usernameError } = this.state
         
         return (
-            <div>
-                <h1>Login to continue</h1>
-                <form>
-                    <div>
-                        <label htmlFor='username'>Username</label>
-                        <input type="text" id='username' name='username' maxLength='20' onChange={this.handleUsernameChange}></input>
+            <div>    
+                <div>
+                           
+                <form className={style.form}>
+                    <div className={style.unameDiv}> 
+                        <label className={style.username} htmlFor='username'> Enter Username</label>
+                        <input className={style.unameInput}type="text" id='username' name='username' maxLength='20' onChange={this.handleUsernameChange} placeholder="username"></input>
                     </div>    
                     {this.state.userType === 'joinee' ? (
-                        <div>
-                            <label htmlFor='roomID'>Room ID</label> 
-                            <input type='text' id='roomID' name='roomID' minLength='6' maxLength='6' onChange={this.handleRoomIDChange}></input>
+                        <div className={style.roomIdDiv}>
+                            <label className={style.roomId} htmlFor='roomID'>Room ID</label> 
+                            <input className={style.roomIdInput}type='text' id='roomID' name='roomID' minLength='6' maxLength='6' onChange={this.handleRoomIDChange} placeholder="roomId"></input>
                         </div>
                     ) : null
                     }
-                    <button onClick={this.onClickLogin}>Login</button>
+                    <button className={style.joinBtn} onClick={this.onClickLogin}>Login</button>
                 </form>
                 <h6 style={{ color: 'red', fontSize: '16px', margin: '5px' }}>{usernameError}</h6>
+                </div>
             </div>
         )
     }
