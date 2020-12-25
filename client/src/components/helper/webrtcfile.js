@@ -1,4 +1,4 @@
-import { serverSocket } from './helper/connection'
+import { serverSocket } from './connection'
 
 const TURN_SERVER_URL = '35.223.15.12:3479';
 const TURN_SERVER_USERNAME = 'videoparty';

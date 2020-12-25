@@ -6,6 +6,7 @@
 import { navigate } from '@reach/router'
 import React from 'react'
 import { serverSocket } from './helper/connection'
+import {connectToAllPeers, getPeerConnections} from './helper/SimplePeer.js'
 
 export default class Lobby extends React.Component {
     state = {
@@ -20,6 +21,7 @@ export default class Lobby extends React.Component {
         ready: false,
         messages: [],
         message: '',
+        numberOfMembers: 0,
     }
 
     componentDidMount(){
@@ -53,26 +55,33 @@ export default class Lobby extends React.Component {
             navigate('/')
         }
 
-        serverSocket.on('update-room-details', (data)=>{
+        serverSocket.on('update-room-details', async (data)=>{
             // console.log(data)
             sessionStorage.setItem('room-details', JSON.stringify(data))
-            // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
             this.setState({
                 roomDetails: JSON.parse(JSON.stringify(data)),
             })
+
             if(this.state.ready && JSON.parse(JSON.stringify(data))['started']){
-                // createPeerConnection() 
                 sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
-                navigate('/video-player')
+                var temp = await getPeerConnections()
+                console.log(temp)
+                // navigate('/video-player',  {state: { peerConnections: temp } })
             }
         })
 
-        serverSocket.on('video-started', (data)=>{
-            // createPeerConnection() 
+        // new member creates RTC connection to other members in the room
+        if(sessionStorage.getItem("user-type") === 'joinee'){
+            connectToAllPeers(JSON.parse(sessionStorage.getItem('room-details')));
+        }
+
+        serverSocket.on('video-started', async (data) =>{
+
             sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
-            // handleSignalingData({'sdp':data['sesDetails'],'type':data['typeOfSdp']})
-            navigate('/video-player')
-            
+            var temp = await getPeerConnections()
+            console.log(temp)
+            navigate('/video-player', { state: { string:"hello", peerConnections: temp } })
+
         })
 
         serverSocket.on('left_room',data=>{
@@ -96,7 +105,6 @@ export default class Lobby extends React.Component {
         })
 
         serverSocket.on('receive_message',data=>{
-            console.log(data)
             sessionStorage.setItem('messages', data)
             this.setState({
                 messages: data,
@@ -105,20 +113,15 @@ export default class Lobby extends React.Component {
         serverSocket.emit('get-all-messages',{roomID:sessionStorage.getItem('room-id')})
     }
 
-
-
-
     handleFile = (e) => {
         this.setState({
             videoStartError:''
         })
         e.preventDefault()
 
-        var filelist = document.getElementById('videofile').files[0]
-        if (filelist !== undefined){
-            console.log(filelist)
-            var typeOfFile = filelist.type
-            console.log(typeOfFile)
+        var fileList = document.getElementById('videofile').files[0]
+        if (fileList !== undefined){
+            var typeOfFile = fileList.type
             var file = e.target.value.replace(/^.*[\\]/, '')
 
             this.setState({
@@ -126,7 +129,6 @@ export default class Lobby extends React.Component {
             })
 
             var extensionVal = typeOfFile.split('/')
-            console.log(extensionVal)
 
             if (this.state.extension.includes(extensionVal[1])) {
                 this.setState({
@@ -142,7 +144,7 @@ export default class Lobby extends React.Component {
                     videoStreamFlag: false
                 })
             }
-            var fileUrl = URL.createObjectURL(filelist).split()
+            var fileUrl = URL.createObjectURL(fileList).split()
             sessionStorage.setItem('video_file', fileUrl)
         }
         else {

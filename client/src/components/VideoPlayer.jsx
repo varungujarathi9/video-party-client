@@ -6,23 +6,29 @@ import { navigate } from '@reach/router'
 import React from 'react'
 import ReactPlayer from 'react-player'
 import { serverSocket } from './helper/connection'
-import {createPeerConnection, startPlaying} from './SimplePeer.js'
+import {startStreaming, setPeerConnections} from './helper/SimplePeer.js'
 
 export default class VideoPlayer extends React.Component{
     constructor(props){
         super(props)
+        console.log(props)
         this.state={
             playing: false,
             secondsPlayed: 0,
             lastUpdatedBy: sessionStorage.getItem('username'),
             videoPlayer: null,
-            videoStreamFlag: true
+            videoStreamFlag: true,
+            peerConnections: null,
         }
         this.videoPlayerRef = React.createRef()
     }
 
     componentDidMount(){
-        
+        console.log(this.props.location.state.peerConnections)
+        this.setState({
+            peerConnections: this.props.location.state.peerConnections
+        })
+        setPeerConnections(this.props.location.state.peerConnections)
         if(sessionStorage.getItem('video-stream-flag') === '' || sessionStorage.getItem('video-stream-flag') === null || sessionStorage.getItem('video-stream-flag') === undefined){
             navigate('/lobby')
         }
@@ -31,7 +37,6 @@ export default class VideoPlayer extends React.Component{
         })
         serverSocket.on('updated-video', (data) =>{
             if(data['pauseDetails']['username'] !== sessionStorage.getItem('username')){
-                console.log('DATA:'+JSON.stringify(data['pauseDetails']))
                 this.setState({
                     playing: data['pauseDetails']['playing'],
                     secondsPlayed: data['pauseDetails']['progressTime'],
@@ -43,7 +48,10 @@ export default class VideoPlayer extends React.Component{
                 }
             }
         })
-        createPeerConnection()
+        // if(sessionStorage.getItem('user-type') === 'joinee'){
+        //     receiveAudioVideoStream()
+        // }
+        console.log(this.state)
     }
 
     componentWillUnmount(){
@@ -58,7 +66,6 @@ export default class VideoPlayer extends React.Component{
         if (this.state.lastUpdatedBy === sessionStorage.getItem('username')){
             let pauseDetails = {'roomID':sessionStorage.getItem('room-id'), 'playing':false,'progressTime':this.state.videoPlayer.getCurrentTime(), 'username':sessionStorage.getItem('username'), 'exited':false}
             serverSocket.emit('video-update',{pauseDetails:pauseDetails})
-            console.log('paused')
         }
 
         this.setState({
@@ -73,7 +80,6 @@ export default class VideoPlayer extends React.Component{
         if (this.state.lastUpdatedBy === sessionStorage.getItem('username')){
             let pauseDetails = {'roomID':sessionStorage.getItem('room-id'), 'playing':true,'progressTime':this.state.videoPlayer.getCurrentTime(), 'username':sessionStorage.getItem('username'), 'exited':false}
             serverSocket.emit('video-update',{pauseDetails:pauseDetails})
-            console.log('played')
         }
 
         this.setState({
@@ -86,19 +92,19 @@ export default class VideoPlayer extends React.Component{
     handleRef = (player) =>{
 
         this.setState({videoPlayer:player})
-        
+
         // if (sessionStorage.getItem("user-type") === "creator"){
         //     console.log(this.videoPlayerRef.current)
         //     getLocalStream(this.videoPlayerRef.current);
         // }
-        
+
     }
 
     ready = () => {
-        
-        if(sessionStorage.getItem('user-type') === "creator"){  
-            console.log("CREATING STREAM")  
-            setTimeout(() => {startPlaying();}, 3000)
+
+        if(sessionStorage.getItem('user-type') === "creator"){
+            console.log(1)
+            setTimeout(() => {startStreaming();}, 3000)
         }
     }
     render(){
@@ -106,9 +112,9 @@ export default class VideoPlayer extends React.Component{
         const {playing} = this.state
         const {videoStreamFlag} = this.state
         const userType=sessionStorage.getItem('user-type')
-        
+
         return(
-            
+
             <div>
                 {/* {sessionStorage.getItem('user-type')==="joinee" && videoStreamFlag?<p>Stream video</p>:<p>Play local file</p>} */}
                 <div className='player-wrapper' style={{backgroundColor:'black'}}>
