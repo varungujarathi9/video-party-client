@@ -6,7 +6,7 @@
 import { navigate } from '@reach/router'
 import React from 'react'
 import { serverSocket } from './helper/connection'
-import {connectToAllPeers, getPeerConnections} from './helper/SimplePeer.js'
+// import {connectToAllPeers, getPeerConnections} from './helper/SimplePeerLobby.js'
 
 export default class Lobby extends React.Component {
     state = {
@@ -21,8 +21,6 @@ export default class Lobby extends React.Component {
         ready: false,
         messages: [],
         message: '',
-        numberOfMembers: 0,
-        peerConnectionDetails: null,
     }
 
     componentDidMount(){
@@ -65,28 +63,13 @@ export default class Lobby extends React.Component {
 
             if(this.state.ready && JSON.parse(JSON.stringify(data))['started']){
                 sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
-                var temp = await getPeerConnections()
-                this.setState({
-                    peerConnectionDetails: temp
-                }, () => navigate('/video-player', {state:{a: {b:"c"}, pC: this.state.extension}}))
-                // navigate('/video-player',  {state: { peerConnections: temp } })
+                navigate('/video-player')
             }
         })
 
-        // new member creates RTC connection to other members in the room
-        if(sessionStorage.getItem("user-type") === 'joinee'){
-            connectToAllPeers(JSON.parse(sessionStorage.getItem('room-details')));
-        }
-
         serverSocket.on('video-started', async (data) =>{
-
             sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
-            var temp = await getPeerConnections()
-            this.setState({
-                peerConnectionDetails: temp
-            }, () => navigate('/video-player', {state:{a: {b:"c"}, pC: this.state.extension}}))
-            // navigate('/video-player', { state: { string:"hello", peerConnections: temp } })
-
+            navigate('/video-player')
         })
 
         serverSocket.on('left_room',data=>{
@@ -166,7 +149,6 @@ export default class Lobby extends React.Component {
             serverSocket.emit('start-video', {room_id:sessionStorage.getItem('room-id')})
         }
     }
-
 
     leaveRoom =() =>{
         if(sessionStorage.getItem('user-type') === 'joinee'){

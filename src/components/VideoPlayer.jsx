@@ -6,29 +6,22 @@ import { navigate } from '@reach/router'
 import React from 'react'
 import ReactPlayer from 'react-player'
 import { serverSocket } from './helper/connection'
-import {startStreaming, setPeerConnections} from './helper/SimplePeer.js'
+import {startStreaming} from './helper/SimplePeerVideoPlayer.js'
 
 export default class VideoPlayer extends React.Component{
     constructor(props){
         super(props)
-        console.log(props)
         this.state={
             playing: false,
             secondsPlayed: 0,
             lastUpdatedBy: sessionStorage.getItem('username'),
             videoPlayer: null,
             videoStreamFlag: true,
-            peerConnections: null,
         }
         this.videoPlayerRef = React.createRef()
     }
 
     componentDidMount(){
-        console.log(this.props.location.state)
-        // this.setState({
-        //     peerConnections: this.props.location.state
-        // })
-        // setPeerConnections(this.props.location.state.peerConnections)
         if(sessionStorage.getItem('video-stream-flag') === '' || sessionStorage.getItem('video-stream-flag') === null || sessionStorage.getItem('video-stream-flag') === undefined){
             navigate('/lobby')
         }
@@ -48,17 +41,22 @@ export default class VideoPlayer extends React.Component{
                 }
             }
         })
-        // if(sessionStorage.getItem('user-type') === 'joinee'){
-        //     receiveAudioVideoStream()
-        // }
-        console.log(this.state)
+
+        if(sessionStorage.getItem('user-type') === "creator"){
+            console.log(1)
+            setTimeout(() => {startStreaming(JSON.parse(sessionStorage.getItem('room-details')).members);}, 3000)
+        }
+        else{
+            console.log(2)
+            startStreaming(JSON.parse(sessionStorage.getItem('room-details')).members)
+        }
     }
 
     componentWillUnmount(){
         if (this.state.lastUpdatedBy === sessionStorage.getItem('username')){
             let pauseDetails = {'roomID':sessionStorage.getItem('room-id'),'playing':false,'progressTime':this.state.videoPlayer.getCurrentTime(), 'username':sessionStorage.getItem('username'), 'exited':true}
             serverSocket.emit('video-update',{pauseDetails:pauseDetails})
-            localStorage.removeItem('video_file')
+            sessionStorage.removeItem('video_file')
         }
     }
 
@@ -101,11 +99,6 @@ export default class VideoPlayer extends React.Component{
     }
 
     ready = () => {
-
-        if(sessionStorage.getItem('user-type') === "creator"){
-            console.log(1)
-            // setTimeout(() => {startStreaming();}, 3000)
-        }
     }
     render(){
         const videoFileUrl = sessionStorage.getItem('video_file')
