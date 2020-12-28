@@ -4,9 +4,9 @@ NPM version - 6.14.8
 To install node <https://phoenixnap.com/kb/update-node-js-version>
 
 # Steps to run client on local machine
-npm i
-cd client
-npm start
+-npm i
+-cd client
+-npm start
 
 ## Test cases
 
