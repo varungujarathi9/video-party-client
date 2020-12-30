@@ -24,7 +24,31 @@ export default class Lobby extends React.Component {
     }
 
     componentDidMount(){
+        serverSocket.on('connect',()=>{
+            console.log("server is connected")
+            console.log(serverSocket)
+            var rejoinRoomID = sessionStorage.getItem('room-id')
+            var rejoinUsername = sessionStorage.getItem('username')
+            var usertype =sessionStorage.getItem('user-type')
+            if(usertype === 'creator'){
+                serverSocket.emit('rejoin-creator',{id:rejoinRoomID,creator_name:rejoinUsername})
+            }
+            else{
+                serverSocket.emit('rejoin-joinee',{id:rejoinRoomID,joinee_name:rejoinUsername})
+            }
+           
+            
+            this.reconnectServer()
+        })
+        serverSocket.on('pong',(data)=>{
+            console.log("received ping is",data)
+        })
 
+
+        serverSocket.on('disconnect',(reason)=>{
+            console.log("the reason for disconnection is",reason)
+            console.log("server is disconnected")
+        })
         if (sessionStorage.getItem('user-type') === 'creator' || sessionStorage.getItem('user-type') === 'joinee' ){
             this.setState({userType: sessionStorage.getItem('user-type')})
         }
@@ -99,6 +123,10 @@ export default class Lobby extends React.Component {
             })
         })
         serverSocket.emit('get-all-messages',{roomID:sessionStorage.getItem('room-id')})
+    }
+
+    reconnectServer =() =>{
+        
     }
 
     handleFile = (e) => {
