@@ -16,7 +16,6 @@ export default class VideoPlayer extends React.Component{
             secondsPlayed: 0,
             lastUpdatedBy: sessionStorage.getItem('username'),
             videoPlayer: null,
-            videoStreamFlag: true,
         }
         this.videoPlayerRef = React.createRef()
     }
@@ -35,7 +34,9 @@ export default class VideoPlayer extends React.Component{
                     secondsPlayed: data['pauseDetails']['progressTime'],
                     lastUpdatedBy: data['pauseDetails']['username']
                 })
-                this.state.videoPlayer.seekTo(data['pauseDetails']['progressTime'], 'seconds')
+                if(data['pauseDetails']['progressTime'] !== null){
+                    this.state.videoPlayer.seekTo(data['pauseDetails']['progressTime'], 'seconds')
+                }
                 if(data['pauseDetails']['exited'] === true){
                     navigate('/lobby')
                 }
@@ -62,7 +63,13 @@ export default class VideoPlayer extends React.Component{
 
     vidOnPause=()=>{
         if (this.state.lastUpdatedBy === sessionStorage.getItem('username')){
-            let pauseDetails = {'roomID':sessionStorage.getItem('room-id'), 'playing':false,'progressTime':this.state.videoPlayer.getCurrentTime(), 'username':sessionStorage.getItem('username'), 'exited':false}
+            let pauseDetails;
+            if(sessionStorage.getItem("user-type") === "creator"){
+                pauseDetails = {'roomID':sessionStorage.getItem('room-id'), 'playing':false,'progressTime':this.state.videoPlayer.getCurrentTime(), 'username':sessionStorage.getItem('username'), 'exited':false}
+            }
+            else{
+                pauseDetails = {'roomID':sessionStorage.getItem('room-id'), 'playing':false,'progressTime':null, 'username':sessionStorage.getItem('username'), 'exited':false}
+            }
             serverSocket.emit('video-update',{pauseDetails:pauseDetails})
         }
 
@@ -76,7 +83,13 @@ export default class VideoPlayer extends React.Component{
 
     vidOnPlay = () => {
         if (this.state.lastUpdatedBy === sessionStorage.getItem('username')){
-            let pauseDetails = {'roomID':sessionStorage.getItem('room-id'), 'playing':true,'progressTime':this.state.videoPlayer.getCurrentTime(), 'username':sessionStorage.getItem('username'), 'exited':false}
+            let pauseDetails;
+            if(sessionStorage.getItem("user-type") === "creator"){
+                pauseDetails = {'roomID':sessionStorage.getItem('room-id'), 'playing':true,'progressTime':this.state.videoPlayer.getCurrentTime(), 'username':sessionStorage.getItem('username'), 'exited':false}
+            }
+            else{
+                pauseDetails = {'roomID':sessionStorage.getItem('room-id'), 'playing':true,'progressTime':null, 'username':sessionStorage.getItem('username'), 'exited':false}
+            }
             serverSocket.emit('video-update',{pauseDetails:pauseDetails})
         }
 
@@ -88,30 +101,16 @@ export default class VideoPlayer extends React.Component{
     }
 
     handleRef = (player) =>{
-
         this.setState({videoPlayer:player})
-
-        // if (sessionStorage.getItem("user-type") === "creator"){
-        //     console.log(this.videoPlayerRef.current)
-        //     getLocalStream(this.videoPlayerRef.current);
-        // }
-
-    }
-
-    ready = () => {
     }
     render(){
         const videoFileUrl = sessionStorage.getItem('video_file')
         const {playing} = this.state
-        const {videoStreamFlag} = this.state
-        const userType=sessionStorage.getItem('user-type')
 
         return(
 
             <div>
-                {/* {sessionStorage.getItem('user-type')==="joinee" && videoStreamFlag?<p>Stream video</p>:<p>Play local file</p>} */}
                 <div className='player-wrapper' style={{backgroundColor:'black'}}>
-                
                 <ReactPlayer
                 id="video-player"
                 ref ={this.handleRef}

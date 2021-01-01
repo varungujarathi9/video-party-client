@@ -17,8 +17,6 @@ export default class Lobby extends React.Component {
         extension: ["mp4", "mkv", "x-msvideo", "x-matroska"],
         extensionValid: false,
         fileError: '',
-        videoStreamFlag: true,
-        ready: false,
         messages: [],
         message: '',
     }
@@ -33,7 +31,6 @@ export default class Lobby extends React.Component {
         }
 
         if (sessionStorage.getItem('room-details') !== null || sessionStorage.getItem('room-details') !== '' ){
-            // console.log(JSON.parse(sessionStorage.getItem('room-details').replace(/"/g,'\"')))
             this.setState({roomDetails: JSON.parse(sessionStorage.getItem('room-details').replace(/"/g,'\"'))})
         }
         else{
@@ -60,21 +57,14 @@ export default class Lobby extends React.Component {
             this.setState({
                 roomDetails: JSON.parse(JSON.stringify(data)),
             })
-
-            if(this.state.ready && JSON.parse(JSON.stringify(data))['started']){
-                sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
-                navigate('/video-player')
-            }
         })
 
         serverSocket.on('video-started', async (data) =>{
-            sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
             navigate('/video-player')
         })
 
         serverSocket.on('left_room',data=>{
             sessionStorage.setItem('room-details', JSON.stringify(data))
-            // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
             this.setState({
                 roomDetails: JSON.parse(JSON.stringify(data)),
 
@@ -83,9 +73,7 @@ export default class Lobby extends React.Component {
         })
 
         serverSocket.on('all_left',data=>{
-            // console.log(data)
             sessionStorage.setItem('room-details', JSON.stringify(data))
-            // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
             this.setState({
                 roomDetails: JSON.parse(JSON.stringify(data)),
             })
@@ -99,6 +87,9 @@ export default class Lobby extends React.Component {
             })
         })
         serverSocket.emit('get-all-messages',{roomID:sessionStorage.getItem('room-id')})
+        if(sessionStorage.getItem("user-type") === "joinee"){
+            serverSocket.emit('update-member-status',{roomID:sessionStorage.getItem('room-id'), username:sessionStorage.getItem('username'), ready:false})
+        }
     }
 
     handleFile = (e) => {
@@ -122,14 +113,12 @@ export default class Lobby extends React.Component {
                 this.setState({
                     extensionCheck: true,
                     errorMsg: '',
-                    videoStreamFlag: true
                 })
             }
             else {
                 this.setState({
                     errorMsg: "Please provide valid file",
                     extensionCheck: false,
-                    videoStreamFlag: false
                 })
             }
             var fileUrl = URL.createObjectURL(fileList).split()
@@ -139,7 +128,6 @@ export default class Lobby extends React.Component {
             this.setState({
                 errorMsg: "",
                 extensionCheck: false,
-                videoStreamFlag: false
             })
         }
     }
@@ -159,40 +147,6 @@ export default class Lobby extends React.Component {
         }
     }
 
-    readyForVideo = () => {
-        if(this.state.userType === 'joinee'){
-            if ( this.state.fileName === '' || this.state.fileName === null){
-                // TODO change alert to UI
-                this.setState({
-                    videoStreamFlag: true
-                })
-                sessionStorage.setItem('video_file', null)
-            }
-            else{
-                this.setState({
-                    videoStreamFlag: false
-                })
-            }
-
-            if (this.state.ready === false){
-                document.getElementById('readyButton').innerHTML = 'Cancel'
-                document.getElementById('videofile').disabled = true
-                this.setState({
-                    ready: true
-                })
-                serverSocket.emit('update-member-status',{roomID:this.state.roomID, username:this.state.username, ready:true})
-            }
-            else{
-                document.getElementById('readyButton').innerHTML = 'Ready for partying'
-                document.getElementById('videofile').disabled = false
-                this.setState({
-                    ready: false
-                })
-                serverSocket.emit('update-member-status',{roomID:this.state.roomID, username:this.state.username, ready:false})
-            }
-       }
-    }
-
     handleMessageChange = (event) => {
         event.preventDefault()
         this.setState({
@@ -210,7 +164,6 @@ export default class Lobby extends React.Component {
 
     render() {
         var {roomDetails} = this.state
-        var {videoStreamFlag} = this.state
         var {messages} = this.state
 
         return (
@@ -227,15 +180,15 @@ export default class Lobby extends React.Component {
 
                         : <h6 style={{ color: 'red' }}>{this.state.errorMsg}</h6>}
                 </div>
-                {sessionStorage.getItem('user-type') === 'joinee' && this.state.ready && <p style={{ color: 'blue' }}>Waiting for the host to start</p>}
-                {sessionStorage.getItem('user-type') === 'joinee' && <button id='readyButton' onClick={this.readyForVideo}>Ready for partying</button>}
-                {sessionStorage.getItem('user-type') === 'joinee' && (videoStreamFlag?<h6 style={{ color: 'red' }}>You have not selected any file, video will be stream to you directly</h6>:<h6 style={{ color: 'green' }}>Your selected file would be played</h6>)}
+                <p style={{ color: 'blue' }}>Waiting for the host to start</p>
+
                 <h4>Room I.D.</h4>
                 {this.state.roomID}
+
                 <h4>Room Members</h4>
                 {roomDetails !== '' && Object.keys(roomDetails.members).length > 0 && Object.keys(roomDetails.members).map((username)=>{
                     return (
-                        <p key={username}>{username}:{roomDetails.members[username]?"ready":"not ready"}</p>
+                        <p key={username}>{username}</p>
                     )
                 })}
                 <h4>Text Channel</h4>

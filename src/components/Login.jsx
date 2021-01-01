@@ -1,6 +1,7 @@
 import React from 'react'
 import {navigate} from '@reach/router'
 import {serverSocket} from './helper/connection'
+import { Socket } from 'socket.io-client'
 // import {createPeerConnection,sendOffer,sendAnswer,handleSignalingData} from './webrtcfile.js'
 
 export default class Login extends React.Component {
@@ -10,11 +11,8 @@ export default class Login extends React.Component {
             userType: '',
             username: '',
             roomID: '',
-            usernameError: ''
+            errorMessage: ''
         }
-        // sessionStorage.removeItem('room-details')
-        // sessionStorage.removeItem('room-id')
-        // sessionStorage.removeItem('username')
     }
 
     componentDidMount(){
@@ -25,13 +23,16 @@ export default class Login extends React.Component {
         }
         else{
             sessionStorage.clear()
-            localStorage.clear()
             navigate('/')
         }
+
+        serverSocket.on("login-error", (data) => {
+            this.setState({
+                errorMessage: data['msg']
+            })
+        })
     }
 
-
-   
     onClickLogin = async (event) =>{
         event.preventDefault()
 
@@ -42,8 +43,6 @@ export default class Login extends React.Component {
                 this.handleCreateRoom()
             }
             else if(this.state.userType === 'joinee'){
-                // var sendJoineeAnswer = await sendAnswer()
-                // console.log("send answer",sendJoineeAnswer)
                 serverSocket.emit('join-room', {username:this.state.username, roomID:this.state.roomID});
                 this.handleJoinRoom()
             }
@@ -55,7 +54,6 @@ export default class Login extends React.Component {
 
     handleCreateRoom = () => {
         serverSocket.on('room-created',(data)=>{
-
             sessionStorage.setItem('username', this.state.username)
             sessionStorage.setItem('room-id', data['room-id'])
             sessionStorage.setItem('room-details', JSON.stringify(data['room-details']))
@@ -87,7 +85,7 @@ export default class Login extends React.Component {
     }
 
     render() {
-        const { usernameError } = this.state
+        let { errorMessage } = this.state
 
         return (
             <div>
@@ -106,7 +104,7 @@ export default class Login extends React.Component {
                     }
                     <button onClick={this.onClickLogin}>Login</button>
                 </form>
-                <h6 style={{ color: 'red', fontSize: '16px', margin: '5px' }}>{usernameError}</h6>
+                <h6 style={{ color: 'red', fontSize: '16px', margin: '5px' }}>{errorMessage}</h6>
             </div>
         )
     }
