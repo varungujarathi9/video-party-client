@@ -12,7 +12,7 @@ export default class RouterPage extends React.Component{
                 <Home exact path="/" />
                 <Login exact path="/login" />
                 <Lobby exact path="/lobby" />
-                <VideoPlayer exact path="/video-player" />      
+                <VideoPlayer exact path="/video-player" />
             </Router>
         )
     }

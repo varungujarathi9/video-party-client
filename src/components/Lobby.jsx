@@ -31,6 +31,7 @@ export default class Lobby extends React.Component {
         }
 
         if (sessionStorage.getItem('room-details') !== null || sessionStorage.getItem('room-details') !== '' ){
+            // console.log(JSON.parse(sessionStorage.getItem('room-details').replace(/"/g,'\"')))
             this.setState({roomDetails: JSON.parse(sessionStorage.getItem('room-details').replace(/"/g,'\"'))})
         }
         else{
@@ -65,6 +66,7 @@ export default class Lobby extends React.Component {
 
         serverSocket.on('left_room',data=>{
             sessionStorage.setItem('room-details', JSON.stringify(data))
+            // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
             this.setState({
                 roomDetails: JSON.parse(JSON.stringify(data)),
 
@@ -73,7 +75,9 @@ export default class Lobby extends React.Component {
         })
 
         serverSocket.on('all_left',data=>{
+            // console.log(data)
             sessionStorage.setItem('room-details', JSON.stringify(data))
+            // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
             this.setState({
                 roomDetails: JSON.parse(JSON.stringify(data)),
             })
@@ -87,9 +91,6 @@ export default class Lobby extends React.Component {
             })
         })
         serverSocket.emit('get-all-messages',{roomID:sessionStorage.getItem('room-id')})
-        if(sessionStorage.getItem("user-type") === "joinee"){
-            serverSocket.emit('update-member-status',{roomID:sessionStorage.getItem('room-id'), username:sessionStorage.getItem('username'), ready:false})
-        }
     }
 
     handleFile = (e) => {
@@ -180,11 +181,8 @@ export default class Lobby extends React.Component {
 
                         : <h6 style={{ color: 'red' }}>{this.state.errorMsg}</h6>}
                 </div>
-                <p style={{ color: 'blue' }}>Waiting for the host to start</p>
-
                 <h4>Room I.D.</h4>
                 {this.state.roomID}
-
                 <h4>Room Members</h4>
                 {roomDetails !== '' && Object.keys(roomDetails.members).length > 0 && Object.keys(roomDetails.members).map((username)=>{
                     return (

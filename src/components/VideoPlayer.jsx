@@ -21,12 +21,6 @@ export default class VideoPlayer extends React.Component{
     }
 
     componentDidMount(){
-        if(sessionStorage.getItem('video-stream-flag') === '' || sessionStorage.getItem('video-stream-flag') === null || sessionStorage.getItem('video-stream-flag') === undefined){
-            navigate('/lobby')
-        }
-        this.setState({
-            videoStreamFlag: sessionStorage.getItem('video-stream-flag')
-        })
         serverSocket.on('updated-video', (data) =>{
             if(data['pauseDetails']['username'] !== sessionStorage.getItem('username')){
                 this.setState({
@@ -44,11 +38,9 @@ export default class VideoPlayer extends React.Component{
         })
 
         if(sessionStorage.getItem('user-type') === "creator"){
-            console.log(1)
             setTimeout(() => {startStreaming(JSON.parse(sessionStorage.getItem('room-details')).members);}, 3000)
         }
         else{
-            console.log(2)
             startStreaming(JSON.parse(sessionStorage.getItem('room-details')).members)
         }
     }
