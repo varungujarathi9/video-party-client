@@ -1,5 +1,4 @@
 {
     "ENVIRONMENT_TYPE" : "Dev",
-    "SERVER" : "ws://localhost:5000",
-    "CLIENT" : "http://35.223.15.12:3000"
+    "SERVER" : "ws://localhost:5000"
 }
