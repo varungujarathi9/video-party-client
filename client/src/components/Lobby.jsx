@@ -7,7 +7,7 @@ import { navigate } from '@reach/router'
 import React from 'react'
 import { serverSocket } from './helper/connection'
 import style from './Lobby.module.css'
-import {AvatarArr} from './Avatar.js'
+import {AvatarArr} from './Avatar'
 
 export default class Lobby extends React.Component {
     state = {
@@ -20,7 +20,7 @@ export default class Lobby extends React.Component {
         fileError: '',
         videoStreamFlag: true,
         ready: false,
-        avatar:AvatarArr
+            
     }
 
     componentDidMount(){
@@ -54,7 +54,7 @@ export default class Lobby extends React.Component {
             navigate('/')
         }
 
-        serverSocket.on('update-members', (data)=>{
+        serverSocket.on('update-room-details', (data)=>{
             // console.log(data)
             sessionStorage.setItem('room-details', JSON.stringify(data))
             // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
@@ -208,8 +208,9 @@ export default class Lobby extends React.Component {
     }
 
     render() {
-        var {roomDetails,videoStreamFlag,avatar} = this.state
-       
+        var {roomDetails,videoStreamFlag} = this.state
+      
+                
         return (
             <div>
                 <div className={style.left}>
@@ -218,11 +219,12 @@ export default class Lobby extends React.Component {
                 <p className={style.memTitle}>Members in Lobby
                 <p className={style.memName}>
                 <div>
-                {roomDetails !== '' && Object.keys(roomDetails.members).length > 0 && Object.keys(roomDetails.members).map((username)=>{
+                {roomDetails !== '' && Object.keys(roomDetails.members).length > 0 && Object.keys(roomDetails.members).map((item)=>{
                     return (
                             <>
-                            <img src={avatar[Math.floor(Math.random()*avatar.length)]} alt="avatarimg"/>
-                            <span key={username}>{username}</span>
+                            
+                            <img src={AvatarArr[roomDetails.members[item]]} alt="avatarimg"/> 
+                            <span key={item}>{item}</span>
                              {/* <span key={username}>{username}:{roomDetails.members[username]?"ready":"not ready"}</span> */}
                             </>
                        

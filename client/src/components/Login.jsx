@@ -2,6 +2,7 @@ import React from 'react'
 import {navigate} from '@reach/router'
 import {serverSocket} from './helper/connection'
 import style from './Login.module.css'
+import {AvatarArr} from './Avatar.js'
 // import {createPeerConnection,sendOffer,sendAnswer,handleSignalingData} from './webrtcfile.js'
 
 export default class Login extends React.Component {
@@ -11,7 +12,9 @@ export default class Login extends React.Component {
             userType: '',
             username: '',
             roomID: '',
-            usernameError: ''
+            usernameError: '',
+            avatar:AvatarArr,
+            setAvatarName:null
         }
         // sessionStorage.removeItem('room-details')
         // sessionStorage.removeItem('room-id')
@@ -39,15 +42,22 @@ export default class Login extends React.Component {
         // TODO: Add regex to check username is valid
         if (this.state.username !== '') {    
             // createPeerConnection()  
+            var {avatar} = this.state
+            var avatarName = Object.keys(avatar)
+            var avatarRandom = avatarName[Math.floor(Math.random()*avatarName.length)]
+            this.setState({
+                setAvatarName:avatarRandom
+            })
             if(this.state.userType === 'creator'){ 
-                // var receiveOffer = await sendOffer()              
-                serverSocket.emit('create-room', {username:this.state.username});          
+                // var receiveOffer = await sendOffer()
+                        
+                serverSocket.emit('create-room', {username:this.state.username,avatarname:avatarRandom});          
                 this.handleCreateRoom()
             }
             else if(this.state.userType === 'joinee'){
                 // var sendJoineeAnswer = await sendAnswer()
                 // console.log("send answer",sendJoineeAnswer)
-                serverSocket.emit('join-room', {username:this.state.username, roomID:this.state.roomID});
+                serverSocket.emit('join-room', {username:this.state.username, roomID:this.state.roomID,avatarname:avatarRandom});
                 this.handleJoinRoom()
             }
         }
@@ -61,6 +71,8 @@ export default class Login extends React.Component {
             sessionStorage.setItem('username', this.state.username)
             sessionStorage.setItem('room-id', data['room-id'])
             sessionStorage.setItem('room-details', JSON.stringify(data['room-details']))
+            sessionStorage.setItem('avatarName',this.state.setAvatarName)
+            console.log(data)
             //write peerconnection
            
             navigate('/lobby')    
@@ -72,8 +84,9 @@ export default class Login extends React.Component {
             sessionStorage.setItem('username', this.state.username)
             sessionStorage.setItem('room-id', this.state.roomID)
             sessionStorage.setItem('room-details', JSON.stringify(data['room-details']))
+            sessionStorage.setItem('avatarName',this.state.setAvatarName)
             //write peerconnection
-         
+            console.log(data)
 
             navigate('/lobby')    
         })
