@@ -110,23 +110,24 @@ export default class VideoPlayer extends React.Component{
         return(
             
             <div>
-            {sessionStorage.getItem('user-type')==="joinee" && videoStreamFlag?<p>Stream video</p>:<p>Play local file</p>}
-            <div className='player-wrapper' style={{backgroundColor:'black'}}>
-            <ReactPlayer
-            id="video-player"
-            ref ={this.handleRef}
-            playing={playing}
-            className='react-player fixed-bottom'
-            url= {videoFileUrl}
-            width='100%'
-            height='100vh'
-            controls = {true}
-            onPause ={this.vidOnPause}
-            onPlay={this.vidOnPlay}
-            onReady={this.ready}
-            />
+                {/* {sessionStorage.getItem('user-type')==="joinee" && videoStreamFlag?<p>Stream video</p>:<p>Play local file</p>} */}
+                <div className='player-wrapper' style={{backgroundColor:'black'}}>
+                
+                <ReactPlayer
+                id="video-player"
+                ref ={this.handleRef}
+                playing={playing}
+                className='react-player fixed-bottom'
+                url= {videoFileUrl}
+                width='100%'
+                height='100vh'
+                controls = {true}
+                onPause ={this.vidOnPause}
+                onPlay={this.vidOnPlay}
+                onReady={this.ready}
+                />
+                </div>
             </div>
-        </div>
         )
     }
 }

@@ -7,14 +7,16 @@ font-weight: 500;
 font-size: 36px;
 line-height: 45px;
 letter-spacing: 0.05em;
-
+border-bottom:4px solid ;
+border-image-slice: 1;
+border-image-source: linear-gradient(rgba(46, 191, 114, 0.9) 0%, rgba(83, 64, 211, 0.9) 100%);
+padding-bottom: 3px ;
 color: #FFFFFF;
 
 }
 
 
-.roomId{
-    
+.roomId{    
     font-family: Bai Jamjuree;
 font-style: normal;
 font-weight: 500;
@@ -28,8 +30,6 @@ color: #FFFFFF;
 
 
 .memTitle{
-  
-
 font-family: Bai Jamjuree;
 font-style: normal;
 font-weight: 500;
@@ -42,10 +42,8 @@ letter-spacing: 0.05em;
 color: #FFFFFF;
 }
 
-.memName{ 
-    
-    display: flex;
-  
+/* .memName{    
+    display: flex;  
     flex-direction: column;
     font-family: Bai Jamjuree;
     font-style: normal;
@@ -54,18 +52,39 @@ color: #FFFFFF;
     line-height: 30px;
     letter-spacing: 0.05em;
     color: #FFFFFF;
+} */
+
+.memberDisplay{
+    display: flex;
+    align-items: center;
+    margin-top: 5%;
+    justify-content: space-around;
 }
 
-.leaveRoomBtn{
-    position: relative;
-    width: 35%;
-    height: 10%;
-    left: 33%;
+.imgndtext{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.memberImg{
+    width: 50%;
+}
+
+.leaveRoomBtn{   
+    width: 50%;  
     color: white;
     background: rgba(255, 255, 255, 0.01);
-    border: 1px solid #FFFFFF;
-    box-sizing: border-box;
-    border-radius: 5px;
+    border: 1px solid #FFFFFF;  
+    border-radius: 5px;  
+}
+
+.leaveBtnDiv{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.leaveBtnTxt{
     font-family: Bai Jamjuree;
     font-style: normal;
     font-weight: 500;
@@ -74,34 +93,52 @@ color: #FFFFFF;
     text-align: center;
     letter-spacing: 0.03em;
 }
+
 
 .fileCheck{
-    height: 40%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-direction: column;
+   width: 60%;
+   height: 40%;
 }
 
-.inputFile{
-    margin-top: 4%;
+.uploadFile{
+    width: 50%;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid #FFFFFF;
-    box-sizing: border-box;
-    border-radius: 5px;   
+    border-radius: 5px;
+    height: 45%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }
-.startPlaying{
-    position: relative;
-    width: 35%;
-    background: #0B754F;
-    border: 1px solid #0B754F;
+
+.uploadImg{
+    width: 15%;
+    cursor: pointer;
+}
+
+.inputFile{   
+    display: none; 
+}
+.startPlaying{  
+    width: 80%;
+    background: linear-gradient(260.65deg, rgba(50, 244, 164, 0.9) 4.79%, rgba(48, 223, 201, 0.9) 52.97%, rgba(33, 109, 247, 0.9) 101.16%);
+    color:black;
     box-sizing: border-box;
     border-radius: 5px;
-    height: 22%;
+    height: 35%;
     font-family: Bai Jamjuree;
     font-style: normal;
-    font-weight: 500;
+    font-weight: bold;
     font-size: 24px;
     line-height: 30px;
     text-align: center;
     letter-spacing: 0.03em;
-    color: white;
+    
 }
 
 .fileName{
@@ -116,20 +153,20 @@ color: #FFFFFF;
     position: absolute;
     display: flex;
     flex-direction: column;
-    top: 20%;
+    top: 15%;
     left: 10%;
     border-right: white;
     border-right-style: solid;
+    align-items: center;
 }
 
 .right{
-    z-index: 1;
-    
+    z-index: 1;    
     height: 60%;
     width: 38%;
     position: absolute;
     display: flex;
-   
+    align-items: center;
     flex-direction: column;
     top: 20%;
     left: 48%;

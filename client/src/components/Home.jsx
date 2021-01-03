@@ -3,6 +3,7 @@ import React from 'react'
 import style from './Home.module.css'
 import CreateRoomPng from '../images/createroom.png'
 import JoinRoomPng from '../images/joinroom.png'
+import HeartIcon from '../images/heart.png'
 export default class Home extends React.Component{    
     
     componentDidMount(){
@@ -35,6 +36,7 @@ export default class Home extends React.Component{
                     <p className={style.buttonText}>Join Party</p>
                     </div>
                 </button>
+                <p className={style.extras}>Made with <img className={style.heartImg} src={HeartIcon} alt="heart image"/> </p>
             </div>
         )
     }

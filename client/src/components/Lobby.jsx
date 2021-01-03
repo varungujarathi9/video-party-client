@@ -8,20 +8,28 @@ import React from 'react'
 import { serverSocket } from './helper/connection'
 import style from './Lobby.module.css'
 import {AvatarArr} from './Avatar'
+import BackIcon from '../images/BackIcon.png'
+import UploadIcon from '../images/Upload.png'
 
 export default class Lobby extends React.Component {
-    state = {
-        userType: '',
-        username: '',
-        roomDetails: '',
-        fileName: '',
-        extension: ["mp4", "mkv", "x-msvideo", "x-matroska"],
-        extensionValid: false,
-        fileError: '',
-        videoStreamFlag: true,
-        ready: false,
-            
+    constructor(props){
+        super(props)
+        this.state = {
+            userType: '',
+            username: '',
+            roomDetails: '',
+            fileName: '',
+            extension: ["mp4", "mkv", "x-msvideo", "x-matroska"],
+            extensionValid: false,
+            fileError: '',
+            videoStreamFlag: true,
+            ready: false,
+            messages: [],
+            message: '',
+        }
+        this.fileUploader = React.createRef()
     }
+    
 
     componentDidMount(){
 
@@ -87,7 +95,7 @@ export default class Lobby extends React.Component {
         })
 
         serverSocket.on('all_left',data=>{
-            console.log(data)
+            // console.log(data)
             sessionStorage.setItem('room-details', JSON.stringify(data))
             // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
             this.setState({
@@ -95,6 +103,15 @@ export default class Lobby extends React.Component {
             })
             navigate('/')
         })
+
+        serverSocket.on('receive_message',data=>{
+            console.log(data)
+            sessionStorage.setItem('messages', data)
+            this.setState({
+                messages: data,
+            })
+        })
+        serverSocket.emit('get-all-messages',{roomID:sessionStorage.getItem('room-id')})
     }
 
 
@@ -207,42 +224,67 @@ export default class Lobby extends React.Component {
         )
     }
 
-    render() {
-        var {roomDetails,videoStreamFlag} = this.state
-      
+    
                 
+    handleMessageChange = (event) => {
+        event.preventDefault()
+        this.setState({
+            message: event.target.value
+        })
+    }
+
+    sendMsg = (event) =>{
+        event.preventDefault()
+        if(this.state.message !== ''){
+            serverSocket.emit('send-message',{senderName:this.state.username, roomID:this.state.roomID, message:this.state.message})
+        }
+        document.getElementById("chat").value = ""
+    }
+
+    openFileUpload =(e)=>{
+        this.fileUploader.current.click()
+    }
+
+    render() {
+        var {roomDetails,messages,videoStreamFlag} = this.state
+        
         return (
             <div>
                 <div className={style.left}>
                 {sessionStorage.getItem('user-type') === 'creator' && this.capitalizeUsername()}
                 {sessionStorage.getItem('user-type') === 'creator' &&<p className={style.roomId}>Room ID: {this.state.roomID}</p>}
                 <p className={style.memTitle}>Members in Lobby
-                <p className={style.memName}>
-                <div>
+                <>
+                <div className={style.memberDisplay}>
                 {roomDetails !== '' && Object.keys(roomDetails.members).length > 0 && Object.keys(roomDetails.members).map((item)=>{
                     return (
-                            <>
-                            
-                            <img src={AvatarArr[roomDetails.members[item]]} alt="avatarimg"/> 
+                            <div className={style.imgndtext}>                              
+                            <img className={style.memberImg}src={AvatarArr[roomDetails.members[item]]} alt="avatarimg"/> 
                             <span key={item}>{item}</span>
-                             {/* <span key={username}>{username}:{roomDetails.members[username]?"ready":"not ready"}</span> */}
-                            </>
+                             </div>
                        
                     )
                 })}
                 </div>
-                </p>
+                </>
                 
                </p>
-               <button className={style.leaveRoomBtn}onClick={this.leaveRoom}>Leave Room</button>
+               <button className={style.leaveRoomBtn}onClick={this.leaveRoom}>
+                   <div className={style.leaveBtnDiv}>
+                       <img  className={style.leaveBtnImg} src={BackIcon}/>
+                       <p  className={style.leaveBtnTxt}>Leave Room</p>
+                   </div>
+                </button>
 
                 </div>
                
 
                 <div className={style.right}>
-                   
-                    <p><input className={style.inputFile} type="file" id="videofile" onChange={this.handleFile} />
-                    </p>
+                    <div className={style.uploadFile} onClick={this.openFileUpload}>
+                        <img className={style.uploadImg} src={UploadIcon} alt="uploadIcon"/>
+                    </div>
+                    <input ref={this.fileUploader} className={style.inputFile} type="file" id="videofile" onChange={this.handleFile} />
+                    
                       
                
                     {this.state.extensionCheck ?
@@ -262,6 +304,24 @@ export default class Lobby extends React.Component {
                
                 
                
+                {/* <h4>Room I.D.</h4>
+                {this.state.roomID}
+                <h4>Room Members</h4>
+                {roomDetails !== '' && Object.keys(roomDetails.members).length > 0 && Object.keys(roomDetails.members).map((username)=>{
+                    return (
+                        <p key={username}>{username}:{roomDetails.members[username]?"ready":"not ready"}</p>
+                    )
+                })}
+                <h4>Text Channel</h4>
+                {messages.length > 0 && messages.map((message)=>{
+                    return(
+                    <p key={message["messageNumber"]}>{message["senderName"]}:{message["message"]}</p>
+                    )
+                })}
+                <input type="text" name='chat' id='chat' onChange={this.handleMessageChange}></input>
+                <button onClick={this.sendMsg}>Send</button>
+                <br/>
+                <button onClick={this.leaveRoom}>Leave Room</button> */}
             </div>
         )
     }

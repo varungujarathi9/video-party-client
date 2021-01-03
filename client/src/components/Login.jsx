@@ -3,6 +3,7 @@ import {navigate} from '@reach/router'
 import {serverSocket} from './helper/connection'
 import style from './Login.module.css'
 import {AvatarArr} from './Avatar.js'
+import BackIcon from '../images/BackIcon.png'
 // import {createPeerConnection,sendOffer,sendAnswer,handleSignalingData} from './webrtcfile.js'
 
 export default class Login extends React.Component {
@@ -22,8 +23,8 @@ export default class Login extends React.Component {
     }
 
     componentDidMount(){
-        
-        // check if user-type is set or not 
+
+        // check if user-type is set or not
         if (sessionStorage.getItem('user-type') === 'creator' || sessionStorage.getItem('user-type') === 'joinee' ){
             this.setState({userType: sessionStorage.getItem('user-type')})
         }
@@ -38,7 +39,7 @@ export default class Login extends React.Component {
    
     onClickLogin = async (event) =>{
         event.preventDefault()
-        
+
         // TODO: Add regex to check username is valid
         if (this.state.username !== '') {    
             // createPeerConnection()  
@@ -67,7 +68,8 @@ export default class Login extends React.Component {
     }
 
     handleCreateRoom = () => {
-        serverSocket.on('room-created',(data)=>{            
+        serverSocket.on('room-created',(data)=>{
+
             sessionStorage.setItem('username', this.state.username)
             sessionStorage.setItem('room-id', data['room-id'])
             sessionStorage.setItem('room-details', JSON.stringify(data['room-details']))
@@ -79,8 +81,8 @@ export default class Login extends React.Component {
         })
     }
 
-    handleJoinRoom = () => {  
-        serverSocket.on('room-joined',(data)=>{   
+    handleJoinRoom = () => {
+        serverSocket.on('room-joined',(data)=>{
             sessionStorage.setItem('username', this.state.username)
             sessionStorage.setItem('room-id', this.state.roomID)
             sessionStorage.setItem('room-details', JSON.stringify(data['room-details']))
@@ -106,13 +108,25 @@ export default class Login extends React.Component {
         })
     }
 
+    navigateBack =()=>{
+        navigate('/')
+    }
+
     render() {
         const { usernameError } = this.state
-        
+
         return (
-            <div>    
+            <div>  
+                 <button className={style.backBtn} onClick={this.navigateBack}>
+                     <div className={style.btnDiv}>
+                     <img className={style.btnImg}src={BackIcon} alt="backIcon" />
+                     <p className={style.btnText}> Back</p>
+                     </div>
+                    
+                   
+                </button>      
                 <div>
-                           
+                
                 <form className={style.form}>
                     <div className={style.unameDiv}> 
                         <label className={style.username} htmlFor='username'> Enter Username</label>
@@ -125,9 +139,10 @@ export default class Login extends React.Component {
                         </div>
                     ) : null
                     }
+                     <h6 style={{ color: 'red', fontSize: '16px', margin: '5px 0px 12px' }}>{usernameError}</h6>
                     <button className={style.joinBtn} onClick={this.onClickLogin}>Login</button>
                 </form>
-                <h6 style={{ color: 'red', fontSize: '16px', margin: '5px' }}>{usernameError}</h6>
+               
                 </div>
             </div>
         )

@@ -49,10 +49,46 @@ label{
 
 }
 
+.backBtn{
+    background: #0F1112;
+    width: 10%;
+    position: absolute;
+     border: none;
+    outline: none;
+    left: 5%;
+    top: 5%;
+}
+
+.btnDiv{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.backBtn:hover{
+    border:none;
+    outline:none;
+}
+
+.btnImg{
+
+}
+
+.btnText{
+    font-family: Bai Jamjuree;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 30px;
+    letter-spacing: 0.05em; 
+    color: #FFFFFF
+}
+
 .joinBtn{
-    
+    background: linear-gradient(260.65deg, rgba(50, 244, 164, 0.9) 4.79%, rgba(48, 223, 201, 0.9) 52.97%, rgba(33, 109, 247, 0.9) 101.16%);
+    color:black;
+    /* background: rgba(0, 0, 0, 0.01); */
     width: 100%;
-    background: #0B754F;
     border: 1px solid #0B754F;
     box-sizing: border-box;
     border-radius: 10px;
@@ -63,8 +99,9 @@ label{
     line-height: 37px;
     text-align: center;
     letter-spacing: 0.05em;
-    color: #FFFFFF;
-
+    outline: none;
+    border: none;
+    /* color:#30C18D; */
 }
 
 input{
