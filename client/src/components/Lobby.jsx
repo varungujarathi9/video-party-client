@@ -7,6 +7,7 @@ import { navigate } from '@reach/router'
 import React from 'react'
 import { serverSocket } from './helper/connection'
 import style from './Lobby.module.css'
+import {AvatarArr} from './Avatar.js'
 
 export default class Lobby extends React.Component {
     state = {
@@ -19,6 +20,7 @@ export default class Lobby extends React.Component {
         fileError: '',
         videoStreamFlag: true,
         ready: false,
+        avatar:AvatarArr
     }
 
     componentDidMount(){
@@ -206,20 +208,27 @@ export default class Lobby extends React.Component {
     }
 
     render() {
-        var {roomDetails} = this.state
-        var {videoStreamFlag} = this.state
+        var {roomDetails,videoStreamFlag,avatar} = this.state
+       
         return (
             <div>
                 <div className={style.left}>
                 {sessionStorage.getItem('user-type') === 'creator' && this.capitalizeUsername()}
-                {sessionStorage.getItem('user-type') === 'creator' &&<p className={style.roomId}>Room I.D.: {this.state.roomID}</p>}
+                {sessionStorage.getItem('user-type') === 'creator' &&<p className={style.roomId}>Room ID: {this.state.roomID}</p>}
                 <p className={style.memTitle}>Members in Lobby
                 <p className={style.memName}>
+                <div>
                 {roomDetails !== '' && Object.keys(roomDetails.members).length > 0 && Object.keys(roomDetails.members).map((username)=>{
                     return (
-                        <span key={username}>{username}:{roomDetails.members[username]?"ready":"not ready"}</span>
+                            <>
+                            <img src={avatar[Math.floor(Math.random()*avatar.length)]} alt="avatarimg"/>
+                            <span key={username}>{username}</span>
+                             {/* <span key={username}>{username}:{roomDetails.members[username]?"ready":"not ready"}</span> */}
+                            </>
+                       
                     )
                 })}
+                </div>
                 </p>
                 
                </p>

@@ -6,15 +6,16 @@
     font-weight: normal;
     font-size: 80px;
     line-height: 102px;
-    letter-spacing: 0.05em;
-    
-    color: #86C232;
+    letter-spacing: 0.05em;    
+    background:-webkit-linear-gradient(180deg, #32F4A5 0%, #30DFC8 54.17%, #216EF6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 .about{
     position: absolute;
     width: 71%;
     left: 10%;
-    top: 18%;
+    top: 23%;
     font-family: Avenir LT Std;
     font-style: normal;
     font-weight: normal;
@@ -31,9 +32,11 @@
     width: 25%;
     height: 20%;
     left: 10%;
-    top: 40%;
-    background: rgba(242, 170, 76, 0.01);
-    border: 1px solid #61892F;
+    top: 50%;
+    background: rgba(0, 0, 0, 0.01);
+    border: 3px solid ;
+    border-image-slice: 1;
+    border-image-source:linear-gradient(180deg, #32F4A5 0%, #30DFC8 54.17%, #216EF6 100%);
     box-sizing: border-box;
     border-radius: 21px;
     font-family: Bai Jamjuree;
@@ -43,11 +46,11 @@
     line-height: 50px;
     text-align: center;
     letter-spacing: 0.05em;
-    color: #61892F;
+    color:#30C18D;
 }
 
 button:hover{
-    background: #61892F;
+    background: linear-gradient(260.65deg, rgba(50, 244, 164, 0.9) 4.79%, rgba(48, 223, 201, 0.9) 52.97%, rgba(33, 109, 247, 0.9) 101.16%);
     color:white;
     cursor: pointer;
 }
@@ -57,9 +60,11 @@ button:hover{
     width: 25%;
     height: 20%;
     left: 55%;
-    top: 40%;
+    top: 50%;
     background: rgba(242, 170, 76, 0.01);
-    border: 1px solid #61892F;
+    border: 1px solid ;
+    border-image-slice: 1;
+    border-image-source:linear-gradient(180deg, #32F4A5 0%, #30DFC8 54.17%, #216EF6 100%);
     box-sizing: border-box;
     border-radius: 21px;
     font-family: Bai Jamjuree;
@@ -69,5 +74,19 @@ button:hover{
     line-height: 50px;
     text-align: center;
     letter-spacing: 0.05em;
-    color: #61892F;
+    color: #30C18D;
+}
+
+.buttonDiv{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.buttonImg{
+    width: 30%;
+    height: 2%;
+}
+
+.buttonText{
+    font-size: 30px;
 }
