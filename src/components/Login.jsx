@@ -4,7 +4,6 @@ import {serverSocket} from './helper/connection'
 import style from './Login.module.css'
 import {AvatarArr} from './Avatar.js'
 import BackIcon from '../images/BackIcon.png'
-// import {createPeerConnection,sendOffer,sendAnswer,handleSignalingData} from './webrtcfile.js'
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -15,11 +14,9 @@ export default class Login extends React.Component {
             roomID: '',
             usernameError: '',
             avatar:AvatarArr,
-            setAvatarName:null
+            setAvatarName:null,
+            errorMessage: ''
         }
-        // sessionStorage.removeItem('room-details')
-        // sessionStorage.removeItem('room-id')
-        // sessionStorage.removeItem('username')
     }
 
     componentDidMount(){
@@ -30,34 +27,33 @@ export default class Login extends React.Component {
         }
         else{
             sessionStorage.clear()
-            localStorage.clear()
             navigate('/')
         }
+
+        serverSocket.on("login-error", (data) => {
+            this.setState({
+                errorMessage: data['msg']
+            })
+        })
     }
 
-
-   
     onClickLogin = async (event) =>{
         event.preventDefault()
 
         // TODO: Add regex to check username is valid
-        if (this.state.username !== '') {    
-            // createPeerConnection()  
+        if (this.state.username !== '') {
+            // createPeerConnection()
             var {avatar} = this.state
             var avatarName = Object.keys(avatar)
             var avatarRandom = avatarName[Math.floor(Math.random()*avatarName.length)]
             this.setState({
                 setAvatarName:avatarRandom
             })
-            if(this.state.userType === 'creator'){ 
-                // var receiveOffer = await sendOffer()
-                        
-                serverSocket.emit('create-room', {username:this.state.username,avatarname:avatarRandom});          
+            if(this.state.userType === 'creator'){
+                serverSocket.emit('create-room', {username:this.state.username,avatarname:avatarRandom});
                 this.handleCreateRoom()
             }
             else if(this.state.userType === 'joinee'){
-                // var sendJoineeAnswer = await sendAnswer()
-                // console.log("send answer",sendJoineeAnswer)
                 serverSocket.emit('join-room', {username:this.state.username, roomID:this.state.roomID,avatarname:avatarRandom});
                 this.handleJoinRoom()
             }
@@ -69,15 +65,11 @@ export default class Login extends React.Component {
 
     handleCreateRoom = () => {
         serverSocket.on('room-created',(data)=>{
-
             sessionStorage.setItem('username', this.state.username)
             sessionStorage.setItem('room-id', data['room-id'])
             sessionStorage.setItem('room-details', JSON.stringify(data['room-details']))
             sessionStorage.setItem('avatarName',this.state.setAvatarName)
-            console.log(data)
-            //write peerconnection
-           
-            navigate('/lobby')    
+            navigate('/lobby')
         })
     }
 
@@ -90,7 +82,7 @@ export default class Login extends React.Component {
             //write peerconnection
             console.log(data)
 
-            navigate('/lobby')    
+            navigate('/lobby')
         })
     }
 
@@ -113,36 +105,35 @@ export default class Login extends React.Component {
     }
 
     render() {
-        const { usernameError } = this.state
+        let { errorMessage } = this.state
 
         return (
-            <div>  
+            <div>
                  <button className={style.backBtn} onClick={this.navigateBack}>
                      <div className={style.btnDiv}>
                      <img className={style.btnImg}src={BackIcon} alt="backIcon" />
                      <p className={style.btnText}> Back</p>
                      </div>
-                    
-                   
-                </button>      
+
+
+                </button>
                 <div>
-                
-                <form className={style.form}>
-                    <div className={style.unameDiv}> 
-                        <label className={style.username} htmlFor='username'> Enter Username</label>
-                        <input className={style.unameInput}type="text" id='username' name='username' maxLength='20' onChange={this.handleUsernameChange} placeholder="username"></input>
-                    </div>    
-                    {this.state.userType === 'joinee' ? (
-                        <div className={style.roomIdDiv}>
-                            <label className={style.roomId} htmlFor='roomID'>Room ID</label> 
-                            <input className={style.roomIdInput}type='text' id='roomID' name='roomID' minLength='6' maxLength='6' onChange={this.handleRoomIDChange} placeholder="roomId"></input>
+                    <form className={style.form}>
+                        <div className={style.unameDiv}>
+                            <label className={style.username} htmlFor='username'> Enter Username</label>
+                            <input className={style.unameInput}type="text" id='username' name='username' maxLength='20' onChange={this.handleUsernameChange} placeholder="username"></input>
                         </div>
-                    ) : null
-                    }
-                     <h6 style={{ color: 'red', fontSize: '16px', margin: '5px 0px 12px' }}>{usernameError}</h6>
-                    <button className={style.joinBtn} onClick={this.onClickLogin}>Login</button>
-                </form>
-               
+                        {this.state.userType === 'joinee' ? (
+                            <div className={style.roomIdDiv}>
+                                <label className={style.roomId} htmlFor='roomID'>Room ID</label>
+                                <input className={style.roomIdInput}type='text' id='roomID' name='roomID' minLength='6' maxLength='6' onChange={this.handleRoomIDChange} placeholder="roomId"></input>
+                            </div>
+                        ) : null
+                        }
+                        <h6 style={{ color: 'red', fontSize: '16px', margin: '5px 0px 12px' }}>{usernameError}</h6>
+                        <button className={style.joinBtn} onClick={this.onClickLogin}>Login</button>
+                    </form>
+                    <h6 style={{ color: 'red', fontSize: '16px', margin: '5px' }}>{errorMessage}</h6>
                 </div>
             </div>
         )

@@ -10,7 +10,7 @@ on:
 
 defaults:
   run:
-    working-directory: client
+    working-directory: ./
 
 jobs:
   push_to_registry:

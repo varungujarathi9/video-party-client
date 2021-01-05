@@ -12,24 +12,18 @@ import BackIcon from '../images/BackIcon.png'
 import UploadIcon from '../images/Upload.png'
 
 export default class Lobby extends React.Component {
-    constructor(props){
-        super(props)
-        this.state = {
-            userType: '',
-            username: '',
-            roomDetails: '',
-            fileName: '',
-            extension: ["mp4", "mkv", "x-msvideo", "x-matroska"],
-            extensionValid: false,
-            fileError: '',
-            videoStreamFlag: true,
-            ready: false,
-            messages: [],
-            message: '',
-        }
-        this.fileUploader = React.createRef()
+    state = {
+        userType: '',
+        username: '',
+        roomDetails: '',
+        fileName: '',
+        extension: ["mp4", "mkv", "x-msvideo", "x-matroska"],
+        extensionValid: false,
+        fileError: '',
+        messages: [],
+        message: '',
     }
-    
+
 
     componentDidMount(){
 
@@ -62,26 +56,16 @@ export default class Lobby extends React.Component {
             navigate('/')
         }
 
-        serverSocket.on('update-room-details', (data)=>{
+        serverSocket.on('update-room-details', async (data)=>{
             // console.log(data)
             sessionStorage.setItem('room-details', JSON.stringify(data))
-            // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
             this.setState({
                 roomDetails: JSON.parse(JSON.stringify(data)),
             })
-            if(this.state.ready && JSON.parse(JSON.stringify(data))['started']){
-                // createPeerConnection() 
-                sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
-                navigate('/video-player')
-            }
         })
 
-        serverSocket.on('video-started', (data)=>{
-            // createPeerConnection() 
-            sessionStorage.setItem('video-stream-flag', this.state.videoStreamFlag)
-            // handleSignalingData({'sdp':data['sesDetails'],'type':data['typeOfSdp']})
+        serverSocket.on('video-started', async (data) =>{
             navigate('/video-player')
-            
         })
 
         serverSocket.on('left_room',data=>{
@@ -105,7 +89,6 @@ export default class Lobby extends React.Component {
         })
 
         serverSocket.on('receive_message',data=>{
-            console.log(data)
             sessionStorage.setItem('messages', data)
             this.setState({
                 messages: data,
@@ -114,20 +97,15 @@ export default class Lobby extends React.Component {
         serverSocket.emit('get-all-messages',{roomID:sessionStorage.getItem('room-id')})
     }
 
-
-
-
     handleFile = (e) => {
         this.setState({
             videoStartError:''
         })
         e.preventDefault()
 
-        var filelist = document.getElementById('videofile').files[0]
-        if (filelist !== undefined){
-            console.log(filelist)
-            var typeOfFile = filelist.type
-            console.log(typeOfFile)
+        var fileList = document.getElementById('videofile').files[0]
+        if (fileList !== undefined){
+            var typeOfFile = fileList.type
             var file = e.target.value.replace(/^.*[\\]/, '')
 
             this.setState({
@@ -135,30 +113,26 @@ export default class Lobby extends React.Component {
             })
 
             var extensionVal = typeOfFile.split('/')
-            console.log(extensionVal)
 
             if (this.state.extension.includes(extensionVal[1])) {
                 this.setState({
                     extensionCheck: true,
                     errorMsg: '',
-                    videoStreamFlag: true
                 })
             }
             else {
                 this.setState({
                     errorMsg: "Please provide valid file",
                     extensionCheck: false,
-                    videoStreamFlag: false
                 })
             }
-            var fileUrl = URL.createObjectURL(filelist).split()
+            var fileUrl = URL.createObjectURL(fileList).split()
             sessionStorage.setItem('video_file', fileUrl)
         }
         else {
             this.setState({
                 errorMsg: "",
                 extensionCheck: false,
-                videoStreamFlag: false
             })
         }
     }
@@ -168,7 +142,6 @@ export default class Lobby extends React.Component {
             serverSocket.emit('start-video', {room_id:sessionStorage.getItem('room-id')})
         }
     }
-
 
     leaveRoom =() =>{
         if(sessionStorage.getItem('user-type') === 'joinee'){
@@ -219,13 +192,11 @@ export default class Lobby extends React.Component {
         return(
             <p className={style.creatorName}>
                 {finalUsername}'s Room
-                
+
             </p>
         )
     }
 
-    
-                
     handleMessageChange = (event) => {
         event.preventDefault()
         this.setState({
@@ -247,7 +218,7 @@ export default class Lobby extends React.Component {
 
     render() {
         var {roomDetails,messages,videoStreamFlag} = this.state
-        
+
         return (
             <div>
                 <div className={style.left}>
@@ -258,16 +229,16 @@ export default class Lobby extends React.Component {
                 <div className={style.memberDisplay}>
                 {roomDetails !== '' && Object.keys(roomDetails.members).length > 0 && Object.keys(roomDetails.members).map((item)=>{
                     return (
-                            <div className={style.imgndtext}>                              
-                            <img className={style.memberImg}src={AvatarArr[roomDetails.members[item]]} alt="avatarimg"/> 
+                            <div className={style.imgndtext}>
+                            <img className={style.memberImg}src={AvatarArr[roomDetails.members[item]]} alt="avatarimg"/>
                             <span key={item}>{item}</span>
                              </div>
-                       
+
                     )
                 })}
                 </div>
                 </>
-                
+
                </p>
                <button className={style.leaveRoomBtn}onClick={this.leaveRoom}>
                    <div className={style.leaveBtnDiv}>
@@ -277,7 +248,7 @@ export default class Lobby extends React.Component {
                 </button>
 
                 </div>
-               
+
 
                 <div className={style.right}>
                     <div className={style.uploadFile} onClick={this.openFileUpload}>
@@ -285,9 +256,9 @@ export default class Lobby extends React.Component {
                         <p>Upload file</p>
                     </div>
                     <input ref={this.fileUploader} className={style.inputFile} type="file" id="videofile" onChange={this.handleFile} />
-                    
-                      
-               
+
+
+
                     {this.state.extensionCheck ?
                         <div className={style.fileCheck}>
                             <p className={style.fileName}>{this.state.fileName}</p>
@@ -301,16 +272,16 @@ export default class Lobby extends React.Component {
                 {sessionStorage.getItem('user-type') === 'joinee' && (videoStreamFlag?<h6 style={{ color: 'red' }}>You have not selected any file, video will be stream to you directly</h6>:<h6 style={{ color: 'green' }}>Your selected file would be played</h6>)}
                 </div>
                 </div>
-                
-               
-                
-               
+
+
+
+
                 {/* <h4>Room I.D.</h4>
                 {this.state.roomID}
                 <h4>Room Members</h4>
                 {roomDetails !== '' && Object.keys(roomDetails.members).length > 0 && Object.keys(roomDetails.members).map((username)=>{
                     return (
-                        <p key={username}>{username}:{roomDetails.members[username]?"ready":"not ready"}</p>
+                        <p key={username}>{username}</p>
                     )
                 })}
                 <h4>Text Channel</h4>
