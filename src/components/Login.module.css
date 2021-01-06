@@ -1,9 +1,15 @@
+.loginDiv{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
 label{  
     width: max-content;
     font-family: Bai Jamjuree;
     font-style: normal;
     font-weight: 500;
-    font-size: 36px;
+    font-size: 30px;
     line-height: 45px;
     text-align: center;
     letter-spacing: 0.05em;
@@ -17,15 +23,28 @@ label{
 
 }
 
+.formDiv{
+    position: absolute;
+    width: 50%;
+    height: 60%;
+    /* left: 26.5%; */
+    top: 20%;
+    background: #1C1E1F;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
 .form{
-    top: 30%;
-    left: 41%;
+    top: 30%; 
+   
     display: flex;
     flex-direction: column;
-    width: 14%;
+  
     align-items: center;
-    position: absolute;
-    height: 25%;
+    height: 40%;
+    
 }
 
 .roomId{

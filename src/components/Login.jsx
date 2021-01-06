@@ -108,7 +108,7 @@ export default class Login extends React.Component {
         let {usernameError, errorMessage } = this.state
 
         return (
-            <div>
+            <div className={style.loginDiv}>
                  <button className={style.backBtn} onClick={this.navigateBack}>
                      <div className={style.btnDiv}>
                      <img className={style.btnImg}src={BackIcon} alt="backIcon" />
@@ -117,10 +117,10 @@ export default class Login extends React.Component {
 
 
                 </button>
-                <div>
+                <div className={style.formDiv}>
                     <form className={style.form}>
                         <div className={style.unameDiv}>
-                            <label className={style.username} htmlFor='username'> Enter Username</label>
+                            <label className={style.username} htmlFor='username'> Username</label>
                             <input className={style.unameInput}type="text" id='username' name='username' maxLength='20' onChange={this.handleUsernameChange} placeholder="username"></input>
                         </div>
                         {this.state.userType === 'joinee' ? (
