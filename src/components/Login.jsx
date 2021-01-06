@@ -105,7 +105,7 @@ export default class Login extends React.Component {
     }
 
     render() {
-        let { errorMessage } = this.state
+        let {usernameError, errorMessage } = this.state
 
         return (
             <div>
