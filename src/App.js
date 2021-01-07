@@ -1,8 +1,9 @@
-import logo from './logo.svg';
+
 import './App.css';
 import version from './version.json'
 import Router from '../src/components/helper/router'
 import ConfigData from './configs.json'
+
 
 function App() {
   return (

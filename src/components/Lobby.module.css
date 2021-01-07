@@ -7,10 +7,10 @@ font-weight: 500;
 font-size: 36px;
 line-height: 45px;
 letter-spacing: 0.05em;
-border-bottom:4px solid ;
-border-image-slice: 1;
-border-image-source: linear-gradient(rgba(46, 191, 114, 0.9) 0%, rgba(83, 64, 211, 0.9) 100%);
-padding-bottom: 3px ;
+/* border-bottom:4px solid ; */
+/* border-image-slice: 1;
+border-image-source: linear-gradient(rgba(46, 191, 114, 0.9) 0%, rgba(83, 64, 211, 0.9) 100%); */
+/* padding-bottom: 3px ; */
 color: #FFFFFF;
 
 }
@@ -24,7 +24,7 @@ font-size: 24px;
 line-height: 30px;
 letter-spacing: 0.05em;
 
-color: #FFFFFF;
+color: #9a9a9a;
 
 }
 
@@ -42,9 +42,7 @@ letter-spacing: 0.05em;
 color: #FFFFFF;
 }
 
-/* .memName{    
-    display: flex;  
-    flex-direction: column;
+.memName{    
     font-family: Bai Jamjuree;
     font-style: normal;
     font-weight: 500;
@@ -52,23 +50,28 @@ color: #FFFFFF;
     line-height: 30px;
     letter-spacing: 0.05em;
     color: #FFFFFF;
-} */
+}
 
 .memberDisplay{
     display: flex;
     align-items: center;
-    margin-top: 5%;
     justify-content: space-around;
+    flex-direction: column;
 }
 
 .imgndtext{
     display: flex;
-    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
+    width: 100%;
+    margin-bottom: 10%;
 }
 .memberImg{
-    width: 50%;
+    width: 20%;
+    margin-right: 20%;
+
 }
+
 
 .leaveRoomBtn{   
     width: 50%;  
@@ -101,7 +104,7 @@ color: #FFFFFF;
    align-items: center;
    flex-direction: column;
    width: 60%;
-   height: 40%;
+   height: 18%;
 }
 
 .uploadFile{
@@ -109,7 +112,7 @@ color: #FFFFFF;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid #FFFFFF;
     border-radius: 5px;
-    height: 45%;
+    height: 40%;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -123,23 +126,27 @@ line-height: 22px;
 text-align: center;
 letter-spacing: 0.02em;
 color: white;
+
 }
 
 .uploadImg{
     width: 15%;
     cursor: pointer;
+    margin-bottom: 10px;
 }
 
 .inputFile{   
     display: none; 
 }
+
 .startPlaying{  
     width: 80%;
-    background: linear-gradient(260.65deg, rgba(50, 244, 164, 0.9) 4.79%, rgba(48, 223, 201, 0.9) 52.97%, rgba(33, 109, 247, 0.9) 101.16%);
-    color:black;
+    background: rgba(242, 170, 76, 0.01);
+    color: #30C18D;
+    border: 1px solid #0B754F;
     box-sizing: border-box;
-    border-radius: 5px;
-    height: 35%;
+    border-radius: 10px;
+    padding: 12px 0px 12px;
     font-family: Bai Jamjuree;
     font-style: normal;
     font-weight: bold;
@@ -154,29 +161,204 @@ color: white;
     font-size: 20px;
     color: green;
 }
-
-.left{
-    z-index: 1;
-    height: 60%;
-    width: 38%;
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    top: 15%;
-    left: 10%;
-    border-right: white;
-    border-right-style: solid;
-    align-items: center;
+#mainContent{
+    position: relative;
+    margin: 10% 0 0 0 !important;
 }
 
-.right{
-    z-index: 1;    
-    height: 60%;
-    width: 38%;
+
+#left{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* min-height: 70vh; */
+    border-right: 1px solid white;
+}
+#middle{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    /* min-height: 70vh; */
+    border-right: 1px solid white;
+    
+}
+
+
+#right{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* min-height: 70vh; */
+   
+}
+
+.leaveBtn{
+    background: #0F1112;
     position: absolute;
+     border: none;
+    outline: none;
+    left: 5%;
+    top: 5%;
+    
+}
+
+.leaveDiv{
     display: flex;
     align-items: center;
-    flex-direction: column;
-    top: 20%;
-    left: 48%;
+    justify-content: space-around;
+    
 }
+
+.leaveBtn:hover{
+    border: none;
+    outline:none;
+    background:none;
+    color:none;
+    box-shadow: none;
+    border-bottom:4px solid ;
+    padding-bottom: 3px ;
+    color: #FFFFFF;
+    
+}
+
+.leaveImg{
+    width: 17%;
+    margin-right: 4%;
+}
+
+.leaveText{
+    font-family: Bai Jamjuree;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 30px;
+    letter-spacing: 0.05em; 
+    color: #FFFFFF;
+    margin: auto;
+}
+
+.msgBox{
+    width: 60%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #FFFFFF;
+    border-radius: 5px;
+    height: 100%;
+    display: flex;
+    
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    font-family: Bai Jamjuree;
+font-style: normal;
+font-weight: 500;
+font-size: 18px;
+line-height: 22px;
+text-align: center;
+letter-spacing: 0.02em;
+color: white;
+}
+
+.msg{
+    height: 35em;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    flex-flow: column-reverse;
+}
+.msgfooter{
+    height: 50px;
+    width: 100%;
+
+}
+
+#sendBtn{
+    width: 20px;
+    position: absolute;
+    /* float: right; */
+    left: 75%;
+    bottom: 3%;
+}
+.msgContainer{
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #414141;
+   
+}
+.memJoinedDetails{
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #414141;
+    justify-content: center;
+}
+
+.msgContainerSender{
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #414141;
+    justify-content: flex-end;
+}
+
+.nameRight{
+    margin-right: 2%;
+    margin-top: revert;
+    margin-left: 2%;
+    color:bisque;
+}
+
+.nameLeft{
+    margin-right: 3%;
+    margin-top: revert;
+    margin-left: 2%;
+    color: cadetblue;
+}
+
+
+.chatmsgRight{
+    margin-top: revert;
+    word-break: break-word;
+    word-wrap: break-word;
+}
+
+.chatmsgLeft{
+    margin-top: revert;
+    word-break: break-word;
+    word-wrap: break-word;
+}
+
+.chatInput{
+    border-top: 1px solid white;
+    width: 100%;
+    height: 50px;
+    border-radius: 0;
+    
+}
+
+
+.chatmemimgRight{
+    width: 10%;
+}
+.chatmemimgLeft{
+    width: 10%;
+}
+
+#alertDisplay{
+    position: fixed;
+    right: 0;
+    top: 2%;
+    animation: fadeinout 3s linear forwards;
+    -webkit-animation: fadeinout 3s linear forwards;
+   
+}
+
+@-webkit-keyframes fadeinout {
+    0%,100% { opacity: 0; }
+    50% { opacity: 1; }
+  }
+  
+  @keyframes fadeinout {
+    0%,100% { opacity: 0; }
+    50% { opacity: 1; }
+  }

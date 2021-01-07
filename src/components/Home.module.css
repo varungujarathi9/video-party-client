@@ -10,6 +10,7 @@
     background:linear-gradient(to right, #46DD98, #44a08d);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    margin-top: 2%;
 }
 .about{
     position: absolute;
@@ -26,6 +27,7 @@
     text-align: justify;
 
 }
+
 
 .createBtn{
    
@@ -47,8 +49,7 @@
     font-size: 40px;
     line-height: 50px;
     text-align: center;
-    letter-spacing: 0.05em;
-    
+    letter-spacing: 0.05em;    
     outline: none;
     /* border: none; */
 }

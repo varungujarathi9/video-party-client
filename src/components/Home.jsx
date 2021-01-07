@@ -16,6 +16,9 @@ export default class Home extends React.Component {
         sessionStorage.setItem('user-type', userType)
         navigate('/login')
     }
+    navigatePage =()=>{
+        navigate('/developers')
+    }
 
     render() {
 
@@ -63,7 +66,7 @@ export default class Home extends React.Component {
                     </div>
 
                 </div>
-                <p className={style.extras}>Made with <img className={style.heartImg} src={HeartIcon} alt="heart image" /> </p>
+                <p className={style.extras}>Made with <img className={style.heartImg} src={HeartIcon} alt="heart image" onClick={this.navigatePage} style={{cursor:"pointer"}}/> </p>
             </div>
         )
     }

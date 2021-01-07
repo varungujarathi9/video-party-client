@@ -118,6 +118,7 @@ export default class Login extends React.Component {
 
                 </button>
                 <div className={style.formDiv}>
+                    <label>Credentials</label>
                     <form className={style.form}>
                         <div className={style.unameDiv}>
                             <label className={style.username} htmlFor='username'> Username</label>
