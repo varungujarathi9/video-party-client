@@ -1,181 +1,330 @@
-.title{
-    position: absolute;
-    left: 10%;
-    top: 5%;      
-    font-family: Audiowide;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 60px;
-    line-height: 102px;
-    letter-spacing: 0.05em;    
-    background:linear-gradient(to right, #46DD98, #44a08d);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    
-}
-.about{
-    position: absolute;
-    width: 71%;
-    left: 10%;
-    top: 23%;
-    font-family: Avenir LT Std;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 26px;
-    line-height: 38px;
-    letter-spacing: 0.05em;
-    color: #FFFFFF;
-    text-align: justify;
+@media only screen and (min-width: 768px) {
+    .title{
+        position: absolute;
+        left: 10%;
+        top: 5%;
+        font-family: Audiowide;
+        font-style: normal;
+        font-weight: normal;
+        letter-spacing: 0.05em;
+        background:linear-gradient(to right, #46DD98, #44a08d);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
 
-}
+    }
 
+    .joinBtn{
+        padding: 10px;
+        max-width: 100%;
+        background: rgba(242, 170, 76, 0.01);
+        color:#44A08D;
+        border: 1px solid #30C18D;
+        box-sizing: border-box;
+        border-radius: 15px;
+        font-family: Bai Jamjuree;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 155%;
+        text-align: center;
+        letter-spacing: 0.05em;
+        outline: none;
+        /* border: none; */
+    }
 
-.createBtn{    
-    max-width: 100%;
-    background: rgba(242, 170, 76, 0.01);
-    color: #44A08D;
-    padding: 10px;
-   /* background: linear-gradient(260.65deg, rgba(50, 244, 164, 0.9) 4.79%, rgba(48, 223, 201, 0.9) 52.97%, rgba(33, 109, 247, 0.9) 101.16%);
-      color:black; */
-   
-    /* background: rgba(0, 0, 0, 0.01); */
-    border: 1px solid #30C18D;
-    box-sizing: border-box;
-    border-radius: 10px 32px;
-    font-family: Bai Jamjuree;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 40px;
-    line-height: 50px;
-    text-align: center;
-    letter-spacing: 0.05em;    
-    outline: none;
-    /* border: none; */
-}
-
-button:hover{
+    .createBtn{
+        max-width: 100%;
+        background: rgba(242, 170, 76, 0.01);
+        color: #44A08D;
+        padding: 10px;
     /* background: linear-gradient(260.65deg, rgba(50, 244, 164, 0.9) 4.79%, rgba(48, 223, 201, 0.9) 52.97%, rgba(33, 109, 247, 0.9) 101.16%);
-    color:black; */
-    border: 1px solid;
-    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.2);
-    outline: none;
-    /* outline-color: rgba(255, 255, 255, 0); */
-    text-shadow: 1px 1px 2px #427388;
-    cursor: pointer;
-    /* background: linear-gradient(260.65deg, rgba(50, 244, 164, 0.9) 4.79%, rgba(48, 223, 201, 0.9) 52.97%, rgba(33, 109, 247, 0.9) 101.16%); */
-    background:linear-gradient(to right, #46DD98, #44a08d);
-    color:black;
-}
+        color:black; */
 
-.joinBtn{  
-    padding: 10px; 
-    max-width: 100%;   
-    background: rgba(242, 170, 76, 0.01);
-    color:#44A08D;
-    border: 1px solid #30C18D;
-    box-sizing: border-box;
-    border-radius: 10px 32px;
-    font-family: Bai Jamjuree;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 40px;
-    line-height: 50px;
-    text-align: center;
-    letter-spacing: 0.05em;
-    outline: none;
-    /* border: none; */
-    
-}
+        /* background: rgba(0, 0, 0, 0.01); */
+        border: 1px solid #30C18D;
+        box-sizing: border-box;
+        border-radius: 15px;
+        font-family: Bai Jamjuree;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 155%;
+        text-align: center;
+        letter-spacing: 0.05em;
+        outline: none;
+        /* border: none; */
+    }
 
-.buttonDiv{
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-}
-.buttonImg{
-    width: 30%;
-    height: 2%;
-}
+    .buttonText{
+        margin-top: 5%;
+        margin-left: 4%;
+    }
 
-.buttonText{
-    font-size: 30px;
-}
+    button:hover{
+        /* background: linear-gradient(260.65deg, rgba(50, 244, 164, 0.9) 4.79%, rgba(48, 223, 201, 0.9) 52.97%, rgba(33, 109, 247, 0.9) 101.16%);
+        color:black; */
+        border: 1px solid;
+        box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.2);
+        outline: none;
+        /* outline-color: rgba(255, 255, 255, 0); */
+        text-shadow: 1px 1px 2px #427388;
+        cursor: pointer;
+        /* background: linear-gradient(260.65deg, rgba(50, 244, 164, 0.9) 4.79%, rgba(48, 223, 201, 0.9) 52.97%, rgba(33, 109, 247, 0.9) 101.16%); */
+        background:linear-gradient(to right, #46DD98, #44a08d);
+        color:black;
+    }
 
-.developersLink{
-    position: absolute;
-    bottom: 0px;
-}
 
-.extras{
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;    
-}
 
-.heartImg{
-    width: 2%;
-}
-
-.left{
-    z-index: 1;
-    height: 60%;
-    width: 38%;
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    top: 25%;
-    left: 10%;
-    border-right: 1px solid #DADADA;
-    border-right-style: solid;
-    align-items: center;
-}
-
-.leftDiv{
-    border-right: 1px solid white;
-}
-
-.right{
-    z-index: 1;
-    height: 60%;
-    width: 38%;
-    position: absolute;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    top: 25%;
-    left: 48%;
-}
-
-h3{
-    font-family:  Bai Jamjuree;
-font-style: normal;
-font-weight: bold;
-font-size: 24px;
-line-height: 30px;
-
-color: #E7E7E7;
-}
-
-.btnsdiv{
-    position: relative;
-    margin: 15% 10% 0 10% !important;
-}
-
-.btnDetails{
-    font-family:  Bai Jamjuree;
-font-style: normal;
-font-weight: normal;
-font-size: 18px;
-line-height: 23px;
-text-align: left;
-    width: 50%;
-color: #B4B4B4;
-}
-
-.details{
+    .buttonDiv{
         display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 2%;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+    .buttonImg{
+        width: 30%;
+        height: 2%;
+    }
+
+    .developersLink{
+        position: relative;
+        margin-top: 5%;
+    }
+
+    .extras{
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .heartImg{
+        width: 2%;
+    }
+
+    .left{
+        z-index: 1;
+        height: 60%;
+        width: 38%;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        top: 25%;
+        left: 10%;
+        border-right: 1px solid #DADADA;
+        border-right-style: solid;
+        align-items: center;
+    }
+
+    .leftDiv{
+        border-right: 1px solid white;
+    }
+
+    .right{
+        z-index: 1;
+        height: 60%;
+        width: 38%;
+        position: absolute;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        top: 25%;
+        left: 48%;
+    }
+
+    .detailsTitle{
+        font-family:  Bai Jamjuree;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 24px;
+        line-height: 30px;
+
+        color: #E7E7E7;
+    }
+
+    .btnsdiv{
+        position: relative;
+        margin: 15% 10% 0 10% !important;
+    }
+
+    .btnDetails{
+        font-family:  Bai Jamjuree;
+        font-style: normal;
+        font-weight: normal;
+        line-height: 23px;
+        text-align: justify;
+        max-width: 70%;
+        color: #B4B4B4;
+    }
+
+    .details{
+            display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 2%;
+    }
+}
+
+@media only screen and (max-width:768px){
+    .title{
+        position: absolute;
+        left: 10%;
+        top: 5%;
+        font-family: Audiowide;
+        font-style: normal;
+        font-weight: normal;
+        letter-spacing: 0.05em;
+        background:linear-gradient(to right, #46DD98, #44a08d);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+
+    }
+
+
+    .joinBtn{
+        padding: 10px;
+        max-width: 100%;
+        background: rgba(242, 170, 76, 0.01);
+        color:#44A08D;
+        border: 1px solid #30C18D;
+        box-sizing: border-box;
+        border-radius: 15px;
+        font-family: Bai Jamjuree;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 160%;
+        text-align: center;
+        letter-spacing: 0.05em;
+        outline: none;
+        /* border: none; */
+    }
+
+    .createBtn{
+        max-width: 100%;
+        background: rgba(242, 170, 76, 0.01);
+        color: #44A08D;
+        padding: 10px;
+    /* background: linear-gradient(260.65deg, rgba(50, 244, 164, 0.9) 4.79%, rgba(48, 223, 201, 0.9) 52.97%, rgba(33, 109, 247, 0.9) 101.16%);
+        color:black; */
+
+        /* background: rgba(0, 0, 0, 0.01); */
+        border: 1px solid #30C18D;
+        box-sizing: border-box;
+        border-radius: 15px;
+        font-family: Bai Jamjuree;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 160%;
+        text-align: center;
+        letter-spacing: 0.05em;
+        outline: none;
+        /* border: none; */
+    }
+
+    .buttonText{
+        margin-top: 5%;
+        margin-left: 4%;
+    }
+
+    button:hover{
+        /* background: linear-gradient(260.65deg, rgba(50, 244, 164, 0.9) 4.79%, rgba(48, 223, 201, 0.9) 52.97%, rgba(33, 109, 247, 0.9) 101.16%);
+        color:black; */
+        border: 1px solid;
+        box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.2);
+        outline: none;
+        /* outline-color: rgba(255, 255, 255, 0); */
+        text-shadow: 1px 1px 2px #427388;
+        cursor: pointer;
+        /* background: linear-gradient(260.65deg, rgba(50, 244, 164, 0.9) 4.79%, rgba(48, 223, 201, 0.9) 52.97%, rgba(33, 109, 247, 0.9) 101.16%); */
+        background:linear-gradient(to right, #46DD98, #44a08d);
+        color:black;
+    }
+
+
+
+    .buttonDiv{
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+
+    .buttonImg{
+        width: 30%;
+        height: 2%;
+    }
+
+    .developersLink{
+        position: relative;
+        margin-top: 5%;
+    }
+
+    .extras{
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .heartImg{
+        width: 2%;
+    }
+
+    .left{
+        z-index: 1;
+        height: 60%;
+        width: 38%;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        top: 25%;
+        left: 10%;
+        align-items: center;
+        margin-bottom: 20%;
+    }
+
+    .leftDiv{
+        margin-bottom: 10%;
+    }
+
+    .right{
+        z-index: 1;
+        height: 60%;
+        width: 38%;
+        position: absolute;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        top: 25%;
+        left: 48%;
+    }
+
+    .detailsTitle{
+        font-family:  Bai Jamjuree;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 24px;
+        line-height: 30px;
+
+        color: #E7E7E7;
+    }
+
+    .btnsdiv{
+        position: relative;
+        margin: 15% 10% 0 10% !important;
+    }
+
+    .btnDetails{
+        font-family:  Bai Jamjuree;
+        font-style: normal;
+        font-weight: normal;
+        line-height: 23px;
+        text-align: justify;
+        width: 70%;
+        color: #B4B4B4;
+    }
+
+    .details{
+            display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 2%;
+    }
 }

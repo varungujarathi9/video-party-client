@@ -1,5 +1,5 @@
 .creatorName{
-    
+
 
 font-family: Bai Jamjuree;
 font-style: normal;
@@ -16,7 +16,7 @@ color: #FFFFFF;
 }
 
 
-.roomId{    
+.roomId{
     font-family: Bai Jamjuree;
 font-style: normal;
 font-weight: 500;
@@ -42,7 +42,7 @@ letter-spacing: 0.05em;
 color: #FFFFFF;
 }
 
-.memName{    
+.memName{
     font-family: Bai Jamjuree;
     font-style: normal;
     font-weight: 500;
@@ -73,12 +73,12 @@ color: #FFFFFF;
 }
 
 
-.leaveRoomBtn{   
-    width: 50%;  
+.leaveRoomBtn{
+    width: 50%;
     color: white;
     background: rgba(255, 255, 255, 0.01);
-    border: 1px solid #FFFFFF;  
-    border-radius: 5px;  
+    border: 1px solid #FFFFFF;
+    border-radius: 5px;
 }
 
 .leaveBtnDiv{
@@ -135,11 +135,11 @@ color: white;
     margin-bottom: 10px;
 }
 
-.inputFile{   
-    display: none; 
+.inputFile{
+    display: none;
 }
 
-.startPlaying{  
+.startPlaying{
     width: 80%;
     background: rgba(242, 170, 76, 0.01);
     color: #30C18D;
@@ -154,7 +154,7 @@ color: white;
     line-height: 30px;
     text-align: center;
     letter-spacing: 0.03em;
-    
+
 }
 
 .fileName{
@@ -181,7 +181,7 @@ color: white;
     align-items: center;
     min-height: 70vh;
     border-right: 1px solid white;
-    
+
 }
 
 
@@ -191,7 +191,7 @@ color: white;
     justify-content: center;
     align-items: center;
     min-height: 70vh;
-   
+
 }
 
 .leaveBtn{
@@ -201,14 +201,14 @@ color: white;
     outline: none;
     left: 5%;
     top: 5%;
-    
+
 }
 
 .leaveDiv{
     display: flex;
     align-items: center;
     justify-content: space-around;
-    
+
 }
 
 .leaveBtn:hover{
@@ -220,7 +220,7 @@ color: white;
     border-bottom:4px solid ;
     padding-bottom: 3px ;
     color: #FFFFFF;
-    
+
 }
 
 .leaveImg{
@@ -234,30 +234,51 @@ color: white;
     font-weight: 600;
     font-size: 17px;
     line-height: 30px;
-    letter-spacing: 0.05em; 
+    letter-spacing: 0.05em;
     color: #FFFFFF;
     margin: auto;
 }
 
-.msgBox{
+.msgBoxJoinee{
     width: 60%;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid #FFFFFF;
     border-radius: 5px;
     height: 100%;
     display: flex;
-    
+
     flex-direction: column;
     align-items: center;
     cursor: pointer;
     font-family: Bai Jamjuree;
-font-style: normal;
-font-weight: 500;
-font-size: 18px;
-line-height: 22px;
-text-align: center;
-letter-spacing: 0.02em;
-color: white;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 22px;
+    text-align: center;
+    letter-spacing: 0.02em;
+    color: white;
+}
+
+.msgBoxCreator{
+    width: 80%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #FFFFFF;
+    border-radius: 5px;
+    height: 100%;
+    display: flex;
+
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    font-family: Bai Jamjuree;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 22px;
+    text-align: center;
+    letter-spacing: 0.02em;
+    color: white;
 }
 
 .msg{
@@ -284,7 +305,7 @@ color: white;
     display: flex;
     align-items: center;
     border-bottom: 1px solid #414141;
-   
+
 }
 .memJoinedDetails{
     display: flex;
@@ -335,7 +356,7 @@ color: white;
     border: none;
     font-size: 25px !important;
     color:white
-    
+
 }
 
 .chatInput:focus{
@@ -357,14 +378,14 @@ color: white;
     top: 2%;
     animation: fadeinout 3s linear forwards;
     -webkit-animation: fadeinout 3s linear forwards;
-   
+
 }
 
 @-webkit-keyframes fadeinout {
     0%,100% { opacity: 0; }
     50% { opacity: 1; }
   }
-  
+
   @keyframes fadeinout {
     0%,100% { opacity: 0; }
     50% { opacity: 1; }

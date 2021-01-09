@@ -21,7 +21,7 @@ export default class Lobby extends React.Component {
             username: '',
             roomDetails: '',
             fileName: '',
-            extension: ["mp4", "mkv", "x-msvideo", "x-matroska"],
+            extension: ["mp4"],
             extensionValid: false,
             fileError: '',
             messages: [],
@@ -37,10 +37,6 @@ export default class Lobby extends React.Component {
 
     componentDidMount() {
 
-
-        console.log("what is scroll top", document.getElementById("msgBox").scrollTop)
-        console.log("what is scroll height", document.getElementById("msgBox").scrollHeight)
-
         if (sessionStorage.getItem('user-type') === 'creator' || sessionStorage.getItem('user-type') === 'joinee') {
             this.setState({ userType: sessionStorage.getItem('user-type') })
         }
@@ -49,7 +45,6 @@ export default class Lobby extends React.Component {
         }
 
         if (sessionStorage.getItem('room-details') !== null || sessionStorage.getItem('room-details') !== '') {
-            // console.log(JSON.parse(sessionStorage.getItem('room-details').replace(/"/g,'\"')))
             this.setState({ roomDetails: JSON.parse(sessionStorage.getItem('room-details').replace(/"/g, '\"')) })
         }
         else {
@@ -71,7 +66,6 @@ export default class Lobby extends React.Component {
         }
 
         serverSocket.on('update-room-details', async (data) => {
-             console.log("update room",data)
             sessionStorage.setItem('room-details', JSON.stringify(data))
             this.setState({
                 roomDetails: JSON.parse(JSON.stringify(data)),
@@ -93,22 +87,15 @@ export default class Lobby extends React.Component {
         })
 
         serverSocket.on('all_left', data => {
-            // console.log(data)
             sessionStorage.setItem('room-details', JSON.stringify(data))
-            // sessionStorage.setItem('room-members',JSON.stringify(data['members']))
             this.setState({
                 roomDetails: JSON.parse(JSON.stringify(data)),
             })
             navigate('/')
         })
-        serverSocket.emit('get-all-messages', { roomID: sessionStorage.getItem('room-id') })
 
         serverSocket.on('receive_message', (data) => {
-            // sessionStorage.setItem('messages', data)
-            console.log("message", data)
             var reversedArray = data.slice(0).reverse()
-            console.log(reversedArray)
-
             if (reversedArray.length > 0) {
                 this.setState({
                     messages: reversedArray,
@@ -118,7 +105,8 @@ export default class Lobby extends React.Component {
             }
 
         })
-       
+
+        setTimeout(2000,serverSocket.emit('get-all-messages', { roomID: sessionStorage.getItem('room-id') }))
     }
 
     handleFile = (e) => {
@@ -211,7 +199,7 @@ export default class Lobby extends React.Component {
     }
 
     capitalizeUsername = () => {
-        var username = sessionStorage.getItem('username')
+        var username = Object.keys(JSON.parse(sessionStorage.getItem("room-details")).members)[0]
         var finalUsername = username.charAt(0).toUpperCase() + username.slice(1)
         return (
             <p className={style.creatorName}>
@@ -229,7 +217,6 @@ export default class Lobby extends React.Component {
     }
 
     sendMsg = (event) => {
-        console.log("on press of enter")
         event.preventDefault()
         if (this.state.message !== '') {
             serverSocket.emit('send-message', { senderName: this.state.username, roomID: this.state.roomID, message: this.state.message })
@@ -242,7 +229,7 @@ export default class Lobby extends React.Component {
 
     scrollcheck = () => {
         var getMsgContainer = document.getElementById("msgBox")
-        if (getMsgContainer.scrollTop != 0) {
+        if (getMsgContainer.scrollTop !== 0) {
             getMsgContainer.scrollTop = 0
         }
     }
@@ -260,14 +247,13 @@ export default class Lobby extends React.Component {
     }
 
     render() {
-        var { roomDetails, messages, videoStreamFlag, copyStatus, lastSender } = this.state
+        var { roomDetails, messages, copyStatus, lastSender } = this.state
         var sessionUsername = sessionStorage.getItem('username')
         if (messages.length > 0) {
             var roomDetailsMembers = Object.keys(roomDetails.members)
 
         }
 
-        console.log(roomDetails)
         return (
             <div className="container-fluid">
                 <button className={style.leaveBtn} onClick={this.leaveRoom}>
@@ -280,7 +266,6 @@ export default class Lobby extends React.Component {
                 {copyStatus === 'copied' &&
                     <div className="alert alert-success" id={style.alertDisplay}>
                         "Copied to clipboard"
-                    {console.log("inside alert box")}
                     </div>}
 
 
@@ -291,7 +276,7 @@ export default class Lobby extends React.Component {
                         <p className={style.roomId}>Room ID: {this.state.roomID}</p>
 
                         <>
-                            <i class="fa fa-clipboard" style={{ fontSize: "24px", color: "red" }}></i>
+                            <i className="fa fa-clipboard" style={{ fontSize: "24px", color: "red" }}></i>
                             <p onClick={this.copytoClipBoard} style={{ cursor: "pointer", color: "#9a9a9a" }}>Copy Room link </p>
                             <textarea ref={this.urlText} id="urlTextField" style={{ display: "none" }}></textarea>
                         </>
@@ -338,17 +323,15 @@ export default class Lobby extends React.Component {
 
                     </div>
 }
-                   
+
 
 
                     <div className={sessionStorage.getItem('user-type') === 'creator'?"col-md-4":"col-md-7"} id={style.right}>
-                        <div className={style.msgBox}>
+                        <div className={sessionStorage.getItem('user-type') === 'creator'?`${style.msgBoxCreator}`:`${style.msgBoxJoinee}`}>
                             <div className={style.msg} id="msgBox">
                                 {messages.length > 0 ?
 
                                     messages.map((message, id) => {
-
-                                        console.log(Boolean(lastSender === sessionUsername))
                                         return (
                                             <>
                                                 {/* <img></img> */}
@@ -382,18 +365,7 @@ export default class Lobby extends React.Component {
                                     })
                                     :
                                     <>
-                                        {roomDetails !== '' && Object.keys(roomDetails.members).length > 0 && Object.keys(roomDetails.members).map((item) => {
-                                            return (
-                                                <div className={style.memJoinedDetails}>
-                                                    <p>
-                                                        {item} joined
-                                                </p>
-
-
-                                                </div>
-
-                                            )
-                                        })}
+                                        <p style={{color:"darkgrey", fontSize: "13px"}}>Enter message below to chat with friends</p>
                                     </>
 
                                 }
@@ -402,23 +374,15 @@ export default class Lobby extends React.Component {
                             <div className={`row ${style.msgfooter}`}>
                                 <form onSubmit={this.sendMsg} style={{display:"flex",width:"100%",alignItems:"center"}}>
                                     <input type="text" name='chat' id="chat" className={style.chatInput} onChange={this.handleMessageChange} placeholder="Type to chat" autoComplete="off"></input>
-                                    <img src={SendBtn} alt="send button" id={style.sendBtn} onClick={this.sendMsg} />                                 
+                                    <img src={SendBtn} alt="send button" id={style.sendBtn} onClick={this.sendMsg} />
                                     <button type="submit" style={{ display: "none" }}>Send</button>
-
                                 </form>
-
                             </div>
-
-
                             {/* <button onClick={this.sendMsg}>Send</button> */}
-
-
                         </div>
                     </div>
 
                 </div>
-
-
                 {/* <h4>Room I.D.</h4>
                 {this.state.roomID}
                 <h4>Room Members</h4>
