@@ -71,7 +71,7 @@ export default class Lobby extends React.Component {
         }
 
         serverSocket.on('update-room-details', async (data) => {
-            // console.log(data)
+             console.log("update room",data)
             sessionStorage.setItem('room-details', JSON.stringify(data))
             this.setState({
                 roomDetails: JSON.parse(JSON.stringify(data)),
@@ -101,8 +101,9 @@ export default class Lobby extends React.Component {
             })
             navigate('/')
         })
+        serverSocket.emit('get-all-messages', { roomID: sessionStorage.getItem('room-id') })
 
-        serverSocket.on('receive_message', data => {
+        serverSocket.on('receive_message', (data) => {
             // sessionStorage.setItem('messages', data)
             console.log("message", data)
             var reversedArray = data.slice(0).reverse()
@@ -117,7 +118,7 @@ export default class Lobby extends React.Component {
             }
 
         })
-        serverSocket.emit('get-all-messages', { roomID: sessionStorage.getItem('room-id') })
+       
     }
 
     handleFile = (e) => {
@@ -398,10 +399,10 @@ export default class Lobby extends React.Component {
                                 }
 
                             </div>
-                            <div className={style.msgfooter}>
-                                <form onSubmit={this.sendMsg}>
-                                    <input type="text" name='chat' id="chat" className={style.chatInput} onChange={this.handleMessageChange} placeholder="type to chat" autoComplete="off"></input>
-                                    <img src={SendBtn} alt="send button" id={style.sendBtn} onClick={this.sendMsg} />
+                            <div className={`row ${style.msgfooter}`}>
+                                <form onSubmit={this.sendMsg} style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
+                                    <input type="text" name='chat' id="chat" className={style.chatInput} onChange={this.handleMessageChange} placeholder="Type to chat" autoComplete="off"></input>
+                                    <img src={SendBtn} alt="send button" id={style.sendBtn} onClick={this.sendMsg} />                                 
                                     <button type="submit" style={{ display: "none" }}>Send</button>
 
                                 </form>
