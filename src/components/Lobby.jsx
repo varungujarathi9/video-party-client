@@ -65,17 +65,17 @@ export default class Lobby extends React.Component {
 
         serverSocket.on('connect',()=>{
             console.log("server is connected")
-            console.log(serverSocket)
-            if(this.state.disconnected === true){
-                this.setState({
-                    disconnected: false
-                })
-                var rejoinRoomID = sessionStorage.getItem('room-id')
-                var rejoinUsername = sessionStorage.getItem('username')
+            console.log(this.state.disconnected)
 
-                serverSocket.emit('rejoin-room',{roomID:rejoinRoomID, joineeName:rejoinUsername})
+            this.setState({
+                disconnected: false
+            })
+            var rejoinRoomID = sessionStorage.getItem('room-id')
+            var rejoinUsername = sessionStorage.getItem('username')
 
-            }
+            serverSocket.emit('rejoin-room',{roomID:rejoinRoomID, username:rejoinUsername})
+
+
         })
 
         serverSocket.on('disconnect',(reason)=>{
@@ -221,14 +221,19 @@ export default class Lobby extends React.Component {
     }
 
     capitalizeUsername = () => {
-        var username = Object.keys(JSON.parse(sessionStorage.getItem("room-details")).members)[0]
-        var finalUsername = username.charAt(0).toUpperCase() + username.slice(1)
-        return (
-            <p className={style.creatorName}>
-                {finalUsername}'s Room
+        if(JSON.parse(sessionStorage.getItem("room-details")).members !== undefined && JSON.parse(sessionStorage.getItem("room-details")).members !== null && Object.keys(JSON.parse(sessionStorage.getItem("room-details")).members).length > 0  ){
+            var username = Object.keys(JSON.parse(sessionStorage.getItem("room-details")).members)[0]
+            var finalUsername = username.charAt(0).toUpperCase() + username.slice(1)
+            return (
+                <p className={style.creatorName}>
+                    {finalUsername}'s Room
 
-            </p>
-        )
+                </p>
+            )
+        }
+        else{
+            navigate('/')
+        }
     }
 
     handleMessageChange = (event) => {
@@ -305,7 +310,7 @@ export default class Lobby extends React.Component {
 
                         <p className={style.memTitle}>Members in Lobby:</p>
                         <div className={style.memberDisplay}>
-                            {roomDetails !== '' && Object.keys(roomDetails.members).length > 0 && Object.keys(roomDetails.members).map((item) => {
+                            {roomDetails !== '' && roomDetails.members !== undefined && roomDetails.members !== null && Object.keys(roomDetails.members).length > 0 && Object.keys(roomDetails.members).map((item) => {
                                 return (
                                     <div className={style.imgndtext}>
                                         <img className={style.memberImg} src={AvatarArr[roomDetails.members[item]]} alt="avatarimg" />
