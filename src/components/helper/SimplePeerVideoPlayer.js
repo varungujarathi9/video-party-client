@@ -103,12 +103,14 @@ serverSocket.on('receive-offer', (data) => {
 
             // add callback event to receive stream
             creatorPC.on('stream', (stream) => {
-                console.log("receiving stream");
                 videoPlayer = document.querySelector('video')
-                if ('srcObject' in videoPlayer) {
-                    videoPlayer.srcObject = stream
-                } else {
-                    videoPlayer.src = window.URL.createObjectURL(stream) // for older browsers
+                console.log(videoPlayer)
+                if (videoPlayer !== null && videoPlayer !== undefined){
+                    if('srcObject' in videoPlayer) {
+                        videoPlayer.srcObject = stream
+                    } else {
+                        videoPlayer.src = window.URL.createObjectURL(stream) // for older browsers
+                    }
                 }
             })
         }

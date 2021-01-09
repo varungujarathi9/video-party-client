@@ -34,10 +34,10 @@ export default class VideoPlayer extends React.Component{
         })
 
         if(sessionStorage.getItem('user-type') === "creator"){
-            setTimeout(() => {startStreaming(JSON.parse(sessionStorage.getItem('room-details')).members);}, 3000)
+            setTimeout(() => {startStreaming(JSON.parse(sessionStorage.getItem('room-details')).members);}, 5000)
         }
         else{
-            startStreaming(JSON.parse(sessionStorage.getItem('room-details')).members)
+            setTimeout(() => {startStreaming(JSON.parse(sessionStorage.getItem('room-details')).members);}, 1000)
         }
     }
 
