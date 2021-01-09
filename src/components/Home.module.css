@@ -1,6 +1,7 @@
 .title{
     position: absolute;
-    left: 10%;      
+    left: 5%;
+    top: 5%;      
     font-family: Audiowide;
     font-style: normal;
     font-weight: normal;
@@ -10,7 +11,7 @@
     background:linear-gradient(to right, #46DD98, #44a08d);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-top: 2%;
+    
 }
 .about{
     position: absolute;
@@ -29,10 +30,8 @@
 }
 
 
-.createBtn{
-   
-    min-height: 28%;
-    width: 49%;
+.createBtn{    
+    max-width: 100%;
     background: rgba(242, 170, 76, 0.01);
     color: #44A08D;
 
@@ -68,14 +67,8 @@ button:hover{
     color:black;
 }
 
-.joinBtn{
-  
-    min-height: 28%;
-    width: 49%;
-   
-   
-    /* background: linear-gradient(260.65deg, rgba(50, 244, 164, 0.9) 4.79%, rgba(48, 223, 201, 0.9) 52.97%, rgba(33, 109, 247, 0.9) 101.16%);
-    color:black; */
+.joinBtn{   
+    max-width: 100%;   
     background: rgba(242, 170, 76, 0.01);
     color:#44A08D;
     border: 1px solid #30C18D;
@@ -107,13 +100,16 @@ button:hover{
     font-size: 30px;
 }
 
+.developersLink{
+    position: absolute;
+    bottom: 0px;
+}
+
 .extras{
     color: white;
     display: flex;
     justify-content: center;
-    align-items: center;
-    position: absolute;
-    bottom: 0px;
+    align-items: center;    
 }
 
 .heartImg{
@@ -132,6 +128,10 @@ button:hover{
     border-right: 1px solid #DADADA;
     border-right-style: solid;
     align-items: center;
+}
+
+.leftDiv{
+    border-right: 1px solid white;
 }
 
 .right{
@@ -154,6 +154,11 @@ font-size: 24px;
 line-height: 30px;
 
 color: #E7E7E7;
+}
+
+.btnsdiv{
+    position: relative;
+    margin: 15% 10% 0 10% !important;
 }
 
 .btnDetails{
