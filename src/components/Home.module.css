@@ -1,11 +1,11 @@
 .title{
     position: absolute;
-    left: 5%;
+    left: 10%;
     top: 5%;      
     font-family: Audiowide;
     font-style: normal;
     font-weight: normal;
-    font-size: 80px;
+    font-size: 60px;
     line-height: 102px;
     letter-spacing: 0.05em;    
     background:linear-gradient(to right, #46DD98, #44a08d);
@@ -34,7 +34,7 @@
     max-width: 100%;
     background: rgba(242, 170, 76, 0.01);
     color: #44A08D;
-
+    padding: 10px;
    /* background: linear-gradient(260.65deg, rgba(50, 244, 164, 0.9) 4.79%, rgba(48, 223, 201, 0.9) 52.97%, rgba(33, 109, 247, 0.9) 101.16%);
       color:black; */
    
@@ -67,7 +67,8 @@ button:hover{
     color:black;
 }
 
-.joinBtn{   
+.joinBtn{  
+    padding: 10px; 
     max-width: 100%;   
     background: rgba(242, 170, 76, 0.01);
     color:#44A08D;

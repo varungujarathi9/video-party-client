@@ -400,7 +400,7 @@ export default class Lobby extends React.Component {
 
                             </div>
                             <div className={`row ${style.msgfooter}`}>
-                                <form onSubmit={this.sendMsg} style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
+                                <form onSubmit={this.sendMsg} style={{display:"flex",width:"100%",alignItems:"center"}}>
                                     <input type="text" name='chat' id="chat" className={style.chatInput} onChange={this.handleMessageChange} placeholder="Type to chat" autoComplete="off"></input>
                                     <img src={SendBtn} alt="send button" id={style.sendBtn} onClick={this.sendMsg} />                                 
                                     <button type="submit" style={{ display: "none" }}>Send</button>
