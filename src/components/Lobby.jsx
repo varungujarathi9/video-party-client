@@ -27,18 +27,16 @@ export default class Lobby extends React.Component {
             messages: [],
             message: '',
             copyStatus: '',
-            lastSender: ''
+            lastSender: '',
+            disconnected: false
         }
         this.fileUploader = React.createRef()
         this.urlText = React.createRef()
     }
 
-
-
-    componentDidMount() {
-
-        if (sessionStorage.getItem('user-type') === 'creator' || sessionStorage.getItem('user-type') === 'joinee') {
-            this.setState({ userType: sessionStorage.getItem('user-type') })
+    componentDidMount(){
+        if (sessionStorage.getItem('user-type') === 'creator' || sessionStorage.getItem('user-type') === 'joinee' ){
+            this.setState({userType: sessionStorage.getItem('user-type')})
         }
         else {
             navigate('/')
@@ -64,6 +62,30 @@ export default class Lobby extends React.Component {
         else {
             navigate('/')
         }
+
+        serverSocket.on('connect',()=>{
+            console.log("server is connected")
+            console.log(serverSocket)
+            if(this.state.disconnected === true){
+                this.setState({
+                    disconnected: false
+                })
+                var rejoinRoomID = sessionStorage.getItem('room-id')
+                var rejoinUsername = sessionStorage.getItem('username')
+
+                serverSocket.emit('rejoin-room',{roomID:rejoinRoomID, joineeName:rejoinUsername})
+
+            }
+        })
+
+        serverSocket.on('disconnect',(reason)=>{
+            this.setState({
+                disconnected: true
+            })
+            console.log("the reason for disconnection is",reason)
+            console.log("server is disconnected")
+        })
+
 
         serverSocket.on('update-room-details', async (data) => {
             sessionStorage.setItem('room-details', JSON.stringify(data))
