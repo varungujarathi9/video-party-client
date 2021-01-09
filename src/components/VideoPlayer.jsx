@@ -104,7 +104,7 @@ export default class VideoPlayer extends React.Component{
                 ref ={this.handleRef}
                 playing={playing}
                 className='react-player fixed-bottom'
-                url= {sessionStorage.getItem("user-type") === "creator"?videoFileUrl:""}
+                url= {sessionStorage.getItem("user-type") === "creator"?videoFileUrl:null}
                 width='100%'
                 height='100vh'
                 controls = {true}
