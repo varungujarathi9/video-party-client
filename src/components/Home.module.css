@@ -16,6 +16,7 @@
     .joinBtn{
         padding: 10px;
         max-width: 100%;
+        height:100%;
         background: rgba(242, 170, 76, 0.01);
         color:#44A08D;
         border: 1px solid #30C18D;
@@ -33,6 +34,7 @@
 
     .createBtn{
         max-width: 100%;
+        height:100%;
         background: rgba(242, 170, 76, 0.01);
         color: #44A08D;
         padding: 10px;

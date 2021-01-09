@@ -31,7 +31,7 @@ export default class Home extends React.Component {
                {/* create party details */}
                 <div className={`row ${style.btnsdiv}`}>
                     <div className={`col-md-6 ${style.leftDiv}`}>
-                        <div  className="col-md-12" style={{maxWidth:"80%",margin:"auto"}}>
+                        <div  className="col-md-12" style={{maxWidth:"80%", height:"55%", margin:"auto"}}>
                             <button className={style.createBtn} onClick={this.navigateToLogin('creator')}>
                                 <div className={style.buttonDiv}>
                                     <img className={style.buttonImg} src={CreateRoomPng} alt="create room" />
@@ -50,7 +50,7 @@ export default class Home extends React.Component {
 
                     {/* join btn details */}
                     <div className="col-md-6">
-                        <div  className="col-md-12" style={{maxWidth:"80%",margin:"auto"}}>
+                        <div  className="col-md-12" style={{maxWidth:"80%", height:"55%", margin:"auto"}}>
                             <button className={style.joinBtn} onClick={this.navigateToLogin('joinee')}>
                                 <div className={style.buttonDiv}>
                                     <img className={style.buttonImg} src={JoinRoomPng} alt="join room" />
