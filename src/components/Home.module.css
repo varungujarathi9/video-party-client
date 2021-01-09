@@ -33,7 +33,7 @@
 .createBtn{
    
     
-    max-width: 55%;
+    max-width: 100%;
     background: rgba(242, 170, 76, 0.01);
     color: #44A08D;
 
@@ -70,7 +70,7 @@ button:hover{
 }
 
 .joinBtn{   
-    max-width: 55%;   
+    max-width: 100%;   
     background: rgba(242, 170, 76, 0.01);
     color:#44A08D;
     border: 1px solid #30C18D;
