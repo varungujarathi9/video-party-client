@@ -4,13 +4,12 @@ import style from './Home.module.css'
 import CreateRoomPng from '../images/createroom.png'
 import JoinRoomPng from '../images/joinroom.png'
 import HeartIcon from '../images/heart.png'
-
 export default class Home extends React.Component {
 
     componentDidMount() {
         // clear localStorage on coming back to homepage
         sessionStorage.clear()
-        
+
     }
 
     navigateToLogin = (userType) => (event) => {

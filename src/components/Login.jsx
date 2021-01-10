@@ -17,7 +17,7 @@ export default class Login extends React.Component {
             setAvatarName:null,
             errorMessage: '',
             usernametypeerror:'',
-           
+
         }
     }
 
@@ -43,7 +43,7 @@ export default class Login extends React.Component {
         event.preventDefault()
         var regEx = /^[a-z0-9]+$/i
         var validation = regEx.test(this.state.username)
-              
+
         // TODO: Add regex to check username is valid
         if (this.state.username !== '' && validation ) {
             // createPeerConnection()
@@ -62,9 +62,9 @@ export default class Login extends React.Component {
                 this.handleJoinRoom()
             }
         }
-        else if(validation == false  && this.state.username !== ''){
+        else if(validation === false  && this.state.username !== ''){
             this.setState({usernametypeerror:"No special characters allowed"})
-           
+
         }
         else{
             this.setState({usernameError: "Please provide username"})
@@ -90,7 +90,7 @@ export default class Login extends React.Component {
     }
 
     handleUsernameChange = (event) => {
-        event.preventDefault()        
+        event.preventDefault()
         this.setState({
             username: event.target.value.trim(),
             usernameError:'',
