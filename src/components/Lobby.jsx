@@ -7,7 +7,6 @@ import { navigate } from '@reach/router'
 import React from 'react'
 import { serverSocket } from './helper/connection'
 import style from './Lobby.module.css'
-import { AvatarArr } from './Avatar'
 import BackIcon from '../images/BackIcon.png'
 import UploadIcon from '../images/Upload.png'
 import copy from 'copy-to-clipboard'
@@ -223,7 +222,8 @@ export default class Lobby extends React.Component {
     capitalizeUsername = () => {
         if(JSON.parse(sessionStorage.getItem("room-details")).members !== undefined && JSON.parse(sessionStorage.getItem("room-details")).members !== null && Object.keys(JSON.parse(sessionStorage.getItem("room-details")).members).length > 0  ){
             var username = Object.keys(JSON.parse(sessionStorage.getItem("room-details")).members)[0]
-            var finalUsername = username.charAt(0).toUpperCase() + username.slice(1)
+            // var finalUsername = username.charAt(0).toUpperCase() + username.slice(1)
+            var finalUsername = username.toUpperCase()
             return (
                 <p className={style.creatorName}>
                     {finalUsername}'s Room
@@ -245,8 +245,8 @@ export default class Lobby extends React.Component {
 
     sendMsg = (event) => {
         event.preventDefault()
-        if (this.state.message !== '') {
-            serverSocket.emit('send-message', { senderName: this.state.username, roomID: this.state.roomID, message: this.state.message })
+        if (this.state.message.trim() !== '') {
+            serverSocket.emit('send-message', { senderName: this.state.username, roomID: this.state.roomID, message: this.state.message.trim() })
         }
         this.scrollcheck()
 
@@ -274,12 +274,8 @@ export default class Lobby extends React.Component {
     }
 
     render() {
-        var { roomDetails, messages, copyStatus, lastSender } = this.state
+        var { roomDetails, messages, copyStatus } = this.state
         var sessionUsername = sessionStorage.getItem('username')
-        if (messages.length > 0) {
-            var roomDetailsMembers = Object.keys(roomDetails.members)
-
-        }
 
         return (
             <div className="container-fluid">
@@ -307,13 +303,13 @@ export default class Lobby extends React.Component {
                             <p onClick={this.copytoClipBoard} style={{ cursor: "pointer", color: "#9a9a9a" }}>Copy Room link </p>
                             <textarea ref={this.urlText} id="urlTextField" style={{ display: "none" }}></textarea>
                         </>
-
+                        <hr/>
                         <p className={style.memTitle}>Members in Lobby:</p>
                         <div className={style.memberDisplay}>
                             {roomDetails !== '' && roomDetails.members !== undefined && roomDetails.members !== null && Object.keys(roomDetails.members).length > 0 && Object.keys(roomDetails.members).map((item) => {
                                 return (
                                     <div className={style.imgndtext}>
-                                        <img className={style.memberImg} src={AvatarArr[roomDetails.members[item]]} alt="avatarimg" />
+                                        <span className={`${style.listAvatar} ${style[roomDetails.members[item]]}`}>{item.slice(0,2).toUpperCase()}</span>
                                         <span className={style.memName} key={item}>{item}</span>
                                     </div>
 
@@ -355,37 +351,37 @@ export default class Lobby extends React.Component {
 
                     <div className={sessionStorage.getItem('user-type') === 'creator'?"col-md-4":"col-md-7"} id={style.right}>
                         <div className={sessionStorage.getItem('user-type') === 'creator'?`${style.msgBoxCreator}`:`${style.msgBoxJoinee}`}>
-                            <div className={style.msg} id="msgBox">
+                            <div className={style.msgContainerBase} id='msgBox'>
                                 {messages.length > 0 ?
 
                                     messages.map((message, id) => {
                                         return (
                                             <>
-                                                {/* <img></img> */}
-                                                {Boolean(message.senderName === sessionUsername) ?
-                                                    <div className={style.msgContainerSender} key={id}>
-
-                                                        <p className={style.chatmsgRight}>{message.message}</p>
-                                                        <p className={style.nameRight}>:{message.senderName}</p>
-                                                        {roomDetailsMembers.includes(message.senderName) ?
-                                                            <img className={style.chatmemimgRight} src={AvatarArr[roomDetails.members[message.senderName]]} alt="avatarimg" />
-
-                                                            : "Member left"}
+                                                {Boolean(message.senderName === "<$%^") ? 
+                                                    <div className={style.msgContainerStatus} key={id}>
+                                                        <div className={style.msgStatus}><p style={{marginBottom:"0"}}>{message.message}</p><time className={style.msgTimestamp} dateTime={message.timestamp}>{message.timestamp}</time></div>
+                                                        {/* <span className={style.redChatAvatar}>{message.senderName.slice(0,2).toUpperCase()}</span> */}
                                                     </div>
                                                     :
-                                                    <div className={style.msgContainer} key={id}>
-                                                        {roomDetailsMembers.includes(message.senderName) ?
-
-                                                            <img className={style.chatmemimgLeft} src={AvatarArr[roomDetails.members[message.senderName]]} alt="avatarimg" />
-                                                            : "Member Left"}
-                                                        <p className={style.nameLeft}>{message.senderName}:</p>
-                                                        <p className={style.chatmsgLeft}>{message.message}</p>
-
-
-                                                    </div>
+                                                    <>
+                                                    {Boolean(message.senderName === sessionUsername) ?
+                                                        <div className={style.msgContainerSent} key={id}>
+                                                            <div className={style.msgSent}><p style={{marginBottom:"0"}}>{message.message}</p><time className={style.msgTimestamp} dateTime={message.timestamp}>{message.timestamp}</time></div>
+                                                            {/* <span className={style.redChatAvatar}>{message.senderName.slice(0,2).toUpperCase()}</span> */}
+                                                        </div>
+                                                        :
+                                                        <div className={style.msgContainerReceived} key={id}>
+                                                            <div className="row col-md-12">
+                                                                <span className={`${style.chatAvatar} ${style[roomDetails.members[message.senderName]]}`}>{message.senderName.slice(0,2).toUpperCase()}</span>
+                                                                <p className={`${style.chatName}`}>{message.senderName}</p>
+                                                            </div>
+                                                            <div className="row col-md-12">
+                                                                <div className={style.msgReceived}><p style={{marginBottom:"0"}}>{message.message}</p><time className={style.msgTimestamp} dateTime={message.timestamp}>{message.timestamp}</time></div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    </>
                                                 }
-
-
                                             </>
 
                                         )

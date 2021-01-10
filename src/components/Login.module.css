@@ -4,8 +4,8 @@
     align-items: center;
 }
 
-label{  
-   
+label{
+
     font-family: Bai Jamjuree;
     font-style: normal;
     font-weight: 500;
@@ -34,7 +34,7 @@ label{
     position: absolute;
     padding: 40px 0 40px;
     width: 45%;
-  
+
     top: 20%;
     background: #1C1E1F;
     border-radius: 5px;
@@ -42,17 +42,17 @@ label{
     align-items: center;
     justify-content: space-around;
     flex-direction: column;
-    
+
 }
 .form{
-      
+
     display: flex;
     flex-direction: column;
-  
+
     align-items: center;
     padding: 5px 0 5px;
     width: 50%;
-    
+
 }
 
 .roomId{
@@ -73,14 +73,14 @@ label{
     display: flex;
     flex-direction: column;
     width: 100%;
-   
+
 }
 
 .roomIdDiv{
     display: flex;
     flex-direction: column;
     width: 100%;
-   
+
 
 }
 
@@ -97,7 +97,7 @@ label{
     display: flex;
     align-items: center;
     justify-content: space-around;
-    
+
 }
 
 .backBtn:hover{
@@ -109,7 +109,7 @@ label{
     border-bottom:4px solid ;
     padding-bottom: 3px ;
     color: #FFFFFF;
-    
+
 }
 
 .btnImg{
@@ -123,7 +123,7 @@ label{
     font-weight: 600;
     font-size: 17px;
     line-height: 30px;
-    letter-spacing: 0.05em; 
+    letter-spacing: 0.05em;
     color: #FFFFFF;
     margin: auto;
 }
@@ -162,18 +162,19 @@ input{
 
 .unameInput{
     /* position: absolute;
-   
+
     left: 39%;
     top: 39%; */
     width: 100%;
     text-align: center;
-    height:53px;
+    height: 30%;
+    padding: 2%;
     font-family: Bai Jamjuree;
-    
+
 }
 
 input[type="text"]{
-    font-size: 30px;
+    font-size: 200%;
 }
 input:-internal-autofill-selected {
     background-color: none !important;
@@ -181,7 +182,10 @@ input:-internal-autofill-selected {
 
 .roomIdInput{
     text-align: center;
-    height:53px;
+    height: 30%;
+    padding: 2%;
+    text-transform:uppercase;
+    font-family: Bai Jamjuree;
     /* position: absolute;
     width: 25%;
     height: 6%;

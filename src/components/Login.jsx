@@ -42,19 +42,12 @@ export default class Login extends React.Component {
 
         // TODO: Add regex to check username is valid
         if (this.state.username !== '') {
-            // createPeerConnection()
-            var {avatar} = this.state
-            var avatarName = Object.keys(avatar)
-            var avatarRandom = avatarName[Math.floor(Math.random()*avatarName.length)]
-            this.setState({
-                setAvatarName:avatarRandom
-            })
             if(this.state.userType === 'creator'){
-                serverSocket.emit('create-room', {username:this.state.username,avatarname:avatarRandom});
+                serverSocket.emit('create-room', {username:this.state.username});
                 this.handleCreateRoom()
             }
             else if(this.state.userType === 'joinee'){
-                serverSocket.emit('join-room', {username:this.state.username, roomID:this.state.roomID,avatarname:avatarRandom});
+                serverSocket.emit('join-room', {username:this.state.username, roomID:this.state.roomID});
                 this.handleJoinRoom()
             }
         }
@@ -68,7 +61,6 @@ export default class Login extends React.Component {
             sessionStorage.setItem('username', this.state.username)
             sessionStorage.setItem('room-id', data['room-id'])
             sessionStorage.setItem('room-details', JSON.stringify(data['room-details']))
-            sessionStorage.setItem('avatarName',this.state.setAvatarName)
             navigate('/lobby')
         })
     }
@@ -78,10 +70,6 @@ export default class Login extends React.Component {
             sessionStorage.setItem('username', this.state.username)
             sessionStorage.setItem('room-id', this.state.roomID)
             sessionStorage.setItem('room-details', JSON.stringify(data['room-details']))
-            sessionStorage.setItem('avatarName',this.state.setAvatarName)
-            //write peerconnection
-            console.log(data)
-
             navigate('/lobby')
         })
     }
@@ -96,8 +84,9 @@ export default class Login extends React.Component {
     handleRoomIDChange = (event) => {
         event.preventDefault()
         this.setState({
-            roomID: event.target.value.trim()
+            roomID: event.target.value.trim().toUpperCase()
         })
+        console.log(event.target.value.trim().toUpperCase())
     }
 
     navigateBack =()=>{
@@ -126,6 +115,7 @@ export default class Login extends React.Component {
                         </div>
                         {this.state.userType === 'joinee' ? (
                             <div className={style.roomIdDiv}>
+
                                 <label className={style.roomId} htmlFor='roomID'>Room ID</label>
                                 <input className={style.roomIdInput}type='text' id='roomID' name='roomID' minLength='6' maxLength='6' onChange={this.handleRoomIDChange} placeholder="roomId"></input>
                             </div>
