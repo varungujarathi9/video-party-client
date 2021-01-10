@@ -11,9 +11,11 @@ import BackIcon from '../images/BackIcon.png'
 import UploadIcon from '../images/Upload.png'
 import copy from 'copy-to-clipboard'
 import SendBtn from '../images/send.png'
+import copy from 'copy-to-clipboard'
+// import {connectToAllPeers, getPeerConnections} from './helper/SimplePeerLobby.js'
 
 export default class Lobby extends React.Component {
-    constructor(props) {
+    constructor(props){
         super(props)
         this.state = {
             userType: '',
@@ -32,6 +34,7 @@ export default class Lobby extends React.Component {
         this.fileUploader = React.createRef()
         this.urlText = React.createRef()
     }
+    
 
     componentDidMount(){
         if (sessionStorage.getItem('user-type') === 'creator' || sessionStorage.getItem('user-type') === 'joinee' ){
@@ -262,7 +265,7 @@ export default class Lobby extends React.Component {
     }
 
     copytoClipBoard = (e) => {
-        var urlName = window.location.href
+        var urlName = window.location.href+"/"+`${this.state.roomID}`
         copy(urlName)
         this.setState({
             copyStatus: 'copied'
@@ -404,6 +407,8 @@ export default class Lobby extends React.Component {
                 </div>
                 {/* <h4>Room I.D.</h4>
                 {this.state.roomID}
+                <p onClick={this.copytoClipBoard} style={{ cursor: "pointer", color: "#9a9a9a" }}>Copy Room link </p>
+                <textarea ref={this.urlText} id="urlTextField" style={{ display: "none" }}></textarea>
                 <h4>Room Members</h4>
                 {roomDetails !== '' && Object.keys(roomDetails.members).length > 0 && Object.keys(roomDetails.members).map((username)=>{
                     return (
