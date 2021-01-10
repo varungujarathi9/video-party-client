@@ -15,7 +15,9 @@ export default class Login extends React.Component {
             usernameError: '',
             avatar:AvatarArr,
             setAvatarName:null,
-            errorMessage: ''
+            errorMessage: '',
+            usernametypeerror:'',
+           
         }
     }
 
@@ -39,9 +41,18 @@ export default class Login extends React.Component {
 
     onClickLogin = async (event) =>{
         event.preventDefault()
-
+        var regEx = /^[a-z0-9]+$/i
+        var validation = regEx.test(this.state.username)
+              
         // TODO: Add regex to check username is valid
-        if (this.state.username !== '') {
+        if (this.state.username !== '' && validation ) {
+            // createPeerConnection()
+            var {avatar} = this.state
+            var avatarName = Object.keys(avatar)
+            var avatarRandom = avatarName[Math.floor(Math.random()*avatarName.length)]
+            this.setState({
+                setAvatarName:avatarRandom
+            })
             if(this.state.userType === 'creator'){
                 serverSocket.emit('create-room', {username:this.state.username});
                 this.handleCreateRoom()
@@ -51,7 +62,11 @@ export default class Login extends React.Component {
                 this.handleJoinRoom()
             }
         }
-        else {
+        else if(validation == false  && this.state.username !== ''){
+            this.setState({usernametypeerror:"No special characters allowed"})
+           
+        }
+        else{
             this.setState({usernameError: "Please provide username"})
         }
     }
@@ -75,9 +90,11 @@ export default class Login extends React.Component {
     }
 
     handleUsernameChange = (event) => {
-        event.preventDefault()
+        event.preventDefault()        
         this.setState({
-            username: event.target.value.trim()
+            username: event.target.value.trim(),
+            usernameError:'',
+            usernametypeerror:''
         })
     }
 
@@ -94,7 +111,7 @@ export default class Login extends React.Component {
     }
 
     render() {
-        let {usernameError, errorMessage } = this.state
+        let {usernameError,usernametypeerror,errorMessage } = this.state
 
         return (
             <div className={style.loginDiv}>
@@ -122,6 +139,7 @@ export default class Login extends React.Component {
                         ) : null
                         }
                         <h6 style={{ color: 'red', fontSize: '16px', margin: '5px 0px 12px' }}>{usernameError}</h6>
+                        <h6 style={{ color: 'red', fontSize: '16px', margin: '5px 0px 12px' }}>{usernametypeerror}</h6>
                         <button className={style.joinBtn} onClick={this.onClickLogin}>Login</button>
                     </form>
                     <h6 style={{ color: 'red', fontSize: '16px', margin: '5px' }}>{errorMessage}</h6>

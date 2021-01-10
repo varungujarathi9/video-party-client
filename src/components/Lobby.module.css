@@ -52,8 +52,12 @@ color: #FFFFFF;
 .memberDisplay{
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    height: 40%;
+    overflow-y: auto;
+    overflow-x: hidden;
     flex-direction: column;
+    word-break: break-all;
+    width: 40%;
 }
 
 .imgndtext{
@@ -507,3 +511,22 @@ color: white;
     0%,100% { opacity: 0; }
     50% { opacity: 1; }
   }
+
+
+.emojiPicker{
+  
+    position: absolute;
+    top: 7%;
+    left: 14%;
+}
+
+.emojiSection{
+    width: 80%;
+}
+
+.defaultemoji{
+    margin-top: revert;
+    cursor: pointer;
+    margin-right: 2%;
+}
+

@@ -13,6 +13,8 @@ import copy from 'copy-to-clipboard'
 import SendBtn from '../images/send.png'
 import copy from 'copy-to-clipboard'
 // import {connectToAllPeers, getPeerConnections} from './helper/SimplePeerLobby.js'
+import {Picker} from 'emoji-mart'
+import "emoji-mart/css/emoji-mart.css";
 
 export default class Lobby extends React.Component {
     constructor(props){
@@ -29,14 +31,19 @@ export default class Lobby extends React.Component {
             message: '',
             copyStatus: '',
             lastSender: '',
-            disconnected: false
-        }
+            disconnected: false,
+            showEmojis:false
+            }
         this.fileUploader = React.createRef()
         this.urlText = React.createRef()
+        this.emojiPicker = React.createRef()
     }
     
 
     componentDidMount(){
+
+        window.addEventListener("beforeunload",this.leaveRoom)
+
         if (sessionStorage.getItem('user-type') === 'creator' || sessionStorage.getItem('user-type') === 'joinee' ){
             this.setState({userType: sessionStorage.getItem('user-type')})
         }
@@ -241,6 +248,17 @@ export default class Lobby extends React.Component {
             message: event.target.value
         })
     }
+    addEmojis=(e)=>{
+        let sym = e.unified.split('-')
+        let codesArray = []
+        sym.forEach(e=> codesArray.push('0x' + e))
+        let emoji = String.fromCodePoint(...codesArray)
+        this.setState({
+            message:this.state.message+emoji,
+            showEmojis:false
+        })
+        document.getElementById("chat").autofocus=true
+    }
 
     sendMsg = (event) => {
         event.preventDefault()
@@ -250,6 +268,9 @@ export default class Lobby extends React.Component {
         this.scrollcheck()
 
         document.getElementById("chat").value = ""
+        this.setState({
+            message:""
+        })
     }
 
 
@@ -272,8 +293,23 @@ export default class Lobby extends React.Component {
         })
     }
 
+    displayEmoji =(e) =>{
+        this.setState({
+            showEmojis:true
+        })
+    }
+
+    closeEmojiDiv =(e)=>{
+      console.log(this.emojiPicker)
+      if(this.emojiPicker !==null ){
+          this.setState({
+              showEmojis:false
+          },()=>document.removeEventListener("click",this.closeEmojiDiv))
+      }
+    }
+
     render() {
-        var { roomDetails, messages, copyStatus } = this.state
+        var { roomDetails, messages, copyStatus, lastSender,showEmojis } = this.state
         var sessionUsername = sessionStorage.getItem('username')
 
         return (
@@ -395,10 +431,20 @@ export default class Lobby extends React.Component {
                             </div>
                             <div className={`row ${style.msgfooter}`}>
                                 <form onSubmit={this.sendMsg} style={{display:"flex",width:"100%",alignItems:"center"}}>
-                                    <input type="text" name='chat' id="chat" className={style.chatInput} onChange={this.handleMessageChange} placeholder="Type to chat" autoComplete="off"></input>
+                                    <input type="text" name='chat' id="chat" className={style.chatInput} value={this.state.message} onChange={this.handleMessageChange}  autoComplete="off" autoFocus></input>
+
+                                   {showEmojis ? 
+                                    <span ref={this.emojiPicker} className={style.emojiPicker}>
+                                    <Picker onSelect={this.addEmojis}  emojiTooltip={true} title="emoticons" style={{width:"80%",float:"left"}}/>
+                                    </span>                                       
+                                    :
+                                    <p onClick={this.displayEmoji} className={style.defaultemoji}> {String.fromCodePoint(0x1f60a)}</p>}
                                     <img src={SendBtn} alt="send button" id={style.sendBtn} onClick={this.sendMsg} />
                                     <button type="submit" style={{ display: "none" }}>Send</button>
+                                    
                                 </form>
+
+                               
                             </div>
                             {/* <button onClick={this.sendMsg}>Send</button> */}
                         </div>

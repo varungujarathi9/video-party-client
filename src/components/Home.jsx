@@ -10,6 +10,7 @@ export default class Home extends React.Component {
     componentDidMount() {
         // clear localStorage on coming back to homepage
         sessionStorage.clear()
+        
     }
 
     navigateToLogin = (userType) => (event) => {
