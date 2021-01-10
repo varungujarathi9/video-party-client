@@ -92,26 +92,26 @@ export default class VideoPlayer extends React.Component{
         this.setState({videoPlayer:player})
     }
     render(){
-        const videoFileUrl = sessionStorage.getItem('video_file')
+        const videoFileUrl = sessionStorage.getItem("user-type") === "creator"?sessionStorage.getItem('video_file'):"xyz.mp4"
         const {playing} = this.state
 
         return(
 
             <div>
                 <div className='player-wrapper' style={{backgroundColor:'black'}}>
-                <ReactPlayer
-                id="video-player"
-                ref ={this.handleRef}
-                playing={playing}
-                className='react-player fixed-bottom'
-                url= {sessionStorage.getItem("user-type") === "creator"?videoFileUrl:null}
-                width='100%'
-                height='100vh'
-                controls = {true}
-                onPause ={this.vidOnPause}
-                onPlay={this.vidOnPlay}
-                onReady={this.ready}
-                />
+                    <ReactPlayer
+                        id="video-player"
+                        ref ={this.handleRef}
+                        playing={playing}
+                        className='react-player fixed-bottom'
+                        url= {videoFileUrl}
+                        width='100%'
+                        height='100vh'
+                        controls = {true}
+                        onPause ={this.vidOnPause}
+                        onPlay={this.vidOnPlay}
+                        onReady={this.ready}
+                    />
                 </div>
             </div>
         )
