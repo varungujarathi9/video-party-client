@@ -2,18 +2,30 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Your Business</title>
+    <title>Error 502</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--# if expr="$status = 502" -->
       <meta http-equiv="refresh" content="2">
     <!--# endif -->
+    <style>
+      body
+      {
+        background-color: #0F1112;
+      }
+    </style>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree&display=swap" rel="stylesheet">
   </head>
-<body>
-  <!--# if expr="$status = 502" -->
-    <h1>We are updating our website </h1>
-    <p>This is only for a few seconds, you will be redirected.</p>
-  <!--# else -->
-    <h1><!--# echo var="status" default="" --> <!--# echo var="status_text" default="Something went wrong" --></h1>
-  <!--# endif -->
-</body>
+  <body>
+    <!--# if expr="$status = 502" -->
+      <h1 style="font-family: Bai Jamjuree; align-self:center; text-align: center; color:#44a08d">We are updating our website </h1>
+      <p style="font-family: Bai Jamjuree; align-self:center; text-align: center; color:#ffffff;">This is only for a few seconds, you will be redirected.</p>
+      
+    <!--# else -->
+      <h1 style="font-family: Bai Jamjuree; align-self:center; text-align: center; color:#44a08d"><!--# echo var="status" default="" --></h1>
+      <h2 style="font-family: Bai Jamjuree; align-self:center; text-align: center; color:#ffffff"><!--# echo var="status_text" default="Something went wrong" --></h2>
+      <a href="https://videoparty.tk"><p style="font-family: Bai Jamjuree; align-self:center; text-align: center; color:#ffffff; text-decoration:underline"><!--# echo var="link" default="Go to home" --></p></a>
+    <!--# endif -->
+
+  </body>
 </html>
