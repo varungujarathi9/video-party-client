@@ -42,7 +42,7 @@ export default class Home extends React.Component {
                         <div className={`col-md-12 ${style.details}`}>
                             <h4 className={style.detailsTitle}>Host your own room</h4>
                             <p className={style.btnDetails}>
-                                Want to watch movies with your friends? Host your own room and watch movies with your friends seemlessly.
+                                Host your own room and watch movies with your friends seemlessly.
                             </p>
                         </div>
                     </div>
@@ -61,7 +61,7 @@ export default class Home extends React.Component {
                         <div className={`col-md-12 ${style.details}`}>
                             <h4 className={style.detailsTitle}>Join an existing room</h4>
                             <p className={style.btnDetails}>
-                                Want to watch movies alone? Stream it online and watch it alone.
+                                Join the existing room  and watch streamed videos with your friends.
                             </p>
                         </div>
                     </div>

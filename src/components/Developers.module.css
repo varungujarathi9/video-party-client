@@ -45,15 +45,20 @@
 
 .developerdiv{
     position: relative;
-    margin: 10% 10% 0 10% !important;
+    margin: 10% 0% 0 14% !important;
 }
 
 .developerdetails{
-    background-color: bisque;
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    font-size: xx-large;
+    text-align: justify;
+    color: white;
+     margin:0 0 1%;
+}
+.designerdetails{
+    font-size: xx-large;
+    text-align: justify;
+    color: white;
+    margin:5% 0 1%;
 }
 
 .developertext{
