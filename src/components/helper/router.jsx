@@ -11,9 +11,9 @@ export default class RouterPage extends React.Component{
         return(
             <Router>
                 <Home exact path="/" />
-                <Login exact path="/login" />
-                <Lobby exact path="/lobby" />
-                <Join exact path="/join" />
+                <Login  path="/login" />
+                <Lobby path="/lobby" />
+                <Join  path="/lobby/:roomId" />
                 <VideoPlayer exact path="/video-player" />
             </Router>
         )

@@ -6,20 +6,27 @@
 import { navigate } from '@reach/router'
 import React from 'react'
 import { serverSocket } from './helper/connection'
+import copy from 'copy-to-clipboard'
 // import {connectToAllPeers, getPeerConnections} from './helper/SimplePeerLobby.js'
 
 export default class Lobby extends React.Component {
-    state = {
-        userType: '',
-        username: '',
-        roomDetails: '',
-        fileName: '',
-        extension: ["mp4", "mkv", "x-msvideo", "x-matroska"],
-        extensionValid: false,
-        fileError: '',
-        messages: [],
-        message: '',
+    constructor(props){
+        super(props)
+        this.state = {
+            userType: '',
+            username: '',
+            roomDetails: '',
+            fileName: '',
+            extension: ["mp4", "mkv", "x-msvideo", "x-matroska"],
+            extensionValid: false,
+            fileError: '',
+            messages: [],
+            message: '',
+        }
+
+        this.urlText = React.createRef()
     }
+    
 
     componentDidMount(){
 
@@ -163,6 +170,14 @@ export default class Lobby extends React.Component {
         document.getElementById("chat").value = ""
     }
 
+    copytoClipBoard = (e) => {
+        var urlName = window.location.href+"/"+`${this.state.roomID}`
+        copy(urlName)
+        this.setState({
+            copyStatus: 'copied'
+        })
+    }
+
     render() {
         var {roomDetails} = this.state
         var {messages} = this.state
@@ -183,6 +198,8 @@ export default class Lobby extends React.Component {
                 </div>
                 <h4>Room I.D.</h4>
                 {this.state.roomID}
+                <p onClick={this.copytoClipBoard} style={{ cursor: "pointer", color: "#9a9a9a" }}>Copy Room link </p>
+                <textarea ref={this.urlText} id="urlTextField" style={{ display: "none" }}></textarea>
                 <h4>Room Members</h4>
                 {roomDetails !== '' && Object.keys(roomDetails.members).length > 0 && Object.keys(roomDetails.members).map((username)=>{
                     return (
