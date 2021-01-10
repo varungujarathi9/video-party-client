@@ -2,7 +2,7 @@ import { navigate } from '@reach/router'
 import React from 'react'
 import ReactPlayer from 'react-player'
 import { serverSocket } from './helper/connection'
-import {startStreaming} from './helper/SimplePeerVideoPlayer.js'
+import {startStreaming, destroyPeerConnections} from './helper/SimplePeerVideoPlayer.js'
 
 export default class VideoPlayer extends React.Component{
     constructor(props){
@@ -37,7 +37,7 @@ export default class VideoPlayer extends React.Component{
             setTimeout(() => {startStreaming(JSON.parse(sessionStorage.getItem('room-details')).members);}, 5000)
         }
         else{
-            setTimeout(() => {startStreaming(JSON.parse(sessionStorage.getItem('room-details')).members);}, 1000)
+            setTimeout(() => {startStreaming(JSON.parse(sessionStorage.getItem('room-details')).members);}, 0)
         }
     }
 
@@ -47,6 +47,7 @@ export default class VideoPlayer extends React.Component{
             serverSocket.emit('video-update',{pauseDetails:pauseDetails})
             sessionStorage.removeItem('video_file')
         }
+        destroyPeerConnections()
     }
 
     vidOnPause=()=>{

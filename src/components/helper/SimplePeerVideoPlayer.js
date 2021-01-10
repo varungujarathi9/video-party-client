@@ -44,7 +44,7 @@ function startStreaming(roomMembers){
         else if(stream === null || stream === undefined){
             stream = videoPlayer.captureStream()
         }
-
+        destroyPeerConnections()
         //  create peer connection with each member
         Object.keys(roomMembers).map((username) => {
             // check if username same as own username
@@ -95,6 +95,18 @@ function startStreaming(roomMembers){
     // }
 }
 
+function destroyPeerConnections(){
+    Object.keys(peerConnections).map((username) => {
+        // check if username same as own username
+        if(username !== sessionStorage.getItem("username")){
+            peerConnections[username].destroy()
+            console.log(username)
+        }
+    })
+    peerConnections = {}
+}
+
+
 serverSocket.on('receive-offer', (data) => {
     if(sessionStorage.getItem("user-type") === "joinee"){
         if(data['to'] === sessionStorage.getItem('username')){
@@ -129,4 +141,4 @@ serverSocket.on('receive-answer', (data) => {
     }
 })
 
-export {startStreaming}
+export {startStreaming, destroyPeerConnections}
