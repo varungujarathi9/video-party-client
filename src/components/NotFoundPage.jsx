@@ -7,10 +7,10 @@ class NotFoundPage extends React.Component{
         navigate('/')
     }
     render(){
-        return <div>
+        return <div style={{position:"absolute",left:"40%",top:"20%"}}>
             {/* <img src={PageNotFound}  /> */}
-            <h1>404 Not Found</h1>
-            <p style={{textAlign:"center"}} onClick={this.handleClick}>
+            <h1 style={{color:"white"}}>404 Not Found</h1>
+            <p style={{textAlign:"center",color:"lightblue",fontSize:"20px",textDecoration:"underline",cursor:"pointer"}} onClick={this.handleClick}>
                 Go to Home
             </p>
           </div>;

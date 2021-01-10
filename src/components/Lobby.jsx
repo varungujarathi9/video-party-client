@@ -339,8 +339,8 @@ export default class Lobby extends React.Component {
                         <p className={style.roomId}>Room ID: {this.state.roomID}</p>
 
                         <>
-                            <i className="fa fa-clipboard" style={{ fontSize: "24px", color: "red" }}></i>
-                            <p onClick={this.copytoClipBoard} style={{ cursor: "pointer", color: "#9a9a9a" }}>Copy Room link </p>
+                            {/* <i className="fa fa-clipboard" style={{ fontSize: "24px", color: "red" }}></i> */}
+                            <p onClick={this.copytoClipBoard} style={{ cursor: "pointer", color: "#9a9a9a" }}>Copy Invite link </p>
                             <textarea ref={this.urlText} id="urlTextField" style={{ display: "none" }}></textarea>
                         </>
 
