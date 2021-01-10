@@ -63,9 +63,6 @@ export default class Lobby extends React.Component {
         }
 
         serverSocket.on('connect',()=>{
-            console.log("server is connected")
-            console.log(this.state.disconnected)
-
             this.setState({
                 disconnected: false
             })
@@ -81,8 +78,7 @@ export default class Lobby extends React.Component {
             this.setState({
                 disconnected: true
             })
-            console.log("the reason for disconnection is",reason)
-            console.log("server is disconnected")
+            
         })
 
 

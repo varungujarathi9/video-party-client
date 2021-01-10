@@ -58,7 +58,7 @@ function startStreaming(roomMembers){
         })
 
     }
-    else if(userType === 'joinee'){
+    else{
         creatorPC = new Peer({config:SERVER_CONFIG})
         creatorPC.on('signal', (desc) => {
             serverSocket.emit("send-answer", {desc:desc, roomID:sessionStorage.getItem("room-id"), from: sessionStorage.getItem("username")})
@@ -99,8 +99,8 @@ function destroyPeerConnections(){
     Object.keys(peerConnections).map((username) => {
         // check if username same as own username
         if(username !== sessionStorage.getItem("username")){
-            peerConnections[username].destroy()
-            console.log(username)
+            peerConnections[username].close()
+            console.log(username, "connection destroyed")
         }
     })
     peerConnections = {}
@@ -110,13 +110,20 @@ function destroyPeerConnections(){
 serverSocket.on('receive-offer', (data) => {
     if(sessionStorage.getItem("user-type") === "joinee"){
         if(data['to'] === sessionStorage.getItem('username')){
+            //  handle null object
+            if(creatorPC === null || creatorPC === undefined){
+                creatorPC = new Peer({config:SERVER_CONFIG})
+                creatorPC.on('signal', (desc) => {
+                    serverSocket.emit("send-answer", {desc:desc, roomID:sessionStorage.getItem("room-id"), from: sessionStorage.getItem("username")})
+                })
+            }
+
             // add signalling desc of creator
             creatorPC.signal(data['desc'])
 
             // add callback event to receive stream
             creatorPC.on('stream', (stream) => {
                 videoPlayer = document.querySelector('video')
-                console.log(videoPlayer)
                 if (videoPlayer !== null && videoPlayer !== undefined){
                     if('srcObject' in videoPlayer) {
                         videoPlayer.srcObject = stream
@@ -135,6 +142,7 @@ serverSocket.on('receive-answer', (data) => {
         let from = data["from"]
         peerConnections[from]['peerConnectionObject'].signal(data['desc'])
         if(peerConnections[from]['streamAdded'] === false){
+            console.log(from,"connection created")
             addMedia(peerConnections[from]['peerConnectionObject'])
             peerConnections[from]['streamAdded'] = true;
         }
