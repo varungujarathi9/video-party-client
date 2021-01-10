@@ -1,0 +1,71 @@
+
+.backBtn{
+    background: #0F1112;
+    position: absolute;
+     border: none;
+    outline: none;
+    left: 5%;
+    top: 5%;
+}
+
+.btnDiv{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    
+}
+
+.backBtn:hover{
+    border: none;
+    outline:none;
+    background:none;
+    color:none;
+    box-shadow: none;
+    border-bottom:4px solid ;
+    padding-bottom: 3px ;
+    color: #FFFFFF;
+    
+}
+
+.btnImg{
+    margin-right: 15%;
+    width: 30%;
+}
+
+.btnText{
+    font-family: Bai Jamjuree;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 30px;
+    letter-spacing: 0.05em; 
+    color: #FFFFFF;
+    margin: auto;
+}
+
+.developerdiv{
+    position: relative;
+    margin: 10% 10% 0 10% !important;
+}
+
+.developerdetails{
+    background-color: bisque;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.developertext{
+    text-align: justify;
+    margin-left: 2%;
+}
+
+.linkImg{
+    width: 25px;
+    margin-right: 5%;
+}
+
+.linkdiv{
+    margin-bottom: 2%;
+}

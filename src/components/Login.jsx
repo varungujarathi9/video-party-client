@@ -1,8 +1,9 @@
 import React from 'react'
 import {navigate} from '@reach/router'
 import {serverSocket} from './helper/connection'
-import { Socket } from 'socket.io-client'
-// import {createPeerConnection,sendOffer,sendAnswer,handleSignalingData} from './webrtcfile.js'
+import style from './Login.module.css'
+import {AvatarArr} from './Avatar.js'
+import BackIcon from '../images/BackIcon.png'
 
 export default class Login extends React.Component {
     constructor(props) {
@@ -11,7 +12,12 @@ export default class Login extends React.Component {
             userType: '',
             username: '',
             roomID: '',
-            errorMessage: ''
+            usernameError: '',
+            avatar:AvatarArr,
+            setAvatarName:null,
+            errorMessage: '',
+            usernametypeerror:'',
+           
         }
     }
 
@@ -35,9 +41,18 @@ export default class Login extends React.Component {
 
     onClickLogin = async (event) =>{
         event.preventDefault()
-
+        var regEx = /^[a-z0-9]+$/i
+        var validation = regEx.test(this.state.username)
+              
         // TODO: Add regex to check username is valid
-        if (this.state.username !== '') {
+        if (this.state.username !== '' && validation ) {
+            // createPeerConnection()
+            var {avatar} = this.state
+            var avatarName = Object.keys(avatar)
+            var avatarRandom = avatarName[Math.floor(Math.random()*avatarName.length)]
+            this.setState({
+                setAvatarName:avatarRandom
+            })
             if(this.state.userType === 'creator'){
                 serverSocket.emit('create-room', {username:this.state.username});
                 this.handleCreateRoom()
@@ -47,7 +62,11 @@ export default class Login extends React.Component {
                 this.handleJoinRoom()
             }
         }
-        else {
+        else if(validation == false  && this.state.username !== ''){
+            this.setState({usernametypeerror:"No special characters allowed"})
+           
+        }
+        else{
             this.setState({usernameError: "Please provide username"})
         }
     }
@@ -71,40 +90,60 @@ export default class Login extends React.Component {
     }
 
     handleUsernameChange = (event) => {
-        event.preventDefault()
+        event.preventDefault()        
         this.setState({
-            username: event.target.value.trim()
+            username: event.target.value.trim(),
+            usernameError:'',
+            usernametypeerror:''
         })
     }
 
     handleRoomIDChange = (event) => {
         event.preventDefault()
         this.setState({
-            roomID: event.target.value.trim()
+            roomID: event.target.value.trim().toUpperCase()
         })
+        console.log(event.target.value.trim().toUpperCase())
+    }
+
+    navigateBack =()=>{
+        navigate('/')
     }
 
     render() {
-        let { errorMessage } = this.state
+        let {usernameError,usernametypeerror,errorMessage } = this.state
 
         return (
-            <div>
-                <h1>Login to continue</h1>
-                <form>
-                    <div>
-                        <label htmlFor='username'>Username</label>
-                        <input type="text" id='username' name='username' maxLength='20' onChange={this.handleUsernameChange}></input>
-                    </div>
-                    {this.state.userType === 'joinee' ? (
-                        <div>
-                            <label htmlFor='roomID'>Room ID</label>
-                            <input type='text' id='roomID' name='roomID' minLength='6' maxLength='6' onChange={this.handleRoomIDChange}></input>
+            <div className={style.loginDiv}>
+                 <button className={style.backBtn} onClick={this.navigateBack}>
+                     <div className={style.btnDiv}>
+                     <img className={style.btnImg}src={BackIcon} alt="backIcon" />
+                     <p className={style.btnText}> Back</p>
+                     </div>
+
+
+                </button>
+                <div className={style.formDiv}>
+                    <label>Credentials</label>
+                    <form className={style.form}>
+                        <div className={style.unameDiv}>
+                            <label className={style.username} htmlFor='username'> Username</label>
+                            <input className={style.unameInput}type="text" id='username' name='username' maxLength='20' onChange={this.handleUsernameChange} placeholder="username"></input>
                         </div>
-                    ) : null
-                    }
-                    <button onClick={this.onClickLogin}>Login</button>
-                </form>
-                <h6 style={{ color: 'red', fontSize: '16px', margin: '5px' }}>{errorMessage}</h6>
+                        {this.state.userType === 'joinee' ? (
+                            <div className={style.roomIdDiv}>
+
+                                <label className={style.roomId} htmlFor='roomID'>Room ID</label>
+                                <input className={style.roomIdInput}type='text' id='roomID' name='roomID' minLength='6' maxLength='6' onChange={this.handleRoomIDChange} placeholder="roomId"></input>
+                            </div>
+                        ) : null
+                        }
+                        <h6 style={{ color: 'red', fontSize: '16px', margin: '5px 0px 12px' }}>{usernameError}</h6>
+                        <h6 style={{ color: 'red', fontSize: '16px', margin: '5px 0px 12px' }}>{usernametypeerror}</h6>
+                        <button className={style.joinBtn} onClick={this.onClickLogin}>Login</button>
+                    </form>
+                    <h6 style={{ color: 'red', fontSize: '16px', margin: '5px' }}>{errorMessage}</h6>
+                </div>
             </div>
         )
     }
