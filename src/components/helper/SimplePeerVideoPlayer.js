@@ -23,18 +23,21 @@ var peerConnections = {};
 var creatorPC;
 var stream;
 var videoPlayer;
-
+var vidTracks;
+var audTracks;
 function addMedia (joineePC) {
-    let vidTracks = stream.getVideoTracks()
-    let audTracks = stream.getAudioTracks()
+    vidTracks = stream.getVideoTracks()
+    audTracks = stream.getAudioTracks()
     joineePC.addTrack(vidTracks[0], stream)
     joineePC.addTrack(audTracks[0], stream)
+    console.log("stream added")
 }
 
 function startStreaming(roomMembers){
     // if creator, create peer connection with each member
     // elseif joinee, create peer connection with creator only
     let userType = sessionStorage.getItem("user-type")
+    // destroyPeerConnections()
     if(userType === 'creator'){
         //  create stream object
         videoPlayer = document.querySelector('video')
@@ -44,15 +47,23 @@ function startStreaming(roomMembers){
         else if(stream === null || stream === undefined){
             stream = videoPlayer.captureStream()
         }
-        destroyPeerConnections()
+        
         //  create peer connection with each member
         Object.keys(roomMembers).map((username) => {
             // check if username same as own username
             if(username !== sessionStorage.getItem("username")){
-                peerConnections[username] = {peerConnectionObject: new Peer({initiator: true, config:SERVER_CONFIG}), streamAdded: false}
-                peerConnections[username]['peerConnectionObject'].on('signal', (desc) => {
-                    serverSocket.emit("send-offer", {desc:desc, roomID:sessionStorage.getItem("room-id"), from: sessionStorage.getItem("username"), to: username,})
-                })
+                if(username in peerConnections){
+                    peerConnections[username].peerConnectionObject.replaceTrack(vidTracks[0], vidTracks[0], stream)
+                    peerConnections[username].peerConnectionObject.replaceTrack(audTracks[0], audTracks[0], stream)
+                    
+                    peerConnections[username]['streamAdded'] = true;
+                }
+                else{
+                    peerConnections[username] = {peerConnectionObject: new Peer({initiator: true, config:SERVER_CONFIG}), streamAdded: false}
+                    peerConnections[username]['peerConnectionObject'].on('signal', (desc) => {
+                        serverSocket.emit("send-offer", {desc:desc, roomID:sessionStorage.getItem("room-id"), from: sessionStorage.getItem("username"), to: username,})
+                    })
+                }
             }
             return (null)
         })
@@ -64,46 +75,27 @@ function startStreaming(roomMembers){
             serverSocket.emit("send-answer", {desc:desc, roomID:sessionStorage.getItem("room-id"), from: sessionStorage.getItem("username")})
         })
     }
-
-    // // create peer connection for each member
-    // // send offer to each member
-
-    // if(sessionStorage.getItem("user-type") === "joinee"){
-    //     creatorPC = new Peer({config:SERVER_CONFIG})
-    //     creatorPC.on('signal', desc => {
-    //         serverSocket.emit("send-offer", {desc:desc, roomID:sessionStorage.getItem("room-id")})
-    //     })
-    //     creatorPC.on('stream', stream => {
-    //         videoPlayer = document.querySelector('video')
-    //         if ('srcObject' in videoPlayer) {
-    //             videoPlayer.srcObject = stream
-    //         } else {
-    //             videoPlayer.src = window.URL.createObjectURL(stream) // for older browsers
-    //         }
-    //     })
-
-    // }
-    // else if(sessionStorage.getItem("user-type") === "creator"){
-
-    //     joineePC = new Peer({initiator:true, config:SERVER_CONFIG})
-    //     joineePC.on('signal', desc => {
-    //         serverSocket.emit("send-offer", {desc:desc, roomID:sessionStorage.getItem("room-id")})
-    //     })
-    // }
-    // else{
-    //     console.error("User type error")
-    // }
 }
 
 function destroyPeerConnections(){
+    console.log(peerConnections)
     Object.keys(peerConnections).map((username) => {
         // check if username same as own username
         if(username !== sessionStorage.getItem("username")){
-            peerConnections[username].close()
+            peerConnections[username].peerConnectionObject.removeStream(stream)
+            peerConnections[username].peerConnectionObject.destory()
+            console.log(peerConnections[username].peerConnectionObject)
             console.log(username, "connection destroyed")
         }
     })
     peerConnections = {}
+    videoPlayer = null
+    stream = null
+    vidTracks = null
+    audTracks = null
+    if (creatorPC !== null && creatorPC !== undefined)
+        creatorPC.destroy()
+    creatorPC = null
 }
 
 
