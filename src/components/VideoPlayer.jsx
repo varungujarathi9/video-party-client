@@ -1,12 +1,8 @@
-// TODO: got back to lobby when creator goes back--DONE
-// TODO: leave room
-// TODO: check file duration of all members
-// TODO: create a ready button for joinee
 import { navigate } from '@reach/router'
 import React from 'react'
 import ReactPlayer from 'react-player'
 import { serverSocket } from './helper/connection'
-import {startStreaming} from './helper/SimplePeerVideoPlayer.js'
+import {startStreaming, destroyPeerConnections} from './helper/SimplePeerVideoPlayer.js'
 
 export default class VideoPlayer extends React.Component{
     constructor(props){
@@ -38,10 +34,10 @@ export default class VideoPlayer extends React.Component{
         })
 
         if(sessionStorage.getItem('user-type') === "creator"){
-            setTimeout(() => {startStreaming(JSON.parse(sessionStorage.getItem('room-details')).members);}, 3000)
+            setTimeout(() => {startStreaming(JSON.parse(sessionStorage.getItem('room-details')).members);}, 0)
         }
         else{
-            startStreaming(JSON.parse(sessionStorage.getItem('room-details')).members)
+            setTimeout(() => {startStreaming(JSON.parse(sessionStorage.getItem('room-details')).members);}, 0)
         }
     }
 
@@ -51,6 +47,8 @@ export default class VideoPlayer extends React.Component{
             serverSocket.emit('video-update',{pauseDetails:pauseDetails})
             sessionStorage.removeItem('video_file')
         }
+        // if(sessionStorage.getItem("user-type") === "joinee")
+            // destroyPeerConnections()
     }
 
     vidOnPause=()=>{
@@ -96,26 +94,26 @@ export default class VideoPlayer extends React.Component{
         this.setState({videoPlayer:player})
     }
     render(){
-        const videoFileUrl = sessionStorage.getItem('video_file')
+        const videoFileUrl = sessionStorage.getItem("user-type") === "creator"?sessionStorage.getItem('video_file'):"xyz.mp4"
         const {playing} = this.state
 
         return(
 
             <div>
                 <div className='player-wrapper' style={{backgroundColor:'black'}}>
-                <ReactPlayer
-                id="video-player"
-                ref ={this.handleRef}
-                playing={playing}
-                className='react-player fixed-bottom'
-                url= {videoFileUrl}
-                width='100%'
-                height='100vh'
-                controls = {true}
-                onPause ={this.vidOnPause}
-                onPlay={this.vidOnPlay}
-                onReady={this.ready}
-                />
+                    <ReactPlayer
+                        id="video-player"
+                        ref ={this.handleRef}
+                        playing={playing}
+                        className='react-player fixed-bottom'
+                        url= {videoFileUrl}
+                        width='100%'
+                        height='100vh'
+                        controls = {true}
+                        onPause ={this.vidOnPause}
+                        onPlay={this.vidOnPlay}
+                        onReady={this.ready}
+                    />
                 </div>
             </div>
         )

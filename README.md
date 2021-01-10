@@ -34,3 +34,4 @@ To install node <https://phoenixnap.com/kb/update-node-js-version>
 0.4 chat function added
 0.5 video streaming working
 0.6 multiple peer streaming support added, ready button removed
+0.7 ui done
