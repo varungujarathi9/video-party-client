@@ -7,7 +7,7 @@ import Github from '../images/github.svg'
 import LinkedIn from '../images/linkedin.png'
 import Ak from '../images/ak.jpeg'
 import Jay from '../images/Jay.png'
-import Varun from '../images/Varun.png'
+import Varun from '../images/Varun.jpg'
 import Rihan from '../images/rihan.png'
 import Rahul from '../images/Rahul.png'
 
