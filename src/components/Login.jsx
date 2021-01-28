@@ -117,15 +117,14 @@ export default class Login extends React.Component {
             <div className={style.loginDiv}>
                  <button className={style.backBtn} onClick={this.navigateBack}>
                      <div className={style.btnDiv}>
-                     <img className={style.btnImg}src={BackIcon} alt="backIcon" />
-                     <p className={style.btnText}> Back</p>
+                        <img className={style.btnImg}src={BackIcon} alt="backIcon" />
+                        <p className={style.btnText}> Back</p>
                      </div>
-
-
                 </button>
+                
                 <div className={style.formDiv}>
                     <label>Credentials</label>
-                    <form className={style.form}>
+                    <form className={`container ${style.form}`}>
                         <div className={style.unameDiv}>
                             <label className={style.username} htmlFor='username'> Username</label>
                             <input className={style.unameInput}type="text" id='username' name='username' maxLength='20' onChange={this.handleUsernameChange} placeholder="username"></input>

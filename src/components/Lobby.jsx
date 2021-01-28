@@ -39,7 +39,7 @@ export default class Lobby extends React.Component {
         this.urlText = React.createRef()
         this.emojiPicker = React.createRef()
     }
-    
+
 
     componentDidMount(){
 
@@ -89,7 +89,7 @@ export default class Lobby extends React.Component {
             this.setState({
                 disconnected: true
             })
-            
+
         })
 
 
@@ -314,13 +314,15 @@ export default class Lobby extends React.Component {
         var sessionUsername = sessionStorage.getItem('username')
 
         return (
-            <div className="container-fluid">
-                <button className={style.leaveBtn} onClick={this.leaveRoom}>
-                    <div className={style.leaveDiv}>
-                        <img className={style.leaveImg} src={BackIcon} alt="backIcon" />
-                        <p className={style.leaveText}> Leave Room</p>
-                    </div>
-                </button>
+            <div>
+                <p align="left">
+                    <button className={style.leaveBtn} onClick={this.leaveRoom}>
+                        <div className={style.leaveDiv}>
+                            <img className={style.leaveImg} src={BackIcon} alt="backIcon" />
+                            <p className={style.leaveText}> Leave Room</p>
+                        </div>
+                    </button>
+                </p>
 
                 {copyStatus === 'copied' &&
                     <div className="alert alert-success" id={style.alertDisplay}>
@@ -392,7 +394,7 @@ export default class Lobby extends React.Component {
                                     messages.map((message, id) => {
                                         return (
                                             <>
-                                                {Boolean(message.senderName === "<$%^") ? 
+                                                {Boolean(message.senderName === "<$%^") ?
                                                     <div className={style.msgContainerStatus} key={id}>
                                                         <div className={style.msgStatus}><p style={{marginBottom:"0"}}>{message.message}</p><time className={style.msgTimestamp} dateTime={message.timestamp}>{message.timestamp}</time></div>
                                                         {/* <span className={style.redChatAvatar}>{message.senderName.slice(0,2).toUpperCase()}</span> */}
@@ -433,18 +435,18 @@ export default class Lobby extends React.Component {
                                 <form onSubmit={this.sendMsg} style={{display:"flex",width:"100%",alignItems:"center"}}>
                                     <input type="text" name='chat' id="chat" className={style.chatInput} value={this.state.message} onChange={this.handleMessageChange}  autoComplete="off" autoFocus></input>
 
-                                   {showEmojis ? 
+                                   {showEmojis ?
                                     <span ref={this.emojiPicker} className={style.emojiPicker}>
                                     <Picker onSelect={this.addEmojis}  emojiTooltip={true} title="emoticons" style={{width:"80%",float:"left"}}/>
-                                    </span>                                       
+                                    </span>
                                     :
                                     <p onClick={this.displayEmoji} className={style.defaultemoji}> {String.fromCodePoint(0x1f60a)}</p>}
                                     <img src={SendBtn} alt="send button" id={style.sendBtn} onClick={this.sendMsg} />
                                     <button type="submit" style={{ display: "none" }}>Send</button>
-                                    
+
                                 </form>
 
-                               
+
                             </div>
                             {/* <button onClick={this.sendMsg}>Send</button> */}
                         </div>

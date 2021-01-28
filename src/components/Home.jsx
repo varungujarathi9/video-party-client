@@ -31,7 +31,7 @@ export default class Home extends React.Component {
                {/* create party details */}
                 <div className={`row ${style.btnsdiv}`}>
                     <div className={`col-md-6 ${style.leftDiv}`}>
-                        <div  className="col-md-12" style={{maxWidth:"80%", height:"55%", margin:"auto"}}>
+                        <div  className="col-md-12">
                             <button className={style.createBtn} onClick={this.navigateToLogin('creator')}>
                                 <div className={style.buttonDiv}>
                                     <img className={style.buttonImg} src={CreateRoomPng} alt="create room" />
@@ -42,7 +42,7 @@ export default class Home extends React.Component {
                         <div className={`col-md-12 ${style.details}`}>
                             <h4 className={style.detailsTitle}>Host your own room</h4>
                             <p className={style.btnDetails}>
-                                Host your own room and watch movies with your friends seemlessly.
+                                Host your own room and watch movies with your friends seamlessly.
                             </p>
                         </div>
                     </div>
@@ -50,7 +50,7 @@ export default class Home extends React.Component {
 
                     {/* join btn details */}
                     <div className="col-md-6">
-                        <div  className="col-md-12" style={{maxWidth:"80%", height:"55%", margin:"auto"}}>
+                        <div  className="col-md-12">
                             <button className={style.joinBtn} onClick={this.navigateToLogin('joinee')}>
                                 <div className={style.buttonDiv}>
                                     <img className={style.buttonImg} src={JoinRoomPng} alt="join room" />
@@ -67,7 +67,7 @@ export default class Home extends React.Component {
                     </div>
                 </div>
                 <div className={`row ${style.developersLink}`}>
-                    <p className={style.extras}>Made with <img className={style.heartImg} src={HeartIcon} alt="heart" onClick={this.navigatePage} style={{cursor:"pointer"}}/> </p>
+                    <p className={style.extras}>Made with &nbsp;<img className={style.heartImg} src={HeartIcon} alt="heart" onClick={this.navigatePage} style={{cursor:"pointer"}}/> </p>
                 </div>
             </div>
         )

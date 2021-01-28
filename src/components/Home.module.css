@@ -56,8 +56,7 @@
     }
 
     .buttonText{
-        margin-top: 5%;
-        margin-left: 4%;
+        font-size: 155%;
     }
 
     button:hover{
@@ -167,9 +166,10 @@
 
 @media only screen and (max-width:768px){
     .title{
-        position: absolute;
+        position: relative;
         left: 10%;
-        top: 5%;
+        top: 10%;
+        margin-top:10%;
         font-family: Audiowide;
         font-style: normal;
         font-weight: normal;
@@ -177,7 +177,6 @@
         background:linear-gradient(to right, #46DD98, #44a08d);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-
     }
 
 
@@ -222,8 +221,7 @@
     }
 
     .buttonText{
-        margin-top: 5%;
-        margin-left: 4%;
+        font-size: 100%;
     }
 
     button:hover{
@@ -266,7 +264,7 @@
     }
 
     .heartImg{
-        width: 2%;
+        width: 8%;
     }
 
     .left{
@@ -304,13 +302,12 @@
         font-weight: bold;
         font-size: 24px;
         line-height: 30px;
-
         color: #E7E7E7;
     }
 
     .btnsdiv{
         position: relative;
-        margin: 15% 10% 0 10% !important;
+        margin: 10% 2% 0 2% !important;
     }
 
     .btnDetails{
@@ -324,9 +321,11 @@
     }
 
     .details{
-            display: flex;
+        position: relative;
+        display: flex;
         flex-direction: column;
         align-items: center;
         margin-top: 2%;
+        margin-bottom: 10%;
     }
 }

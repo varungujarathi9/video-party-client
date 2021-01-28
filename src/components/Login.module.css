@@ -33,8 +33,6 @@ label{
 .formDiv{
     position: absolute;
     padding: 40px 0 40px;
-    width: 45%;
-
     top: 20%;
     background: #1C1E1F;
     border-radius: 5px;
@@ -87,7 +85,7 @@ label{
 .backBtn{
     background: #0F1112;
     position: absolute;
-     border: none;
+    border: none;
     outline: none;
     left: 5%;
     top: 5%;
