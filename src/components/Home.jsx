@@ -54,7 +54,7 @@ export default class Home extends React.Component {
                             <button className={style.joinBtn} onClick={this.navigateToLogin('joinee')}>
                                 <div className={style.buttonDiv}>
                                     <img className={style.buttonImg} src={JoinRoomPng} alt="join room" />
-                                    <p className={style.buttonText}>Join Party</p>
+                                    <p className={style.buttonText}>Join&nbsp; Party</p>
                                 </div>
                             </button>
                         </div>
