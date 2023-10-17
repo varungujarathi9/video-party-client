@@ -6,9 +6,8 @@ To install node <https://phoenixnap.com/kb/update-node-js-version>
 
 ## Steps to run client on local machine
 
--npm i
--cd client
--npm start
+-npm i 
+-npm start 
 
 ## Port Details
 
