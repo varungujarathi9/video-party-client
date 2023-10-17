@@ -6,17 +6,14 @@ To install node <https://phoenixnap.com/kb/update-node-js-version>
 
 ## Steps to run client on local machine
 
--npm i
--cd client
--npm start
+-npm i 
+-npm start 
 
 ## Port Details
 
 | Port Type      | Client    | Server    |
 |:--------------:|:---------:|:---------:|
 | **Production** | 80        | 1793      |
-| **UAT**        | 3002      | 5002      |
-| **SIT**        | 3001      | 5001      |
 | **Dev**        | 3000      | 5000      |
 
 ## Test cases
