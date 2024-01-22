@@ -2,13 +2,7 @@
 
 ## Live Demo
 
-<https://video-party-client.onrender.com>
-
-## System Requirements
-
-Node version - 12.8.1  
-NPM version - 6.14.8  
-To install node <https://phoenixnap.com/kb/update-node-js-version>
+[https://video-party-client.onrender.com](https://video-party-client.onrender.com)
 
 ## Steps to run client on local machine
 
@@ -24,4 +18,4 @@ To install node <https://phoenixnap.com/kb/update-node-js-version>
 
 ## Featured on Product Hunt
 
-<https://www.producthunt.com/posts/video-party>
+[https://www.producthunt.com/posts/video-party](https://www.producthunt.com/posts/video-party)
