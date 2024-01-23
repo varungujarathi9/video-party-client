@@ -1,5 +1,6 @@
 
 import './App.css';
+import React from 'react';
 import version from './version.json'
 import Router from '../src/components/helper/router'
 import ConfigData from './configs.json'
