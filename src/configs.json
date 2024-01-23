@@ -1,4 +1,4 @@
 {
-    "ENVIRONMENT_TYPE" : "Dev",
-    "SERVER" : "ws://localhost:5000"
+  "ENVIRONMENT_TYPE": "Dev",
+  "SERVER": "ws://video-party-server.onrender.com"
 }
