@@ -1,4 +1,5 @@
-# Local-Video-Party-Client
+# Video-Party
+Video party is a peer-to-peer video file streaming platform where you can stream MP4 files from your local machine with your friends. Video party is based on WebRTC and Sockets.
 
 ## Live Demo
 
@@ -8,13 +9,6 @@
 
 -npm i
 -npm start
-
-## Port Details
-
-|   Port Type    | Client | Server |
-| :------------: | :----: | :----: |
-| **Production** |   80   |  1793  |
-|    **Dev**     |  3000  |  5000  |
 
 ## Featured on Product Hunt
 
