@@ -7,8 +7,8 @@ Video party is a peer-to-peer video file streaming platform where you can stream
 
 ## Steps to run client on local machine
 
--npm i
--npm start
+-npm i  
+-npm start  
 
 ## Featured on Product Hunt
 
