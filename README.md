@@ -1,4 +1,5 @@
 # Video-Party
+Watch downloaded videos together with friends & family
 Video party is a peer-to-peer video file streaming platform where you can stream MP4 files from your local machine with your friends. Video party is based on WebRTC and Sockets.
 
 ## Live Demo
