@@ -11,6 +11,7 @@ Video party is a peer-to-peer video file streaming platform where you can stream
 -npm i  
 -npm start  
 
-## Featured on Product Hunt
+## Featured on Product Hunt & Google for Devs
 
-[https://www.producthunt.com/posts/video-party](https://www.producthunt.com/posts/video-party)
+[Video Party on Product Hunt](https://www.producthunt.com/posts/video-party)
+[What projects are DevFest attendees working on? - Google for Devs](https://www.instagram.com/reel/C2yY7okvvdW/)
