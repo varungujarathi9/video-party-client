@@ -9,6 +9,12 @@ class Home extends React.Component {
   componentDidMount() {
     // clear localStorage on coming back to homepage
     sessionStorage.clear();
+
+    // make a request to https://video-party-server.onrender.com/ to wake up the server
+    fetch("https://video-party-server.onrender.com/")
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((err) => console.log(err));
   }
 
   navigateToLogin = (userType) => (event) => {
