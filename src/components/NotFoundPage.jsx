@@ -1,9 +1,10 @@
 import React from "react";
+import { withRouter } from "./helper/Navigate";
 // import PageNotFound from '../assets/images/PageNotFound';
 class NotFoundPage extends React.Component {
   handleClick = (event) => {
     event.preventDefault();
-    navigate("/");
+    this.props.navigate("/");
   };
   render() {
     return (
@@ -26,4 +27,4 @@ class NotFoundPage extends React.Component {
     );
   }
 }
-export default NotFoundPage;
+export default withRouter(NotFoundPage);
