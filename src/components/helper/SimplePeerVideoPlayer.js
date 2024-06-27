@@ -65,6 +65,15 @@ function receiveStream() {
   creatorPeer.on("stream", (streamObj) => {
     console.log("stream received");
     videoPlayer = document.querySelector("video");
+
+    const audioTracks = streamObj.getAudioTracks();
+    if (audioTracks.length > 0) {
+      console.log("Stream contains audio tracks");
+      audioTracks[0].enabled = true; // This line is optional and depends on your use case
+    } else {
+      console.log("Stream does not contain audio tracks");
+    }
+
     if (videoPlayer !== null && videoPlayer !== undefined) {
       if ("srcObject" in videoPlayer) {
         videoPlayer.srcObject = streamObj;
@@ -72,6 +81,8 @@ function receiveStream() {
         videoPlayer.src = window.URL.createObjectURL(streamObj); // for older browsers
       }
     }
+    videoPlayer.muted = false; // Ensure the video is not muted
+    videoPlayer.volume = 1; // Set the volume to 100%
   });
 
   serverSocket.on("receive-offer", (data) => {
