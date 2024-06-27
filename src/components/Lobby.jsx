@@ -79,7 +79,7 @@ class Lobby extends React.Component {
       sessionStorage.getItem("room-id") !== null ||
       sessionStorage.getItem("room-id") !== ""
     ) {
-      this.setState({ roomID: sessionStorage.getItem("room-id") });
+      this.setState({ roomId: sessionStorage.getItem("room-id") });
     } else {
       this.props.navigate("/");
     }
@@ -92,7 +92,7 @@ class Lobby extends React.Component {
       var rejoinUsername = sessionStorage.getItem("username");
 
       serverSocket.emit("rejoin-room", {
-        roomID: rejoinRoomID,
+        roomId: rejoinRoomID,
         username: rejoinUsername,
       });
     });
@@ -146,7 +146,7 @@ class Lobby extends React.Component {
     setTimeout(
       2000,
       serverSocket.emit("get-all-messages", {
-        roomID: sessionStorage.getItem("room-id"),
+        roomId: sessionStorage.getItem("room-id"),
       })
     );
   }
@@ -192,7 +192,7 @@ class Lobby extends React.Component {
   startVideo = async () => {
     if (this.state.userType === "creator") {
       serverSocket.emit("start-video", {
-        room_id: sessionStorage.getItem("room-id"),
+        roomId: sessionStorage.getItem("room-id"),
       });
     }
   };
@@ -201,12 +201,12 @@ class Lobby extends React.Component {
     if (sessionStorage.getItem("user-type") === "joinee") {
       serverSocket.emit("remove-member", {
         username: this.state.username,
-        roomID: this.state.roomID,
+        roomId: this.state.roomId,
       });
     } else {
       serverSocket.emit("remove-all-members", {
         username: this.state.username,
-        roomID: this.state.roomID,
+        roomId: this.state.roomId,
       });
     }
     this.props.navigate("/login");
@@ -233,7 +233,7 @@ class Lobby extends React.Component {
           ready: true,
         });
         serverSocket.emit("update-member-status", {
-          roomID: this.state.roomID,
+          roomId: this.state.roomId,
           username: this.state.username,
           ready: true,
         });
@@ -244,7 +244,7 @@ class Lobby extends React.Component {
           ready: false,
         });
         serverSocket.emit("update-member-status", {
-          roomID: this.state.roomID,
+          roomId: this.state.roomId,
           username: this.state.username,
           ready: false,
         });
@@ -294,7 +294,7 @@ class Lobby extends React.Component {
     if (this.state.message.trim() !== "") {
       serverSocket.emit("send-message", {
         senderName: this.state.username,
-        roomID: this.state.roomID,
+        roomId: this.state.roomId,
         message: this.state.message.trim(),
       });
     }
@@ -318,7 +318,7 @@ class Lobby extends React.Component {
   };
 
   copytoClipBoard = (e) => {
-    var urlName = window.location.href + "/" + `${this.state.roomID}`;
+    var urlName = window.location.href + "/" + `${this.state.roomId}`;
     copy(urlName);
     this.setState({
       copyStatus: "copied",
@@ -375,7 +375,7 @@ class Lobby extends React.Component {
             id={style.left}
           >
             {this.capitalizeUsername()}
-            <p className={style.roomId}>Room ID: {this.state.roomID}</p>
+            <p className={style.roomId}>Room ID: {this.state.roomId}</p>
 
             <>
               <p
@@ -399,7 +399,7 @@ class Lobby extends React.Component {
                 Object.keys(roomDetails.members).length > 0 &&
                 Object.keys(roomDetails.members).map((item) => {
                   return (
-                    <div className={style.imgndtext}>
+                    <div className={style.imgndtext} key={item}>
                       <span
                         className={`${style.listAvatar} ${
                           style[roomDetails.members[item]]
@@ -407,9 +407,7 @@ class Lobby extends React.Component {
                       >
                         {item.slice(0, 2).toUpperCase()}
                       </span>
-                      <span className={style.memName} key={item}>
-                        {item}
-                      </span>
+                      <span className={style.memName}>{item}</span>
                     </div>
                   );
                 })}
@@ -478,9 +476,9 @@ class Lobby extends React.Component {
                 {messages.length > 0 ? (
                   messages.map((message, id) => {
                     return (
-                      <>
+                      <React.Fragment key={id}>
                         {Boolean(message.senderName === "<$%^") ? (
-                          <div className={style.msgContainerStatus} key={id}>
+                          <div className={style.msgContainerStatus}>
                             <div className={style.msgStatus}>
                               <p style={{ marginBottom: "0" }}>
                                 {message.message}
@@ -494,62 +492,51 @@ class Lobby extends React.Component {
                             </div>
                             {/* <span className={style.redChatAvatar}>{message.senderName.slice(0,2).toUpperCase()}</span> */}
                           </div>
-                        ) : (
-                          <>
-                            {Boolean(message.senderName === sessionUsername) ? (
-                              <div className={style.msgContainerSent} key={id}>
-                                <div className={style.msgSent}>
-                                  <p style={{ marginBottom: "0" }}>
-                                    {message.message}
-                                  </p>
-                                  <time
-                                    className={style.msgTimestamp}
-                                    dateTime={message.timestamp}
-                                  >
-                                    {message.timestamp}
-                                  </time>
-                                </div>
-                                {/* <span className={style.redChatAvatar}>{message.senderName.slice(0,2).toUpperCase()}</span> */}
-                              </div>
-                            ) : (
-                              <div
-                                className={style.msgContainerReceived}
-                                key={id}
+                        ) : Boolean(message.senderName === sessionUsername) ? (
+                          <div className={style.msgContainerSent}>
+                            <div className={style.msgSent}>
+                              <p style={{ marginBottom: "0" }}>
+                                {message.message}
+                              </p>
+                              <time
+                                className={style.msgTimestamp}
+                                dateTime={message.timestamp}
                               >
-                                <div className="row col-md-12">
-                                  <span
-                                    className={`${style.chatAvatar} ${
-                                      style[
-                                        roomDetails.members[message.senderName]
-                                      ]
-                                    }`}
-                                  >
-                                    {message.senderName
-                                      .slice(0, 2)
-                                      .toUpperCase()}
-                                  </span>
-                                  <p className={`${style.chatName}`}>
-                                    {message.senderName}
-                                  </p>
-                                </div>
-                                <div className="row col-md-12">
-                                  <div className={style.msgReceived}>
-                                    <p style={{ marginBottom: "0" }}>
-                                      {message.message}
-                                    </p>
-                                    <time
-                                      className={style.msgTimestamp}
-                                      dateTime={message.timestamp}
-                                    >
-                                      {message.timestamp}
-                                    </time>
-                                  </div>
-                                </div>
+                                {message.timestamp}
+                              </time>
+                            </div>
+                            {/* <span className={style.redChatAvatar}>{message.senderName.slice(0,2).toUpperCase()}</span> */}
+                          </div>
+                        ) : (
+                          <div className={style.msgContainerReceived}>
+                            <div className="row col-md-12">
+                              <span
+                                className={`${style.chatAvatar} ${
+                                  style[roomDetails.members[message.senderName]]
+                                }`}
+                              >
+                                {message.senderName.slice(0, 2).toUpperCase()}
+                              </span>
+                              <p className={`${style.chatName}`}>
+                                {message.senderName}
+                              </p>
+                            </div>
+                            <div className="row col-md-12">
+                              <div className={style.msgReceived}>
+                                <p style={{ marginBottom: "0" }}>
+                                  {message.message}
+                                </p>
+                                <time
+                                  className={style.msgTimestamp}
+                                  dateTime={message.timestamp}
+                                >
+                                  {message.timestamp}
+                                </time>
                               </div>
-                            )}
-                          </>
+                            </div>
+                          </div>
                         )}
-                      </>
+                      </React.Fragment>
                     );
                   })
                 ) : (
@@ -614,7 +601,7 @@ class Lobby extends React.Component {
           </div>
         </div>
         {/* <h4>Room I.D.</h4>
-                {this.state.roomID}
+                {this.state.roomId}
                 <p onClick={this.copytoClipBoard} style={{ cursor: "pointer", color: "#9a9a9a" }}>Copy Room link </p>
                 <textarea ref={this.urlText} id="urlTextField" style={{ display: "none" }}></textarea>
                 <h4>Room Members</h4>

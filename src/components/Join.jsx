@@ -9,7 +9,7 @@ class Join extends React.Component {
     this.state = {
       userType: "",
       username: "",
-      roomID: props.roomId,
+      roomId: props.roomId,
       errorMessage: "",
     };
   }
@@ -38,7 +38,7 @@ class Join extends React.Component {
     if (this.state.username !== "") {
       serverSocket.emit("join-room", {
         username: this.state.username,
-        roomID: this.state.roomID,
+        roomId: this.state.roomId,
       });
       this.handleJoinRoom();
     } else {
@@ -59,7 +59,7 @@ class Join extends React.Component {
   handleJoinRoom = () => {
     serverSocket.on("room-joined", (data) => {
       sessionStorage.setItem("username", this.state.username);
-      sessionStorage.setItem("room-id", this.state.roomID);
+      sessionStorage.setItem("room-id", this.state.roomId);
       sessionStorage.setItem("user-type", "joinee");
       sessionStorage.setItem(
         "room-details",
@@ -79,7 +79,7 @@ class Join extends React.Component {
   // handleRoomIDChange = (event) => {
   //     event.preventDefault()
   //     this.setState({
-  //         roomID: event.target.value.trim()
+  //         roomId: event.target.value.trim()
   //     })
   // }
 
@@ -102,8 +102,8 @@ class Join extends React.Component {
           </div>
           {/* {this.state.userType === 'joinee' ? (
                         <div>
-                            <label htmlFor='roomID'>Room ID</label>
-                            <input type='text' id='roomID' name='roomID' minLength='6' maxLength='6' onChange={this.handleRoomIDChange}></input>
+                            <label htmlFor='roomId'>Room ID</label>
+                            <input type='text' id='roomId' name='roomId' minLength='6' maxLength='6' onChange={this.handleRoomIDChange}></input>
                         </div>
                     ) : null
                     } */}

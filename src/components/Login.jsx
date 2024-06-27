@@ -11,7 +11,7 @@ class Login extends React.Component {
     this.state = {
       userType: "",
       username: "",
-      roomID: "",
+      roomId: "",
       usernameError: "",
       avatar: AvatarArr,
       setAvatarName: null,
@@ -61,7 +61,7 @@ class Login extends React.Component {
       } else if (this.state.userType === "joinee") {
         serverSocket.emit("join", {
           username: this.state.username,
-          roomId: this.state.roomID,
+          roomId: this.state.roomId,
         });
         console.log("join room");
         this.handleJoinRoom();
@@ -88,7 +88,7 @@ class Login extends React.Component {
   handleJoinRoom = () => {
     serverSocket.on("joined", (data) => {
       sessionStorage.setItem("username", this.state.username);
-      sessionStorage.setItem("room-id", this.state.roomID);
+      sessionStorage.setItem("room-id", this.state.roomId);
       sessionStorage.setItem(
         "room-details",
         JSON.stringify(data["room-details"])
@@ -109,7 +109,7 @@ class Login extends React.Component {
   handleRoomIDChange = (event) => {
     event.preventDefault();
     this.setState({
-      roomID: event.target.value.trim().toUpperCase(),
+      roomId: event.target.value.trim().toUpperCase(),
     });
     console.log(event.target.value.trim().toUpperCase());
   };
@@ -150,14 +150,14 @@ class Login extends React.Component {
             </div>
             {this.state.userType === "joinee" ? (
               <div className={style.roomIdDiv}>
-                <label className={style.roomId} htmlFor="roomID">
+                <label className={style.roomId} htmlFor="roomId">
                   Room ID
                 </label>
                 <input
                   className={style.roomIdInput}
                   type="text"
-                  id="roomID"
-                  name="roomID"
+                  id="roomId"
+                  name="roomId"
                   minLength="6"
                   maxLength="6"
                   onChange={this.handleRoomIDChange}

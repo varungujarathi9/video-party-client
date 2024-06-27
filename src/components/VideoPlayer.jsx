@@ -2,7 +2,8 @@ import React from "react";
 import ReactPlayer from "react-player";
 import { serverSocket } from "./helper/Sockets";
 import {
-  startStreaming,
+  startStream,
+  receiveStream,
   destroyPeerConnections,
 } from "./helper/SimplePeerVideoPlayer.js";
 
@@ -44,15 +45,11 @@ class VideoPlayer extends React.Component {
 
     if (sessionStorage.getItem("user-type") === "creator") {
       setTimeout(() => {
-        startStreaming(
-          JSON.parse(sessionStorage.getItem("room-details")).members
-        );
-      }, 0);
+        startStream(JSON.parse(sessionStorage.getItem("room-details")).members);
+      }, 1000);
     } else {
       setTimeout(() => {
-        startStreaming(
-          JSON.parse(sessionStorage.getItem("room-details")).members
-        );
+        receiveStream();
       }, 0);
     }
   }
@@ -60,7 +57,7 @@ class VideoPlayer extends React.Component {
   componentWillUnmount() {
     if (this.state.lastUpdatedBy === sessionStorage.getItem("username")) {
       let pauseDetails = {
-        roomID: sessionStorage.getItem("room-id"),
+        roomId: sessionStorage.getItem("room-id"),
         playing: false,
         progressTime: this.state.videoPlayer.getCurrentTime(),
         username: sessionStorage.getItem("username"),
@@ -69,8 +66,8 @@ class VideoPlayer extends React.Component {
       serverSocket.emit("video-update", { pauseDetails: pauseDetails });
       sessionStorage.removeItem("video_file");
     }
-    // if(sessionStorage.getItem("user-type") === "joinee")
-    // destroyPeerConnections()
+    if (sessionStorage.getItem("user-type") === "joinee")
+      destroyPeerConnections();
   }
 
   vidOnPause = () => {
@@ -78,7 +75,7 @@ class VideoPlayer extends React.Component {
       let pauseDetails;
       if (sessionStorage.getItem("user-type") === "creator") {
         pauseDetails = {
-          roomID: sessionStorage.getItem("room-id"),
+          roomId: sessionStorage.getItem("room-id"),
           playing: false,
           progressTime: this.state.videoPlayer.getCurrentTime(),
           username: sessionStorage.getItem("username"),
@@ -86,7 +83,7 @@ class VideoPlayer extends React.Component {
         };
       } else {
         pauseDetails = {
-          roomID: sessionStorage.getItem("room-id"),
+          roomId: sessionStorage.getItem("room-id"),
           playing: false,
           progressTime: null,
           username: sessionStorage.getItem("username"),
@@ -108,7 +105,7 @@ class VideoPlayer extends React.Component {
       let pauseDetails;
       if (sessionStorage.getItem("user-type") === "creator") {
         pauseDetails = {
-          roomID: sessionStorage.getItem("room-id"),
+          roomId: sessionStorage.getItem("room-id"),
           playing: true,
           progressTime: this.state.videoPlayer.getCurrentTime(),
           username: sessionStorage.getItem("username"),
@@ -116,7 +113,7 @@ class VideoPlayer extends React.Component {
         };
       } else {
         pauseDetails = {
-          roomID: sessionStorage.getItem("room-id"),
+          roomId: sessionStorage.getItem("room-id"),
           playing: true,
           progressTime: null,
           username: sessionStorage.getItem("username"),
