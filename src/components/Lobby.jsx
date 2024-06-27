@@ -7,7 +7,7 @@ import React from "react";
 import { serverSocket } from "./helper/Sockets";
 import style from "./Lobby.module.css";
 import BackIcon from "../images/BackIcon.png";
-import UploadIcon from "../images/Upload.png";
+import SelectIcon from "../images/Upload.png";
 import SendBtn from "../images/send.png";
 import copy from "copy-to-clipboard";
 // import {connectToAllPeers, getPeerConnections} from './helper/SimplePeerLobby.js'
@@ -366,14 +366,7 @@ class Lobby extends React.Component {
         )}
 
         <div className="row noMargin" id={style.mainContent}>
-          <div
-            className={
-              sessionStorage.getItem("user-type") === "creator"
-                ? "col-md-4"
-                : "col-md-5"
-            }
-            id={style.left}
-          >
+          <div className={"col-md-4"} id={style.left}>
             {this.capitalizeUsername()}
             <p className={style.roomId}>Room ID: {this.state.roomId}</p>
 
@@ -419,10 +412,10 @@ class Lobby extends React.Component {
               <div className={style.uploadFile} onClick={this.openFileUpload}>
                 <img
                   className={style.uploadImg}
-                  src={UploadIcon}
-                  alt="uploadIcon"
+                  src={SelectIcon}
+                  alt="selectIcon"
                 />
-                <p>Upload file</p>
+                <p>Select Video File</p>
               </div>
               <input
                 ref={this.fileUploader}
@@ -457,14 +450,20 @@ class Lobby extends React.Component {
             </div>
           )}
 
-          <div
-            className={
-              sessionStorage.getItem("user-type") === "creator"
-                ? "col-md-4"
-                : "col-md-7"
-            }
-            id={style.right}
-          >
+          {sessionStorage.getItem("user-type") === "joinee" && (
+            <div className="col-md-4" id={style.middle}>
+              <h2 className={style.fileName}>
+                Wait for the creator of the room to start
+              </h2>
+            </div>
+          )}
+          {/* <div className={style.fileCheck}>
+                        {sessionStorage.getItem('user-type') === 'joinee' && this.state.ready && <p style={{ color: 'blue' }}>Waiting for the host to start</p>}
+                        {sessionStorage.getItem('user-type') === 'joinee' && <button id='readyButton' className={style.startPlaying} onClick={this.readyForVideo}>Ready for partying</button>}
+                        {sessionStorage.getItem('user-type') === 'joinee' && (videoStreamFlag ? <h6 style={{ color: 'red' }}>You have not selected any file, video will be stream to you directly</h6> : <h6 style={{ color: 'green' }}>Your selected file would be played</h6>)}
+                    </div> */}
+
+          <div className={"col-md-4"} id={style.right}>
             <div
               className={
                 sessionStorage.getItem("user-type") === "creator"
