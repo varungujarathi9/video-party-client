@@ -116,20 +116,23 @@ function startStream(roomMembers) {
         return;
       }
 
-      // Now you can use stream.getTracks() if stream is correctly captured
-      if (stream && typeof stream.getTracks === "function") {
-        console.log("sending video");
-        stream.getTracks().forEach((track) => {
-          peer.addTrack(track, stream);
-          console.log("stream added");
-        });
-      } else {
-        console.error(
-          "Captured stream is invalid or getTracks is not a function."
-        );
+      //   // Now you can use stream.getTracks() if stream is correctly captured
+      //   if (stream && typeof stream.getTracks === "function") {
+      //     console.log("sending video");
+      //     stream.getTracks().forEach((track) => {
+      //       peer.addTrack(track, stream);
+      //       console.log("stream added");
+      //     });
+      //   } else {
+      //     console.error(
+      //       "Captured stream is invalid or getTracks is not a function."
+      //     );
+      //   }
+      // });
+      if (stream) {
+        peer.addStream(stream);
       }
     });
-    // peerConnections[from]["peerConnectionObject"].addStream(stream);
   });
 
   serverSocket.on("receive-answer", (data) => {
